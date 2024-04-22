@@ -2,7 +2,7 @@
     position: absolute;
     left: 0;
     top: 60px;
-    height: 100vh;
+    height: 120vh;
     width: 325px;
     display: flex;
     background-color: rgb(10, 26, 14);
@@ -27,7 +27,3 @@
     margin-left: 20px;
 }
 
-  /* button.mat-raised-button.mat-green{
-    background-color: green;
-    color: white;
-} */

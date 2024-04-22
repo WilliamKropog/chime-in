@@ -6,13 +6,34 @@ import { FYPComponent } from './fyp/fyp.component';
 import { CollectiveComponent } from './collective/collective.component';
 import { RegisterComponent } from './register/register.component';
 import { AppComponent } from './app.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full'},
-  { path: 'featured', component: FeaturedComponent },
-  { path: 'fyp', component: FYPComponent},
-  { path: 'collective', component: CollectiveComponent},
-  { path: 'register', component: RegisterComponent}
+  { 
+    path: '', 
+    component: HomeComponent, 
+    pathMatch: 'full'
+  },
+  { 
+    path: 'featured', 
+    component: FeaturedComponent 
+  },
+  { 
+    path: 'fyp', 
+    component: FYPComponent
+  },
+  { 
+    path: 'collective', 
+    component: CollectiveComponent
+  },
+  { 
+    path: 'register', 
+    component: RegisterComponent
+  },
+  { 
+    path: 'profile', 
+    component: ProfileComponent
+  }
   // ... other routes
 ];
 

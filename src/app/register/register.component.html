@@ -1,3 +1,4 @@
+<body>
 <div>
   <img
     src="assets/images/chimeinlogo.png"
@@ -23,51 +24,58 @@
       </li>
         <p style="margin-top: 40px;">Username:</p>
       <li>
-        <form>
+        <form [formGroup] = "registerForm" (ngSubmit)="register()">
           <mat-form-field>
-            <mat-label>Username</mat-label>
-            <input 
-              [(ngModel)]="username" 
-              [ngModelOptions]="{standalone: true}"
-              type="text"
-              matInput placeholder="Enter username">
+            <input
+              matInput placeholder="Enter username"
+              formControlName="username"/>
+            <mat-error *ngIf="username?.errors?.['required']">
+              Username is required
+            </mat-error>
           </mat-form-field>
         </form>
       </li>
         <p>Email:</p>
       <li>
-        <form>
+        <form [formGroup] = "registerForm" >
           <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input 
-              [(ngModel)]="email"
-              [ngModelOptions]="{standalone: true}"
-              type="email" 
-              matInput placeholder="abc123@gmail.com">
+            <input
+              matInput placeholder="Enter email"
+              formControlName="email"/>
+            <mat-error *ngIf="email?.errors?.['required']">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="email?.errors?.['email']">
+              Incorrect email format
+            </mat-error>
           </mat-form-field>
         </form>
       </li>
         <p>Password:</p>
       <li>
-        <form>
+        <form [formGroup] = "registerForm" >
           <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input 
-              [(ngModel)]="password" 
-              [ngModelOptions]="{standalone: true}"
-              type="password" 
-              matInput placeholder="********">
+            <input
+              type="password"
+              matInput placeholder="Enter password"
+              formControlName="password"/>
+            <mat-error *ngIf="password?.errors?.['required']">
+              Password is required
+            </mat-error>
           </mat-form-field>
         </form>
       </li>
-        <p>Confirm password%:</p>
+        <p>Confirm password:</p>
       <li>
-        <form>
+        <form [formGroup] = "registerForm" >
           <mat-form-field>
-            <mat-label>Confirm password</mat-label>
-            <input 
-            type="password" 
-            matInput placeholder="********">
+            <input
+              type="password"
+              matInput placeholder="Confirm Password"
+              formControlName="confirmPassword"/>
+            <mat-error *ngIf="registerForm.hasError('notSame', 'confirmPassword')">
+              Passwords do not match
+            </mat-error>
           </mat-form-field>
         </form>
       </li>
@@ -84,10 +92,11 @@
     </ul>
   </div>
   <p style="
-  margin-left: 300px;
+  margin-left: 200px;
   margin-top: 50px;
   font-size: 36px;
   font-weight: bold;
   font-style: italic;
-  color: black;">Watch, laugh, Chime-in.</p>
+  color: black;">Let your thoughts be heard, Chime-in.</p>
 </div>
+</body>

@@ -2,7 +2,7 @@
     position: absolute;
     left: 0;
     top: 60px;
-    height: 900px;
+    height: 120vh;
     width: 325px;
     display: flex;
     background-color: rgb(10, 26, 14);
@@ -17,6 +17,7 @@
 
   .sidenav li{
     width: 250px;
+    padding-top: 20px;
     display: flex;
     justify-content: center;
     border-bottom: 1px solid white;
@@ -34,7 +35,35 @@
     height: 40px;
   }
 
-  .sidenav li:hover{
+  .sidenav p:hover{
     transition: 0.4s;
     background: rgb(0, 46, 0);
+    padding: 8px;
+    border-radius: 10px;
+  }
+
+  .sidenav a{
+    text-decoration: none;
+    color: white;
+  }
+
+  .sidenav img{
+    height: 150px;
+    width: 150px;
+    border-radius: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .pfp-upload{
+    border-radius: 100%;
+    position: absolute;
+    top: 190px;
+    right: 25%;
+  }
+
+  .pfp-upload button{
+    background-color: green;
+    height: 35px;
+    width: 35px;
   }

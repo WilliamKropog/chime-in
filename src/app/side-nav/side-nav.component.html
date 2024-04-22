@@ -1,16 +1,31 @@
 <div class="sidenav">
   <ul>
     <li>
-      <img 
-        src="assets/images/png-transparent-default-avatar.png"
-        alt="Default pfp"
-        style="height: 150px; width:150px;"
-        >
+      <div *ngIf="user$ | async as user">
+        <a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
+          <img
+            [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" 
+            alt="Profile Picture">
+        </a>
+      </div>
+      <div class="pfp-upload" *ngIf="user$ | async as user">
+        <button mat-mini-fab (click) = "inputField.click()">
+          <mat-icon class="pfp-upload-icon">photo_camera</mat-icon>
+        </button>
+        <input 
+        #inputField 
+        type="file" 
+        accept="image/png, image/jpeg"
+        hidden 
+        (change)="uploadImage($event, user)">
+      </div>
     </li>
     <li>
-      <p *ngIf="user$ | async as user">
-        Hi, {{user.email}}!
-      </p>
+      <a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <p style = "font-size: 24px;" *ngIf="user$ | async as user">
+          {{user.displayName}}
+        </p>
+      </a>
     </li>
     <li>
       <p>
@@ -43,15 +58,25 @@
       </p>
     </li>
     <li>
-      <p>
+      <p (click)="openPostEditor()">
         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg>
         Post
       </p>
     </li>
     <li>
-      <button mat-button (click)="logout()">
-        Logout 
+      <button (click)="logout()"
+        mat-raised-button color="primary" 
+        type="submit"
+        style="
+          width: 200px;
+          height: 40px;
+          background-color: green;
+          font-size: 18px;
+          ">
+            LOGOUT
       </button>
     </li>
   </ul>
 </div>
+
+<app-post-editor *ngIf="isPostEditorOpen" (close)="closePostEditor()"></app-post-editor>

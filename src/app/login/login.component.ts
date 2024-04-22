@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule, NonNullableFormBuilder } from '@angular/forms';
+import { Validators, NonNullableFormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AuthenticationService } from 'src/services/authentication.service';
@@ -11,7 +10,6 @@ import { AuthenticationService } from 'src/services/authentication.service';
   styleUrls: ['./login.component.css']
 })
 
-//Testing new Login features here
 export class LoginComponent implements OnInit{
   
   ngOnInit(): void {
@@ -46,35 +44,29 @@ export class LoginComponent implements OnInit{
 
     this.authService.login(email, password).pipe(
       this.toast.observe({
-        success: 'Logged in successfully',
-        loading: 'Logging in...',
-        error: 'Login Error'
+        success: '', 
+        loading: '',
+        error: '',
       })
     ).subscribe(() => {
       this.router.navigate(['']);
     });
+
+    
   }
 
 
 
 }
+//Recent Login
 
+// this.authService.login(email, password).pipe(
+//   this.toast.observe({
+//     success: 'Logged in successfully',
+//     loading: 'Logging in...',
+//     error: 'Login Error'
+//   })
+// ).subscribe(() => {
+//   this.router.navigate(['']);
+// });
 
-//OLD LOGIN  
-
-// export class LoginComponent {
-//   email: string = '';
-//   password: string = '';
-
-//   constructor(private auth: AngularFireAuth) {}
-
-//   login() {
-//     this.auth.signInWithEmailAndPassword(this.email, this.password)
-//       .then(response => {
-//         console.log('User logged in successfully:', response);
-//       })
-//       .catch(error => {
-//         console.error('Login failed:', error);
-//       })
-//   }
-// }

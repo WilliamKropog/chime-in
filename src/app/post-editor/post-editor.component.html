@@ -1,0 +1,38 @@
+<div class="modal-overlay"> 
+    <div class="modal">
+        <div class="modal-content" *ngIf="user$ | async as user">
+            <img [src]="user.photoURL" alt="Profile Picture">
+            <textarea matInput [ngModel]="postText" 
+            (ngModelChange)="updatePostText($event)" maxlength="500" 
+            (input)="updateCharacterCount()"></textarea>
+            <div class="character-count">
+                {{ characterCount }} / 500
+            </div>
+            <div class="button-row">
+                <button mat-mini-fab>
+                    <mat-icon>image</mat-icon>
+                </button>
+                <button mat-mini-fab>
+                    <mat-icon>access_time</mat-icon>
+                </button>
+                <button mat-mini-fab>
+                    <mat-icon>volume_up</mat-icon>
+                </button>
+                <button mat-mini-fab>
+                    <mat-icon>remove_red_eye</mat-icon>
+                </button>
+            </div>
+            <div class="post-button">
+                <button mat-fab extended>
+                        <mat-icon>edit</mat-icon>
+                        Post
+                </button>
+            </div>
+        </div>
+        <div class="close-button">
+            <button mat-mini-fab (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { filter } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-root',
@@ -9,8 +11,13 @@ import { AuthenticationService } from 'src/services/authentication.service';
 })
 export class AppComponent {
 
+  isRegisterRoute: boolean = false;
+
   constructor(public authService: AuthenticationService, private router: Router){
-
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.isRegisterRoute = event.urlAfterRedirects === '/register';
+    });
   }
-
 }

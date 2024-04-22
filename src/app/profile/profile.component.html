@@ -1,0 +1,13 @@
+<div *ngIf="user$ | async as user">
+    <h1>User Profile</h1>
+    <div class="profile-image">
+        <img 
+        width="120" 
+        height="120" 
+        [src]= "user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"/>
+    </div> 
+    <button mat-mini-fab (click) = "inputField.click()">
+        <mat-icon>edit</mat-icon>
+    </button>
+    <input #inputField type="file" hidden (change)="uploadImage($event, user)">
+</div>>
