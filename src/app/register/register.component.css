@@ -1,0 +1,27 @@
+  .register{
+    height: 800px;
+    width: 500px;
+    background-color: rgb(10, 26, 14);
+    display: flex;
+    float: right;
+    justify-content: center;
+    margin-top: 100px;
+    margin-right: 150px;
+    color: white;
+}
+
+  .register ul{
+    margin-right: 40px;
+}
+
+  .register li{
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-size: 28px;
+}
+
+  .register p{
+    font-size: 18px;
+}

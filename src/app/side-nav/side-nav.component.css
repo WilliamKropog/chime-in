@@ -1,0 +1,40 @@
+  .sidenav {
+    position: absolute;
+    left: 0;
+    top: 60px;
+    height: 900px;
+    width: 325px;
+    display: flex;
+    background-color: rgb(10, 26, 14);
+    color: white;
+    font-weight: 300;
+    font-size: 24px;
+}
+
+  .sidenav ul{
+    margin-top: 50px;
+}
+
+  .sidenav li{
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid white;
+}
+
+  .sidenav li:last-child{
+    border-bottom: none;
+  }
+
+  .sidenav li:first-child{
+    border-bottom: none;
+  }
+
+  .sidenav p{
+    height: 40px;
+  }
+
+  .sidenav li:hover{
+    transition: 0.4s;
+    background: rgb(0, 46, 0);
+  }
