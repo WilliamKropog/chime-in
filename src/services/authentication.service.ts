@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, of, concatMap } from 'rxjs';
-import { 
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { Observable, from, of, concatMap, Subject } from 'rxjs';
+import { User } from '../interface';
+import { user } from '@angular/fire/auth';
+import {
   UserInfo,
-  updateProfile, 
+  updateProfile,
   signInWithEmailAndPassword,
   Auth,
   authState
- } from '@angular/fire/auth';
+} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'any'
@@ -14,16 +18,41 @@ import {
 export class AuthenticationService {
 
   currentUser$ = authState(this.auth);
- 
-  constructor(private auth: Auth) { 
 
+  userData: Subject<any> = new Subject<any>();
+
+  constructor(private auth: Auth, private afAuth: AngularFireAuth, private afs: AngularFirestore) {
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        this.userData.next(user);
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+      else {
+        this.userData.next(null);
+        localStorage.removeItem('user');
+      }
+    });
   }
 
-  login(username: string, password: string){
-    return from(signInWithEmailAndPassword(this.auth, username, password));
+  async login(email: string, password: string): Promise<any> {
+    return await this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
-  updateProfileData(profileData: Partial<UserInfo>): Observable<any>{
+  logout() {
+    console.log("Logging out...");
+    return from(this.auth.signOut());
+  }
+
+
+  // afAuth LOGOUT
+
+  // logout(): void {
+  //   this.afAuth.signOut().then((res) => {
+  //     localStorage.removeItem('user');
+  //   });
+  // }
+
+  updateProfileData(profileData: Partial<UserInfo>): Observable<any> {
     const currentUser = this.auth.currentUser;
     return of(currentUser).pipe(
       concatMap(user => {
@@ -34,9 +63,35 @@ export class AuthenticationService {
     );
   }
 
-  logout(){
-    return from(this.auth.signOut());
+  get loggedInUserId(): string {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      return JSON.parse(userData).uid
+    }
+    return '';
   }
+
+  // currentUser$ = authState(this.auth);
+
+  // constructor(private auth: Auth) { 
+
+  // }
+
+  // login(username: string, password: string){
+  //   return from(signInWithEmailAndPassword(this.auth, username, password));
+  // }
+
+  // updateProfileData(profileData: Partial<UserInfo>): Observable<any>{
+  //   const currentUser = this.auth.currentUser;
+  //   return of(currentUser).pipe(
+  //     concatMap(user => {
+  //       if (!user) throw new Error('Not Authenticated');
+
+  //       return updateProfile(user, profileData);
+  //     })
+  //   );
+  // }
+
 
 }
 

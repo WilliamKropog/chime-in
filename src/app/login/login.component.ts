@@ -10,15 +10,15 @@ import { AuthenticationService } from 'src/services/authentication.service';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit{
-  
+export class LoginComponent implements OnInit {
+
   ngOnInit(): void {
     this.loginForm.value.email;
   }
 
   loginForm = this.fb.group({
-    email:['', [Validators.required, Validators.email]],
-    password:['', Validators.required]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
   });
 
   constructor(
@@ -26,33 +26,33 @@ export class LoginComponent implements OnInit{
     private router: Router,
     private toast: HotToastService,
     private fb: NonNullableFormBuilder,
-  ){}
+  ) { }
 
-  get email(){
+  get email() {
     return this.loginForm.get('email');
   }
 
-  get password(){
+  get password() {
     return this.loginForm.get('password');
   }
 
-  submit(){
+  async submit() {
     const { email, password } = this.loginForm.value;
-    
+
     if (!this.loginForm.valid || !email || !password)
       return;
 
-    this.authService.login(email, password).pipe(
+    (await this.authService.login(email, password).then(
       this.toast.observe({
-        success: '', 
+        success: '',
         loading: '',
         error: '',
       })
-    ).subscribe(() => {
+    )).subscribe(() => {
       this.router.navigate(['']);
     });
 
-    
+
   }
 
 

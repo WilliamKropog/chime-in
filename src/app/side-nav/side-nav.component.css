@@ -9,45 +9,46 @@
     color: white;
     font-weight: 300;
     font-size: 24px;
-}
+  }
 
-  .sidenav ul{
+  .sidenav ul {
     margin-top: 50px;
-}
+  }
 
-  .sidenav li{
+  .sidenav li {
     width: 250px;
     padding-top: 20px;
     display: flex;
     justify-content: center;
     border-bottom: 1px solid white;
-}
+  }
 
-  .sidenav li:last-child{
+  .sidenav li:last-child {
     border-bottom: none;
   }
 
-  .sidenav li:first-child{
+  .sidenav li:first-child {
     border-bottom: none;
   }
 
-  .sidenav p{
+  .sidenav p {
+    cursor: pointer;
     height: 40px;
   }
 
-  .sidenav p:hover{
+  .sidenav p:hover {
     transition: 0.4s;
     background: rgb(0, 46, 0);
     padding: 8px;
     border-radius: 10px;
   }
 
-  .sidenav a{
+  .sidenav a {
     text-decoration: none;
     color: white;
   }
 
-  .sidenav img{
+  .sidenav img {
     height: 150px;
     width: 150px;
     border-radius: 100%;
@@ -55,14 +56,14 @@
     object-position: center;
   }
 
-  .pfp-upload{
+  .pfp-upload {
     border-radius: 100%;
     position: absolute;
     top: 190px;
     right: 25%;
   }
 
-  .pfp-upload button{
+  .pfp-upload button {
     background-color: green;
     height: 35px;
     width: 35px;
