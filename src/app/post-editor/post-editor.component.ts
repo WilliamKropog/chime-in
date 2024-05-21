@@ -40,8 +40,10 @@ export class PostEditorComponent {
 
     console.log('saved post profile...')
 
-    this.postService.savePost(body);
-
+    if (this.postText.length > 0) {
+      this.postService.savePost(body);
+      this.onClose();
+    }
     // this.postService.savePost(body).then(() => {
     //   this.isLoading = false;
     //   this.postText = '';

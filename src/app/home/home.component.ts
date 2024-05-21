@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
-import { PostEditorComponent } from '../post-editor/post-editor.component';
+import { PostComponent } from '../post/post.component';
 
 @Component({
   selector: 'app-home',
@@ -9,8 +9,8 @@ import { PostEditorComponent } from '../post-editor/post-editor.component';
 })
 export class HomeComponent {
 
-  constructor (public authService: AuthenticationService){
-    
+  constructor(public authService: AuthenticationService) {
+
   }
 
 }
