@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule, NonNullableFormBuilder, AbstractControl, ValidationErrors, Validator, ValidatorFn, FormGroupDirective, NgForm } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
+import { User } from 'src/interface';
 
 
 @Component({
@@ -17,20 +17,20 @@ export class RegisterComponent {
   }
 
   constructor(
-    private auth: AngularFireAuth, 
+    private auth: AngularFireAuth,
     private fb: NonNullableFormBuilder,
     private router: Router
-  ){}
+  ) { }
 
-  get email(){
+  get email() {
     return this.registerForm.get('email');
   }
 
-  get password(){
+  get password() {
     return this.registerForm.get('password');
   }
 
-  get username(){
+  get username() {
     return this.registerForm.get('username');
   }
 
@@ -46,15 +46,15 @@ export class RegisterComponent {
   }
 
   registerForm = this.fb.group({
-    username:['', Validators.required],
-    email:['', [Validators.required, Validators.email]],
-    password:['', Validators.required],
-    confirmPassword:['']
+    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+    confirmPassword: ['']
   }, { validators: this.checkPasswords });
 
-  register(){
+  register() {
 
-    const { username, email, password } = this.registerForm.value; 
+    const { username, email, password } = this.registerForm.value;
 
     if (!this.registerForm.valid || !email || !password || !username)
       return;
@@ -68,7 +68,7 @@ export class RegisterComponent {
       .then(() => {
         console.log('Registration Successful:', this.auth.currentUser);
         this.router.navigate(['']);
-      })  
+      })
       .catch(error => {
         console.error('Registration Failed:', error);
       })

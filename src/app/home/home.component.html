@@ -6,15 +6,15 @@ margin-top: 80px;
 margin-right: 50px;">
   Welcome to Chime-in pre-dev build. Here, I hope
   to establish my own social media site to display
-  my coding abilities for potential employers and to
-  simply make a new site for users to enjoy.
+  my coding abilities for potential employers and for
+  other users to enjoy.
 </div>
 
 <div class="version">
-  Pre-Dev Version 3.2.1
+  Pre-Dev Version 3.3.0
   <h1>
-    - Patched issue where users could submit empty posts and take up space in our database.
+    - Most recent post now displays on the Home Page.
   </h1>
 </div>
 
-<app-post></app-post>
+<app-post [post]="mostRecentPost"></app-post>

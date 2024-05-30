@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
-import { PostComponent } from '../post/post.component';
 import { Post } from '../../interface';
 
 @Component({
@@ -23,35 +22,60 @@ export class PostEditorComponent {
 
   constructor(
     private authService: AuthenticationService,
-    private afAuth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    private auth: AngularFireAuth,
+    private afs: AngularFirestore,
     private postService: PostsService,
   ) { }
 
   chimein(): void {
     this.isLoading = true;
-    console.log('chimein pending...')
+    console.log('chimein pending...');
 
-    const body: (Post) = {
-      body: this.postText,
-      userId: this.authService.loggedInUserId,
-      createdAt: new Date()
-    };
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        const body: Post = {
+          body: this.postText,
+          photoURL: user.photoURL,
+          displayName: user.displayName,
+          userId: user.uid,
+          createdAt: new Date(),
+        };
 
-    console.log('saved post profile...')
+        console.log('saved post profile...')
 
-    if (this.postText.length > 0) {
-      this.postService.savePost(body);
-      this.onClose();
-    }
-    // this.postService.savePost(body).then(() => {
-    //   this.isLoading = false;
-    //   this.postText = '';
-    //   console.log('chimein successful');
-    // }).catch(() => {
-    //   this.isLoading = false;
-    // })
+        if (this.postText.length > 0) {
+          this.postService.savePost(body).then(() => {
+            this.onClose();
+          }).catch(error => {
+            console.error('Error saving post: ', error);
+          }).finally(() => {
+            this.isLoading = false;
+          });
+        }
+      } else {
+        console.error('No user is logged in');
+        this.isLoading = false;
+      }
+    })
   }
+
+  // chimein(): void {
+  //   this.isLoading = true;
+  //   console.log('chimein pending...')
+
+  //   const body: (Post) = {
+  //     body: this.postText,
+  //     userId: this.authService.loggedInUserId,
+  //     createdAt: new Date()
+  //   };
+
+  //   console.log('saved post profile...')
+
+  //   if (this.postText.length > 0) {
+  //     this.postService.savePost(body);
+  //     this.onClose();
+  //   }
+  // }
 
   updateCharacterCount(): void {
     this.characterCount = this.postText.length;
@@ -67,19 +91,4 @@ export class PostEditorComponent {
     this.close.emit();
     console.log('Post Modal closed.')
   }
-
-  // submitPost(): void {
-  //   this.afAuth.authState.subscribe(user => {
-  //     if (user) {
-  //       const post: PostComponent = {
-  //         content: this.postText,
-  //         authorId: user.uid,
-  //         timestamp: firebase.default.firestore.Timestamp.now()
-  //       };
-
-
-  //     }
-  //   })
-  // }
-
 }

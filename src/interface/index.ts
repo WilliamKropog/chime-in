@@ -21,6 +21,8 @@ export interface Post {
     body: string;
     createdAt: any;
     user?: User;
+    photoURL: string | null;
+    displayName: string | null;
     postId?: string;
     likes?: Array<string>;
     commentCount?: number;
