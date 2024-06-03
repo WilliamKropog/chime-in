@@ -3,7 +3,6 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
 import { Observable, from, of, concatMap, Subject } from 'rxjs';
 import { User } from '../interface';
-import { user } from '@angular/fire/auth';
 import {
   UserInfo,
   updateProfile,

@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from '../../interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-post-editor',
@@ -19,6 +20,7 @@ export class PostEditorComponent {
   characterCount: number = 0;
 
   user$ = this.authService.currentUser$;
+  userSubscription: Subscription | null = null;
 
   constructor(
     private authService: AuthenticationService,
@@ -31,7 +33,7 @@ export class PostEditorComponent {
     this.isLoading = true;
     console.log('chimein pending...');
 
-    this.authService.currentUser$.subscribe(user => {
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
       if (user) {
         const body: Post = {
           body: this.postText,
@@ -50,6 +52,7 @@ export class PostEditorComponent {
             console.error('Error saving post: ', error);
           }).finally(() => {
             this.isLoading = false;
+            this.unsubscribeUser();
           });
         }
       } else {
@@ -59,23 +62,6 @@ export class PostEditorComponent {
     })
   }
 
-  // chimein(): void {
-  //   this.isLoading = true;
-  //   console.log('chimein pending...')
-
-  //   const body: (Post) = {
-  //     body: this.postText,
-  //     userId: this.authService.loggedInUserId,
-  //     createdAt: new Date()
-  //   };
-
-  //   console.log('saved post profile...')
-
-  //   if (this.postText.length > 0) {
-  //     this.postService.savePost(body);
-  //     this.onClose();
-  //   }
-  // }
 
   updateCharacterCount(): void {
     this.characterCount = this.postText.length;
@@ -84,6 +70,13 @@ export class PostEditorComponent {
   updatePostText(value: string): void {
     this.postText = value;
     this.updateCharacterCount();
+  }
+
+  unsubscribeUser(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+      this.userSubscription = null;
+    }
   }
 
   onClose(): void {
