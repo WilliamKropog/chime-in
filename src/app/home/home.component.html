@@ -7,11 +7,16 @@
   </h1>
 </div>
 <div class="version">
-  Pre-Dev Version 3.3.1
+  Pre-Dev Version 3.4.1
   <h1>
-    - Fixed bug where most recent post will display currently logged in user's name
-    rather than the original author's name and profile picture.
+    - New Posting feature: Users can now create and upload text posts.
+    <br>
+    - Home Page now displays a list of the most recent posts rather than just a single post.
+    <br>
+    - Fixed bug to where user menu and nav-bar would not follow you as you scroll.
   </h1>
 </div>
 
-<app-post [post]="mostRecentPost"></app-post>
+<!-- <app-post [post]="mostRecentPost"></app-post> -->
+
+<app-home-posts [posts]="mostRecentPosts"></app-home-posts>

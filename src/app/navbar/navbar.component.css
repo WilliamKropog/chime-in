@@ -1,5 +1,5 @@
   .toolbar {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -11,27 +11,29 @@
     color: white;
     font-weight: 600;
     font-size: 20px;
-}
+    z-index: 1;
+  }
+
   .toolbar div:hover {
     transition: 0.4s;
     background: rgb(0, 53, 13);
-}
+  }
 
-  .toolbar div:last-child{
+  .toolbar div:last-child {
     border-right: none;
-}
+  }
 
-  .toolbar div:first-child{
+  .toolbar div:first-child {
     border-left: none;
-}
+  }
 
   .toolbar img {
     margin: 0 16px;
-}
+  }
 
-  .toolbar a{
+  .toolbar a {
     text-decoration: none;
-    color:white;
+    color: white;
     border-right: 1px solid #ffffff;
     width: 20%;
     text-align: center;

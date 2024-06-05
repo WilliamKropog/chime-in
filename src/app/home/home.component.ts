@@ -10,12 +10,17 @@ import { Post } from 'src/interface';
 export class HomeComponent implements OnInit {
 
   mostRecentPost: Post | undefined;
+  mostRecentPosts: Post[] = [];
 
   constructor(private postsService: PostsService) { }
 
   ngOnInit(): void {
     this.postsService.getMostRecentPost().subscribe(post => {
       this.mostRecentPost = post;
+    })
+
+    this.postsService.getMostRecentPosts().subscribe(posts => {
+      this.mostRecentPosts = posts;
     })
   }
 

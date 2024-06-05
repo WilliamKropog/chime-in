@@ -47,4 +47,8 @@ export class PostsService {
       );
   }
 
+  getMostRecentPosts(): Observable<Post[]> {
+    return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(3)).valueChanges();
+  }
+
 }

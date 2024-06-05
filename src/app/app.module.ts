@@ -29,6 +29,7 @@ import { getStorage } from 'firebase/storage';
 import { provideAuth } from '@angular/fire/auth';
 import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
+import { HomePostsComponent } from './home-posts/home-posts.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { PostComponent } from './post/post.component';
     PostEditorComponent,
     ProfileComponent,
     PostComponent,
+    HomePostsComponent,
   ],
   imports: [
     BrowserModule,
