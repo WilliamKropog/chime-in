@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Post } from 'src/interface';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-
+import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',

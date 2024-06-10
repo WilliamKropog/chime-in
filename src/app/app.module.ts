@@ -30,6 +30,7 @@ import { provideAuth } from '@angular/fire/auth';
 import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
 import { HomePostsComponent } from './home-posts/home-posts.component';
+import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { HomePostsComponent } from './home-posts/home-posts.component';
     ProfileComponent,
     PostComponent,
     HomePostsComponent,
+    RelativeTimePipe
   ],
   imports: [
     BrowserModule,
@@ -63,7 +65,7 @@ import { HomePostsComponent } from './home-posts/home-posts.component';
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    HotToastModule.forRoot()
+    HotToastModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent]

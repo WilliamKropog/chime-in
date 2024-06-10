@@ -18,6 +18,9 @@
 
 .item3 {
     grid-area: views;
+    color: white;
+    margin-top: 40px;
+    font-size: 18px;
 }
 
 .item4 {
@@ -28,10 +31,16 @@
     grid-area: footer;
 }
 
+.item6 {
+    grid-area: timestamp;
+    color: gray;
+    margin-top: 40px;
+}
+
 .post-content {
     display: grid;
     grid-template-areas:
-        'pfp username username username username views'
+        'pfp username username username timestamp views'
         'body body body body body body'
         'footer footer footer footer footer footer';
     gap: 20px;
@@ -60,7 +69,7 @@
     text-align: left;
     justify-content: center;
     grid-column-start: 2;
-    margin-top: 30px;
+    margin-top: 35px;
 }
 
 .post-content p {
