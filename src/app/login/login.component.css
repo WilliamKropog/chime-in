@@ -1,5 +1,5 @@
   .login {
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 60px;
     height: 120vh;
@@ -9,21 +9,20 @@
     color: white;
     font-weight: 400;
     font-size: 36px;
-}
+  }
 
-  .login ul{
+  .login ul {
     margin-top: 50px;
-}
+  }
 
-  .login li{
+  .login li {
     width: 250px;
     display: flex;
     justify-content: center;
     margin-top: 30px;
-}
+  }
 
-  .login p{
+  .login p {
     font-size: 18px;
     margin-left: 20px;
-}
-
+  }
