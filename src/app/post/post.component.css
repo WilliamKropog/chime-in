@@ -5,6 +5,7 @@
     height: auto;
     margin: auto;
     margin-bottom: 40px;
+    padding-bottom: 20px;
 }
 
 .item1 {
@@ -29,14 +30,12 @@
 .item5 {
     grid-area: footer;
     display: flex;
-    position: relative;
     margin-top: 5px;
-    margin-left: 20px;
 }
 
 .item5 button {
     background-color: green;
-    margin-left: 20px;
+    margin-left: 40px;
 }
 
 .item6 {
