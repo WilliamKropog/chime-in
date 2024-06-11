@@ -1,11 +1,25 @@
 <div class="post" *ngIf="post">
     <div class="post-content">
         <img [src]="post.photoURL ?? '/images/png-transparent-default-avatar.png'" alt="Profile Picture">
-        <div class="item6">{{ post.createdAt | relativeTime}}</div>
+        <div class="item6">• {{ post.createdAt | relativeTime}}</div>
         <div class="item3">0 views</div>
         <h1>{{ post.displayName }}</h1>
         <div class="item4 body">
             {{ post.body }}
+        </div>
+        <div class="item5">
+            <button mat-mini-fab>
+                <mat-icon>image</mat-icon>
+            </button>
+            <button mat-mini-fab>
+                <mat-icon>access_time</mat-icon>
+            </button>
+            <button mat-mini-fab>
+                <mat-icon>volume_up</mat-icon>
+            </button>
+            <button mat-mini-fab>
+                <mat-icon>remove_red_eye</mat-icon>
+            </button>
         </div>
     </div>
 </div>

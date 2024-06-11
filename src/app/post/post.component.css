@@ -1,9 +1,8 @@
 .post {
     width: 800px;
-    height: 400px;
     background-color: rgb(10, 26, 14);
     border-radius: 20px;
-    display: flex;
+    height: auto;
     margin: auto;
     margin-bottom: 40px;
 }
@@ -29,23 +28,35 @@
 
 .item5 {
     grid-area: footer;
+    display: flex;
+    position: relative;
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+.item5 button {
+    background-color: green;
+    margin-left: 20px;
 }
 
 .item6 {
     grid-area: timestamp;
     color: gray;
-    margin-top: 40px;
+    margin-top: 45px;
+}
+
+.item7 {
+    grid-area: header;
 }
 
 .post-content {
     display: grid;
     grid-template-areas:
-        'pfp username username username timestamp views'
+        'pfp username timestamp header header views'
         'body body body body body body'
         'footer footer footer footer footer footer';
     gap: 20px;
     width: 100%;
-    height: 400px;
     justify-content: left;
 }
 
@@ -81,8 +92,7 @@
 .body {
     font-size: 24px;
     line-height: normal;
-    margin-left: 50px;
-    margin-bottom: 30px;
     width: 700px;
     color: white;
+    margin-left: 50px;
 }
