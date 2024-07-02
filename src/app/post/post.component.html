@@ -2,7 +2,7 @@
     <div class="post-content">
         <img [src]="post.photoURL ?? '/images/png-transparent-default-avatar.png'" alt="Profile Picture">
         <div class="item6">• {{ post.createdAt | relativeTime}}</div>
-        <div class="item3">0 views</div>
+        <div class="item3">{{ post.views }} views</div>
         <h1>{{ post.displayName }}</h1>
         <div class="item4 body">
             {{ post.body }}

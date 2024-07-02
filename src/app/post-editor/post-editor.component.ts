@@ -31,7 +31,6 @@ export class PostEditorComponent {
 
   chimein(): void {
     this.isLoading = true;
-    console.log('chimein pending...');
 
     this.userSubscription = this.authService.currentUser$.subscribe(user => {
       if (user) {
@@ -41,12 +40,13 @@ export class PostEditorComponent {
           displayName: user.displayName,
           userId: user.uid,
           createdAt: new Date(),
+          views: 0,
+          postId: '',
         };
 
-        console.log('saved post profile...')
-
         if (this.postText.length > 0) {
-          this.postService.savePost(body).then(() => {
+          this.postService.savePost(body).then((docId) => {
+            body.postId = docId;
             this.onClose();
           }).catch(error => {
             console.error('Error saving post: ', error);

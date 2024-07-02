@@ -23,9 +23,10 @@ export interface Post {
     user?: User;
     photoURL: string | null;
     displayName: string | null;
-    postId?: string;
+    postId: string;
     likes?: Array<string>;
     commentCount?: number;
+    views: number;
 }
 
 export interface Comment {

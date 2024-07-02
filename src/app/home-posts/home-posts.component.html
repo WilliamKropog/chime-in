@@ -1,5 +1,5 @@
 <div *ngIf="posts.length > 0">
-    <app-post *ngFor="let post of posts; let i = index" [post]="post"></app-post>
+    <app-post *ngFor="let post of posts" [post]="post"></app-post>
 </div>
 <div *ngIf="posts.length === 0">
     No recent posts available.

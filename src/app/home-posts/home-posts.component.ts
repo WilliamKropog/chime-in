@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Post } from 'src/interface';
 
 @Component({
@@ -6,6 +6,14 @@ import { Post } from 'src/interface';
   templateUrl: './home-posts.component.html',
   styleUrls: ['./home-posts.component.css']
 })
-export class HomePostsComponent {
+export class HomePostsComponent implements OnInit, OnDestroy {
   @Input() posts: Post[] = [];
+
+  ngOnInit(): void {
+    console.log('HomePostsComponent initialized');
+  }
+
+  ngOnDestroy(): void {
+    console.log('HomePostsComponent destroyed');
+  }
 }
