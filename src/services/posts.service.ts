@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Post } from '../interface';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 
@@ -20,30 +20,17 @@ export class PostsService {
       return postRef.ref.id;
     })
   }
-
+  // Old savePost function:
   // savePost(data: Post) {
   //   console.log('sending data...');
   //   return this.afs.collection<Post>('posts').add(data);
   // }
 
-  getMostRecentPost(): Observable<Post | undefined> {
-    console.log('Fetching most recent post...');
-    return this.afs.collection<Post>('posts', ref => ref.orderBy("createdAt", "desc").limit(1))
-      .snapshotChanges()
-      .pipe(
-        map(actions => {
-          const posts = actions.map(a => {
-            const data = a.payload.doc.data() as Post;
-            const id = a.payload.doc.id;
-            return { id, ...data };
-          });
-          return posts.length > 0 ? posts[0] : undefined;
-        })
-      );
-  }
-
   getMostRecentPosts(): Observable<Post[]> {
-    return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(3)).valueChanges();
+    return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
+    .valueChanges()
+    .pipe(debounceTime(1000),
+    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
   }
 
   incrementView(postId: string): Promise<void> {

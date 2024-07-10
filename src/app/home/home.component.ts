@@ -9,24 +9,38 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
   mostRecentPosts: Post[] = [];
+  viewedPosts: Set<string> = new Set();  
   private postsSubscription: Subscription | undefined;
 
-  constructor(private postsService: PostsService) { }
+  constructor(private postsService: PostsService) {}
 
   ngOnInit(): void {
     console.log('HomeComponent initialized');
     this.postsSubscription = this.postsService.getMostRecentPosts().subscribe(posts => {
-      console.log('getMostRecentPosts called');
+      console.log('Subscription received posts');
       this.mostRecentPosts = posts;
+      this.incrementViewCount(posts);  
     });
   }
 
   ngOnDestroy(): void {
-    console.log('HomeComponent destroyed');
     if (this.postsSubscription) {
       this.postsSubscription.unsubscribe();
     }
+  }
+
+  incrementViewCount(posts: Post[]): void {
+    posts.forEach(post => {
+      if (!this.viewedPosts.has(post.postId)) {
+        this.viewedPosts.add(post.postId);
+        this.incrementPostView(post.postId);  
+      }
+    });
+  }
+
+  incrementPostView(postId: string): void {
+    this.postsService.incrementView(postId);
+    console.log(`Increment view count for post ${postId}`);
   }
 }

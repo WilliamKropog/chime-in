@@ -14,20 +14,20 @@ export class PostComponent implements OnInit{
   constructor(private postsService: PostsService) { }
 
   ngOnInit(): void {
-    if (this.post) {
-      const viewedPosts = JSON.parse(localStorage.getItem('viewedPosts') || '[]');
-
-      if (!viewedPosts.includes(this.post.postId)) {
-        this.postsService.incrementView(this.post.postId).then(() => {
-          viewedPosts.push(this.post?.postId);
-          localStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
-        }).catch(error => {
-          console.error('Error incrementing view count:', error);
-        });
-      }
-    } else {
-      console.error('Post is undefined in ngOnInit.');
-    }
+    // Old view counter:
+    // if (this.post) {
+    //   const viewedPosts = JSON.parse(localStorage.getItem('viewedPosts') || '[]');
+    //   if (!viewedPosts.includes(this.post.postId)) {
+    //     this.postsService.incrementView(this.post.postId).then(() => {
+    //       viewedPosts.push(this.post?.postId);
+    //       localStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
+    //     }).catch(error => {
+    //       console.error('Error incrementing view count:', error);
+    //     });
+    //   }
+    // } else {
+    //   console.error('Post is undefined in ngOnInit.');
+    // }
   }
 
 }
