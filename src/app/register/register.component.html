@@ -7,7 +7,9 @@
       height: 500px;
       width: 500px;
       margin-top: 10%;
-      margin-left: 15%;"
+      margin-left: 15%;
+      border-radius: 20%;
+      border: 1px solid;"
   >
 
   <div class="register">
@@ -16,7 +18,7 @@
         <img
           src="assets/images/chimeinlogo.png"
           alt="chime-in logo"
-          style="height: 100px; width: 100px"
+          style="height: 100px; width: 100px; border-radius: 20px;"
         >
       </li>
       <li>
@@ -91,12 +93,28 @@
       </li>
     </ul>
   </div>
-  <p style="
-  margin-left: 200px;
-  margin-top: 50px;
-  font-size: 36px;
-  font-weight: bold;
-  font-style: italic;
-  color: black;">Let your thoughts be heard, Chime-in.</p>
+  <p class="subtitle">Let your thoughts be heard, Chime-in.</p>
 </div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+    const images = [
+      'C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground1.jpeg',
+      'C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground2.jpg',
+      'C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground3.jpeg',
+    ];
+
+    let currentIndex = 0;
+
+    function changeBackground() {
+      const body = document.getElementById('register-body');
+      body.style.backgroundImage = `url(${images[currentIndex]})`;
+      currentIndex = (currentIndex + 1) % images.length;
+    }
+
+    setInterval(changeBackground, 10000);
+    changeBackground();
+   });
+</script>
+
 </body>

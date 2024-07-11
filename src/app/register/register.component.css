@@ -1,6 +1,40 @@
 body {
-  background-color: greenyellow;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  animation: changeBackground 30s infinite;
 } 
+
+@keyframes changeBackground {
+  0% {
+    background-image: url('C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground1.jpeg');
+  }
+  33%{
+    background-image: url('C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground2.jpg');
+  }
+  67%{
+    background-image: url('C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground3.jpeg');
+  }
+  100%{
+    background-image: url('C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground1.jpeg');
+  }
+  
+}
+
+  .subtitle{
+    margin-left: 175px;
+    margin-top: 50px;
+    height: 60px;
+    width: 650px;
+    text-align: center;
+    font-size: 36px;
+    font-weight: bold;
+    font-style: italic;
+    color: white;
+    padding-top: 30px;
+    border-radius: 20px;
+    background-color: rgb(10, 26, 14);
+  }
   
   .register{
     height: 800px;
@@ -12,6 +46,7 @@ body {
     margin-top: 100px;
     margin-right: 150px;
     color: white;
+    border-radius: 20px;
 }
 
   .register ul{
