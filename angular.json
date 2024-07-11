@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "chime-in:build:production"
+              "buildTarget": "chime-in:build:production"
             },
             "development": {
-              "browserTarget": "chime-in:build:development"
+              "buildTarget": "chime-in:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "chime-in:build"
+            "buildTarget": "chime-in:build"
           }
         },
         "test": {
