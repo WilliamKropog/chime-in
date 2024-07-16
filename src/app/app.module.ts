@@ -54,9 +54,6 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideStorage(() => getStorage()),
     AngularFireStorageModule,
     RouterModule,
     BrowserAnimationsModule,
@@ -67,8 +64,10 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     ReactiveFormsModule,
     HotToastModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => getAuth()),
+    provideStorage(() => getStorage())],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-

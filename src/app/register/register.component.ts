@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule, NonNullableFormBuilder, AbstractControl, ValidationErrors, Validator, ValidatorFn, FormGroupDirective, NgForm } from '@angular/forms';
+import { Validators, NonNullableFormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/interface';
 

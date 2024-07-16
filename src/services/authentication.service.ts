@@ -16,6 +16,7 @@ import {
 })
 export class AuthenticationService {
 
+  //Angular 16 Auth:
   currentUser$ = authState(this.auth);
 
   userData: Subject<any> = new Subject<any>();
@@ -37,6 +38,7 @@ export class AuthenticationService {
     return await this.afAuth.signInWithEmailAndPassword(email, password);
   }
 
+  //Angular 16 Logout:
   logout() {
     console.log("Logging out...");
     return from(this.auth.signOut());
@@ -51,6 +53,7 @@ export class AuthenticationService {
   //   });
   // }
 
+  //Angular 16 updateProfileData:
   updateProfileData(profileData: Partial<UserInfo>): Observable<any> {
     const currentUser = this.auth.currentUser;
     return of(currentUser).pipe(
@@ -70,6 +73,7 @@ export class AuthenticationService {
     return '';
   }
 
+  //OLD AUTH:
   // currentUser$ = authState(this.auth);
 
   // constructor(private auth: Auth) { 
