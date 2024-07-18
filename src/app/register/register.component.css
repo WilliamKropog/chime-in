@@ -5,7 +5,7 @@ body {
   animation: changeBackground 30s infinite;
 } 
 
-@keyframes changeBackground {
+/* @keyframes changeBackground {
   0% {
     background-image: url('C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground1.jpeg');
   }
@@ -19,7 +19,7 @@ body {
     background-image: url('C:\Users\willi\Desktop\Angular Projects\Chime-in\chime-in\src\assets\images\chimeinbackground1.jpeg');
   }
   
-}
+} */
 
   .subtitle{
     margin-left: 175px;
