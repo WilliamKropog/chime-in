@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ElementRef } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Validators, NonNullableFormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User } from 'src/interface';
-
+import { BackgroundService } from 'src/services/background.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements AfterViewInit{
 
   ngOnInit(): void {
     this.registerForm.value.email;
@@ -19,8 +18,15 @@ export class RegisterComponent {
   constructor(
     private auth: AngularFireAuth,
     private fb: NonNullableFormBuilder,
-    private router: Router
+    private router: Router,
+    private backgroundService: BackgroundService,
+    private elRef: ElementRef
   ) { }
+
+  ngAfterViewInit(): void {
+    const registerElement = this.elRef.nativeElement.querySelector('.register-background');
+    this.backgroundService.initBackgroundChanger(registerElement);
+  }
 
   get email() {
     return this.registerForm.get('email');
