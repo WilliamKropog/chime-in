@@ -38,6 +38,13 @@
     margin-left: 40px;
 }
 
+.item5 div{
+    font-size: 24px;
+    padding-top: 10px;
+    padding-left: 12px;
+    color: white;
+}
+
 .item6 {
     grid-area: timestamp;
     color: gray;

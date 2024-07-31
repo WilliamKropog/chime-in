@@ -41,6 +41,7 @@ export class PostEditorComponent {
           userId: user.uid,
           createdAt: new Date(),
           views: 0,
+          likeCount: 0,
           postId: '',
         };
 

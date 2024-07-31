@@ -24,6 +24,7 @@ export interface Post {
     photoURL: string | null;
     displayName: string | null;
     postId: string;
+    likeCount: number;
     likes?: Array<string>;
     commentCount?: number;
     views: number;

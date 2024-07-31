@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
+import { AuthenticationService } from 'src/services/authentication.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -8,26 +9,19 @@ import { Subscription } from 'rxjs';
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
-export class PostComponent implements OnInit{
+export class PostComponent{
   @Input() post?: Post;
 
-  constructor(private postsService: PostsService) { }
+  constructor(private postsService: PostsService, private authService: AuthenticationService) { }
 
-  ngOnInit(): void {
-    // Old view counter:
-    // if (this.post) {
-    //   const viewedPosts = JSON.parse(localStorage.getItem('viewedPosts') || '[]');
-    //   if (!viewedPosts.includes(this.post.postId)) {
-    //     this.postsService.incrementView(this.post.postId).then(() => {
-    //       viewedPosts.push(this.post?.postId);
-    //       localStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
-    //     }).catch(error => {
-    //       console.error('Error incrementing view count:', error);
-    //     });
-    //   }
-    // } else {
-    //   console.error('Post is undefined in ngOnInit.');
-    // }
+  likePost() {
+    const userId = this.authService.loggedInUserId;
+    this.postsService.addLike(this.post?.postId, userId)
+    .then(() => {
+      console.log('Post liked succesffully');
+    })
+    .catch(error => {
+      console.error('Error liking post:', error);
+    });
   }
-
 }

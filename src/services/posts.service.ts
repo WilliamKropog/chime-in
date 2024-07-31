@@ -38,4 +38,9 @@ export class PostsService {
     return incrementViewFn({ postId }).toPromise();
   }
 
+  addLike(postId: string | undefined, userId: string): Promise<void> {
+    const addLikeFn = this.fns.httpsCallable('addLike');
+    return addLikeFn({ postId, userId}).toPromise();
+  }
+
 }
