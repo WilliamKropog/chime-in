@@ -56,7 +56,9 @@ export class SideNavComponent implements OnInit {
   logout() {
     console.log("Logout button clicked...");
     this.authService.logout();
-    this.router.navigate(['']);
+    this.router.navigate(['']).then(() => {
+      window.location.reload();
+    });
   }
 
 

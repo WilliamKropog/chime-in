@@ -43,4 +43,9 @@ export class PostsService {
     return addLikeFn({ postId, userId}).toPromise();
   }
 
+  checkIfUserLiked(postId: string, userId: string): Promise<boolean | undefined>{
+    return this.afs.collection('posts').doc(postId).collection('likes').doc(userId).get().toPromise()
+      .then(doc => doc?.exists);
+  }
+
 }

@@ -39,34 +39,37 @@ export class LoginComponent implements OnInit {
   async submit() {
     const { email, password } = this.loginForm.value;
 
-    if (!this.loginForm.valid || !email || !password)
-      return;
+    if (!this.loginForm.valid || !email || !password) return;
 
-    (await this.authService.login(email, password).then(
-      this.toast.observe({
-        success: '',
-        loading: '',
-        error: '',
-      })
-    )).subscribe(() => {
-      this.router.navigate(['']);
-    });
-
-
+    try {
+      await this.authService.login(email, password);
+      this.toast.success('Logged in successfully');
+      this.router.navigate(['']).then(() => {
+        window.location.reload();
+      });
+    } catch (error) {
+      this.toast.error('Login Error');
+      console.error('Error logging in:', error);
+    }
   }
 
+  // predev 3.7.0 SUBMIT LOGIN
+  // async submit() {
+  //   const { email, password } = this.loginForm.value;
 
+  //   if (!this.loginForm.valid || !email || !password)
+  //     return;
+
+  //   (await this.authService.login(email, password).then(
+  //     this.toast.observe({
+  //       success: '',
+  //       loading: '',
+  //       error: '',
+  //     })
+  //   )).subscribe(() => {
+  //     this.router.navigate(['']);
+  //   });
+  // }
 
 }
-//Recent Login
-
-// this.authService.login(email, password).pipe(
-//   this.toast.observe({
-//     success: 'Logged in successfully',
-//     loading: 'Logging in...',
-//     error: 'Login Error'
-//   })
-// ).subscribe(() => {
-//   this.router.navigate(['']);
-// });
 

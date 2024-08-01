@@ -38,6 +38,11 @@
     margin-left: 40px;
 }
 
+.item5 button.liked {
+    background-color: white;
+    color: green;
+}
+
 .item5 div{
     font-size: 24px;
     padding-top: 10px;
