@@ -67,3 +67,41 @@ exports.addLike = functions.https.onCall(async (data, context) => {
   }
 });
 
+exports.removeLike = functions.https.onCall(async (data, context) => {
+  const {postId, userId} = data;
+  if (!postId || !userId) {
+    throw new functions.https.HttpsError(
+        "invalid-argument",
+        "The function must be called with valid postId and userId.",
+    );
+  }
+
+  const postRef = admin.firestore().collection("posts").doc(postId);
+  const userLikeRef = postRef.collection("likes").doc(userId);
+
+  try {
+    const doc = await userLikeRef.get();
+    if (!doc.exists) {
+      throw new functions.https.HttpsError(
+          "not-found",
+          "User has not liked this post.",
+      );
+    }
+
+    await userLikeRef.delete();
+
+    await postRef.update({
+      likeCount: admin.firestore.FieldValue.increment(-1),
+    });
+
+    return {success: true};
+  } catch (error) {
+    console.error("Error removing like from post:", error);
+    throw new functions.https.HttpsError(
+        "unknown",
+        "Error removing like from post",
+        error,
+    );
+  }
+});
+

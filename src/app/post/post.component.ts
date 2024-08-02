@@ -21,14 +21,29 @@ export class PostComponent implements OnInit{
 
   likePost() {
     const userId = this.authService.loggedInUserId;
-    this.postsService.addLike(this.post?.postId, userId)
-    .then(() => {
-      console.log("Post liked succesffully");
-    })
-    .catch(error => {
-      console.error("Error liking post:", error);
-    });
-    this.isLiked = true; 
+    if (!this.post?.postId || !userId) return;
+
+    if (this.isLiked) {
+      this.postsService.removeLike(this.post.postId, userId)
+        .then(() => {
+          console.log('Post unliked successfully');
+          this.isLiked = false;
+          this.post!.likeCount!--;
+        })
+        .catch(error => {
+          console.error('Error unliking post:', error);
+        });
+    } else {
+      this.postsService.addLike(this.post.postId, userId)
+        .then(() => {
+          console.log('Post liked successfully');
+          this.isLiked = true;
+          this.post!.likeCount!++;
+        })
+        .catch(error => {
+          console.error('Error liking post:', error);
+        });
+    }
   }
 
   checkIfLiked() {

@@ -20,11 +20,6 @@ export class PostsService {
       return postRef.ref.id;
     })
   }
-  // Old savePost function:
-  // savePost(data: Post) {
-  //   console.log('sending data...');
-  //   return this.afs.collection<Post>('posts').add(data);
-  // }
 
   getMostRecentPosts(): Observable<Post[]> {
     return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
@@ -41,6 +36,11 @@ export class PostsService {
   addLike(postId: string | undefined, userId: string): Promise<void> {
     const addLikeFn = this.fns.httpsCallable('addLike');
     return addLikeFn({ postId, userId}).toPromise();
+  }
+
+  removeLike(postId: string | undefined, userId: string): Promise<void> {
+    const removeLikeFn = this.fns.httpsCallable('removeLike');
+    return removeLikeFn({ postId, userId }).toPromise();
   }
 
   checkIfUserLiked(postId: string, userId: string): Promise<boolean | undefined>{
