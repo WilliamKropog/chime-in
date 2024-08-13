@@ -1,6 +1,6 @@
 <div class="post" *ngIf="post">
     <div class="post-content">
-        <img [src]="post.photoURL ?? '/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+        <img [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
         <div class="item6">• {{ post.createdAt | relativeTime}}</div>
         <div class="item3">{{ post.views }} views</div>
         <h1>{{ post.displayName }}</h1>
