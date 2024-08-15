@@ -1,6 +1,6 @@
 export const environment ={
     production: false,
-    baseHref: '/',
+    // baseHref: '/',
     firebase: {
         apiKey: "AIzaSyDQwoSx3sAI1QyzdVUhE_y-MdVJYkj2SZs",
         authDomain: "chime-in-ded1f.firebaseapp.com",
