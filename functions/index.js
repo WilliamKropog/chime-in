@@ -105,3 +105,79 @@ exports.removeLike = functions.https.onCall(async (data, context) => {
   }
 });
 
+exports.addDislike = functions.https.onCall(async (data, context) => {
+  const {postId, userId} = data;
+  if (!postId || !userId) {
+    throw new functions.https.HttpsError(
+        "invalid-argument",
+        "The function must be called with valid postId and userId.",
+    );
+  }
+
+  const postRef = admin.firestore().collection("posts").doc(postId);
+  const userDislikeRef = postRef.collection("dislikes").doc(userId);
+
+  try {
+    const doc = await userDislikeRef.get();
+    if (doc.exists) {
+      throw new functions.https.HttpsError(
+          "already-exists",
+          "User has already disliked this post.",
+      );
+    }
+    await userDislikeRef.set({
+      dislikedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    await postRef.update({
+      dislikeCount: admin.firestore.FieldValue.increment(1),
+    });
+
+    return {success: true};
+  } catch (error) {
+    console.error("Error adding dislike to post:", error);
+    throw new functions.https.HttpsError(
+        "unknown",
+        "Error adding dislike to post",
+        error,
+    );
+  }
+});
+
+exports.removeDislike = functions.https.onCall(async (data, context) => {
+  const {postId, userId} = data;
+  if (!postId, !userId) {
+    throw new functions.https.HttpsError(
+        "invalid-argument",
+        "The function must be called with valid postId and userId.",
+    );
+  }
+
+  const postRef = admin.firestore().collection("posts").doc(postId);
+  const userDislikeRef = postRef.collection("dislikes").doc(userId);
+
+  try {
+    const doc = await userDislikeRef.get();
+    if (!doc.exists) {
+      throw new functions.https.HttpsError(
+          "not-found",
+          "User has not disliked this post.",
+      );
+    }
+
+    await userDislikeRef.delete();
+
+    await postRef.update({
+      dislikeCount: admin.firestore.FieldValue.increment(-1),
+    });
+
+    return {success: true};
+  } catch (error) {
+    console.error("Error removing dislike from post:", error);
+    throw new functions.https.HttpsError(
+        "unknown",
+        "Error removing dislike from post.",
+        error,
+    );
+  }
+});

@@ -42,6 +42,7 @@ export class PostEditorComponent {
           createdAt: new Date(),
           views: 0,
           likeCount: 0,
+          dislikeCount: 0,
           postId: '',
         };
 

@@ -25,6 +25,7 @@ export interface Post {
     displayName: string | null;
     postId: string;
     likeCount: number;
+    dislikeCount: number;
     likes?: Array<string>;
     commentCount?: number;
     views: number;

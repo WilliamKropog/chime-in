@@ -66,7 +66,7 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     HotToastModule.forRoot(),
   ],
   providers: [
-    {provide: APP_BASE_HREF, useValue: '/src/app'},
+    {provide: APP_BASE_HREF, useValue: environment.baseHref},
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage())],
