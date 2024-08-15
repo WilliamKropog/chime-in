@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
@@ -65,6 +66,7 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     HotToastModule.forRoot(),
   ],
   providers: [
+    {provide: APP_BASE_HREF, useValue: '/src/app'},
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage())],
