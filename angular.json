@@ -14,7 +14,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist"
+              "base": "dist/chime-in"
             },
             "index": "src/index.html",
             "polyfills": [
