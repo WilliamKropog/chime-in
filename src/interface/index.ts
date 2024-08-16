@@ -26,8 +26,10 @@ export interface Post {
     postId: string;
     likeCount: number;
     dislikeCount: number;
+    bookmarkCount: number;
+    repostCount: number;
+    commentCount: number;
     likes?: Array<string>;
-    commentCount?: number;
     views: number;
 }
 

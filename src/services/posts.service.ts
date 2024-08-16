@@ -21,11 +21,18 @@ export class PostsService {
     })
   }
 
+  //Testing Home Page Posts Subscription
+
+  // getMostRecentPosts(): Observable<Post[]> {
+  //   return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
+  //   .valueChanges()
+  //   .pipe(debounceTime(1000),
+  //   distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
+  // }
+
   getMostRecentPosts(): Observable<Post[]> {
     return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
-    .valueChanges()
-    .pipe(debounceTime(1000),
-    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
+    .valueChanges();
   }
 
   incrementView(postId: string): Promise<void> {

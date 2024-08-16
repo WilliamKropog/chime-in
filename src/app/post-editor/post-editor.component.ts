@@ -43,6 +43,9 @@ export class PostEditorComponent {
           views: 0,
           likeCount: 0,
           dislikeCount: 0,
+          bookmarkCount: 0,
+          repostCount: 0,
+          commentCount: 0,
           postId: '',
         };
 

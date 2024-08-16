@@ -10,6 +10,7 @@
     color: white;
     font-weight: 300;
     font-size: 24px;
+    z-index: 1;
   }
 
   .sidenav ul {

@@ -31,11 +31,12 @@
     grid-area: footer;
     display: flex;
     margin-top: 5px;
+    z-index: 0;
 }
 
 .item5 button {
     background-color: green;
-    margin-left: 40px;
+    margin-left: 20px;
 }
 
 .item5 button.liked {
