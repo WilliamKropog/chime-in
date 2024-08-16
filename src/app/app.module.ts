@@ -66,7 +66,7 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     HotToastModule.forRoot(),
   ],
   providers: [
-    {provide: APP_BASE_HREF, useValue: 'https://chimein--chime-in-ded1f.us-central1.hosted.app/'},
+    // {provide: APP_BASE_HREF, useValue: '/src/app'},
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage())],
