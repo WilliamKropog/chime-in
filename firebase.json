@@ -16,7 +16,7 @@
     }
   ],
   "hosting": {
-    "public": "dist/chime-in",  
+    "public": "dist",  
     "ignore": [
       "firebase.json",
       "**/.*",
