@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CommentComponent } from '../comment/comment.component';
 import { Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
@@ -99,4 +100,13 @@ export class PostComponent implements OnInit{
         console.error("Error checking if post is disliked:", error);
       });
   }
+
+  //COMMENT EDITOR BUTTON
+
+  isCommentEditorOpen: boolean = false;
+
+  openCommentEditor(): void {
+    this.isCommentEditorOpen = !this.isCommentEditorOpen;
+  }
+
 }

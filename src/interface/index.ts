@@ -20,7 +20,6 @@ export interface Post {
     userId: string;
     body: string;
     createdAt: any;
-    user?: User;
     photoURL: string | null;
     displayName: string | null;
     postId: string;
@@ -34,10 +33,15 @@ export interface Post {
 }
 
 export interface Comment {
-    id?: string;
+    commentId: string;
     body: string;
     postId: string;
-    createdAt?: any;
+    createdAt: any;
     userId: string;
-    user?: User;
+    photoUrl: string | null;
+    displayName: string | null;
+    likeCount: number;
+    dislikeCount: number;
+    replyCount: number;
+    likes?: Array<string>;
 }

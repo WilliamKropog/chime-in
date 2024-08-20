@@ -1,0 +1,39 @@
+.comment-editor{
+  border-top: solid 1px white;
+  padding-top: 20px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  height: auto;
+}
+
+.comment-editor img {
+  width: 50px;
+  height: 50px;
+  margin-right: auto;
+  border-radius: 100%;
+  margin-left: 25px;
+  position: absolute;
+  object-fit: cover;
+  object-position: center;
+  outline-style: solid;
+  outline-color: green;
+  outline-width: 2px;
+}
+
+.comment-editor textarea {
+  display: flex;
+  justify-content: center;
+  margin-left: 100px;
+  width: 600px;
+  height: 60px;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.send-button button {
+    margin-left: 25px;
+    background-color: green;
+    font-size: 18px;
+    transform: scale(1.1);
+  }

@@ -12,6 +12,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FeaturedComponent } from './featured/featured.component';
 import { FYPComponent } from './fyp/fyp.component';
 import { CollectiveComponent } from './collective/collective.component';
+import { CommentComponent } from './comment/comment.component';
+import { CommentEditorComponent } from './comment-editor/comment-editor.component';
 import { AppRoutingModule } from './app-routing.module';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -42,6 +44,8 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     FeaturedComponent,
     FYPComponent,
     CollectiveComponent,
+    CommentComponent,
+    CommentEditorComponent,
     RegisterComponent,
     HomeComponent,
     PostEditorComponent,

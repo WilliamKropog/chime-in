@@ -49,6 +49,11 @@
     color: green;
 }
 
+.item5 button.commenting {
+    background-color: white;
+    color: green;
+}
+
 .item5 div{
     font-size: 24px;
     padding-top: 10px;
@@ -112,4 +117,17 @@
     width: 700px;
     color: white;
     margin-left: 50px;
+}
+
+/* .comment{
+    margin-top: 20px;
+    width: 100%;
+    height: 100%;
+    color: white;
+    border-top: 1px solid white;
+} */
+  
+.comment-editor.open {
+    overflow: hidden;
+    transition: 0.3s ease-out;
 }

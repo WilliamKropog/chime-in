@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from '../../interface';
@@ -24,8 +22,6 @@ export class PostEditorComponent {
 
   constructor(
     private authService: AuthenticationService,
-    private auth: AngularFireAuth,
-    private afs: AngularFirestore,
     private postService: PostsService,
   ) { }
 

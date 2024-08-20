@@ -1,9 +1,9 @@
 <div class="modal-overlay">
     <div class="modal">
         <div class="modal-content" *ngIf="user$ | async as user">
-            <img [src]="user.photoURL" alt="Profile Picture">
+            <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
             <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="500"
-                (input)="updateCharacterCount()"></textarea>
+                (input)="updateCharacterCount()" placeholder="Type your Chime-in here."></textarea>
             <div class="character-count">
                 {{ characterCount }} / 500
             </div>
@@ -23,8 +23,8 @@
             </div>
             <div class="post-button">
                 <button mat-fab extended (click)="chimein();">
-                    <mat-icon>edit</mat-icon>
-                    Post
+                    <mat-icon>send</mat-icon>
+                    Send
                 </button>
             </div>
         </div>

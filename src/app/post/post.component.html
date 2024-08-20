@@ -34,12 +34,19 @@
                     {{ post.repostCount }}
                 </div>
             <button mat-mini-fab
-            style="width: 100px; border-radius: 10px; margin-left: 275px;">
+            style="width: 100px; border-radius: 10px; margin-left: 275px;"
+            (click)="openCommentEditor()" [ngClass]="{'commenting': isCommentEditorOpen}">
                 <mat-icon>chat_bubble</mat-icon>
             </button>
                 <div>
                     {{ post.commentCount }}
                 </div>
         </div>
+    </div>
+    <div class="comment">
+        <app-comment></app-comment>
+    </div>
+    <div class="comment-editor" [ngClass]="{'open': isCommentEditorOpen}">
+         <app-comment-editor *ngIf="isCommentEditorOpen"></app-comment-editor>
     </div>
 </div>
