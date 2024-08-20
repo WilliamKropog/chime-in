@@ -3,17 +3,18 @@
   <h1>• In Progress: Comment feature development</h1>
 </div>
 <div class="version">
-  Pre-Dev Version 3.9.0
+  Pre-Dev Version 3.9.0a
   <h1>
     8/20/24
     <br>
     - New Posting feature: Users can now create and upload text posts.
     <br>
     - New Commenting Feature. Comments do not send yet.
+    <br>
+    - Fixed blinking bug disrupting user experience. 
   </h1>
 </div>
 
-<!-- <app-post [post]="mostRecentPost"></app-post> -->
 <div *ngIf="mostRecentPosts.length > 0">
   <app-home-posts [posts]="mostRecentPosts"></app-home-posts>
 </div>

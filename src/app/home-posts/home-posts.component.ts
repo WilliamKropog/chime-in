@@ -16,4 +16,8 @@ export class HomePostsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     console.log('HomePostsComponent destroyed');
   }
+
+  trackByPostId(index: number, post: Post): string {
+    return post.postId
+  }
 }

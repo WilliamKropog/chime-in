@@ -24,15 +24,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ngOnInit(): void {
-  //   console.log('HomeComponent initialized.');
-  //   this.postsService.getMostRecentPosts().subscribe(posts => {
-  //     console.log('Subscription updated.');
-  //     this.mostRecentPosts = posts;
-  //     this.incrementViewCount(posts);  
-  //   });
-  // }
-
   ngOnDestroy(): void {
     if (this.postsSubscription) {
       this.postsSubscription.unsubscribe();
@@ -53,5 +44,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   incrementPostView(postId: string): void {
     this.postsService.incrementView(postId);
     console.log(`Increment view count for post ${postId}`);
+  }
+
+  updatePosts(newPosts: Post[]): void {
+    const updatedPosts = [...this.mostRecentPosts];
+  
+    newPosts.forEach((newPost) => {
+      const existingPostIndex = updatedPosts.findIndex(post => post.postId === newPost.postId);
+      if (existingPostIndex > -1) {
+        updatedPosts[existingPostIndex] = newPost;
+      } else {
+        updatedPosts.push(newPost);
+      }
+    });
+    this.mostRecentPosts = updatedPosts;
   }
 }
