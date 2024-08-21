@@ -47,6 +47,6 @@
         <app-comment></app-comment>
     </div>
     <div class="comment-editor" [ngClass]="{'open': isCommentEditorOpen}">
-         <app-comment-editor *ngIf="isCommentEditorOpen"></app-comment-editor>
+         <app-comment-editor [postId]="post.postId" *ngIf="isCommentEditorOpen"></app-comment-editor>
     </div>
 </div>

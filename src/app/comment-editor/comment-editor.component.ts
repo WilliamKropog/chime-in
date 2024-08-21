@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Post } from 'src/interface';
+import { Comment } from 'src/interface';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
 
@@ -9,8 +9,8 @@ import { PostsService } from 'src/services/posts.service';
   templateUrl: './comment-editor.component.html',
   styleUrl: './comment-editor.component.css'
 })
-export class CommentEditorComponent {
-  @Input() isVisible: boolean = false;
+export class CommentEditorComponent implements OnInit, OnDestroy{
+  @Input() postId!: string;
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
   isLoading: boolean = false;
@@ -25,43 +25,57 @@ export class CommentEditorComponent {
     private postService: PostsService,
   ) { }
 
-  // chimein(): void {
-  //   this.isLoading = true;
+  ngOnInit(): void {
+    console.log('CommentEditor initialized with postId:', this.postId);
+  }
 
-  //   this.userSubscription = this.authService.currentUser$.subscribe(user => {
-  //     if (user) {
-  //       const body: Post = {
-  //         body: this.postText,
-  //         photoURL: user.photoURL,
-  //         displayName: user.displayName,
-  //         userId: user.uid,
-  //         createdAt: new Date(),
-  //         views: 0,
-  //         likeCount: 0,
-  //         dislikeCount: 0,
-  //         bookmarkCount: 0,
-  //         repostCount: 0,
-  //         commentCount: 0,
-  //         postId: '',
-  //       };
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['postId'] && !changes['postId'].isFirstChange()) {
+      console.log('CommentEditor received new postId:', this.postId);
+    }
+  }
 
-  //       if (this.postText.length > 0) {
-  //         this.postService.savePost(body).then((docId) => {
-  //           body.postId = docId;
-  //           this.onClose();
-  //         }).catch(error => {
-  //           console.error('Error saving post: ', error);
-  //         }).finally(() => {
-  //           this.isLoading = false;
-  //           this.unsubscribeUser();
-  //         });
-  //       }
-  //     } else {
-  //       console.error('No user is logged in');
-  //       this.isLoading = false;
-  //     }
-  //   })
-  // }
+  comment(): void {
+    this.isLoading = true;
+
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
+      console.log('User data in CommentEditor:', user);
+      if (user && this.postId) {
+        const body: Comment = {
+          body: this.commentText,
+          photoURL: user.photoURL,
+          displayName: user.displayName,
+          userId: user.uid,
+          createdAt: new Date(),
+          likeCount: 0,
+          dislikeCount: 0,
+          replyCount: 0,
+          commentId: '',
+          postId: this.postId
+        }; 
+
+        if (this.commentText.length > 0) {
+          this.postService.saveComment(this.postId, body).then((commentId) => {
+            body.commentId = commentId;
+            console.log('Comment successfully saved with ID:', commentId);
+          }).catch(error => {
+            console.error('Error saving comment: ', error);
+          }).finally(() => {
+            this.isLoading = false;
+            this.commentText = '';
+            this.unsubscribeUser();
+            this.close.emit();
+          });
+        } else {
+          console.error('Comment text is empty');
+          this.isLoading = false;
+        }
+      } else {
+        console.error('No user is logged in or postId is undefined');
+        this.isLoading = false;
+      }
+    })
+  }
 
 
   updateCharacterCount(): void {
@@ -80,9 +94,8 @@ export class CommentEditorComponent {
     }
   }
 
-  onClose(): void {
-    this.isVisible = false;
-    this.close.emit();
-    console.log('Post Modal closed.')
+  ngOnDestroy(): void {
+    this.unsubscribeUser();
   }
+
 }

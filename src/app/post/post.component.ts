@@ -1,24 +1,41 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommentComponent } from '../comment/comment.component';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { Subscription } from 'rxjs';
+import { CommentEditorService } from 'src/services/commenteditor.service';
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
-export class PostComponent implements OnInit{
+export class PostComponent implements OnInit, OnDestroy{
   @Input() post?: Post;
   isLiked?: boolean = false; 
   isDisliked?: boolean = false;
+  isCommentEditorOpen: boolean = false;
+  private editorSubscription?: Subscription;
 
-  constructor(private postsService: PostsService, private authService: AuthenticationService) { }
+  constructor(
+    private postsService: PostsService, 
+    private authService: AuthenticationService,
+    private commentEditorService: CommentEditorService,
+  ) { }
 
   ngOnInit(): void {
     this.checkIfLiked();
     this.checkIfDisliked();
+
+    this.editorSubscription = this.commentEditorService.openEditor$.subscribe(openPostId => {
+      if (openPostId !== this.post?.postId) {
+        this.isCommentEditorOpen = false;
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.editorSubscription?.unsubscribe();
   }
 
   likePost() {
@@ -103,10 +120,14 @@ export class PostComponent implements OnInit{
 
   //COMMENT EDITOR BUTTON
 
-  isCommentEditorOpen: boolean = false;
-
   openCommentEditor(): void {
-    this.isCommentEditorOpen = !this.isCommentEditorOpen;
+    if (this.isCommentEditorOpen) {
+      this.isCommentEditorOpen = false;
+      this.commentEditorService.closeEditor();
+    } else {
+      this.isCommentEditorOpen = true;
+      this.commentEditorService.openEditor(this.post?.postId!);
+    }
   }
 
 }

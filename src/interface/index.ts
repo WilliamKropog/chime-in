@@ -38,7 +38,7 @@ export interface Comment {
     postId: string;
     createdAt: any;
     userId: string;
-    photoUrl: string | null;
+    photoURL: string | null;
     displayName: string | null;
     likeCount: number;
     dislikeCount: number;

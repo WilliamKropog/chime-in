@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, pipe } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Post } from '../interface';
+import { Comment } from '../interface';
 import { AngularFireFunctions } from '@angular/fire/compat/functions';
 
 @Injectable({
@@ -21,7 +22,18 @@ export class PostsService {
     })
   }
 
-  //Testing Home Page Posts Subscription
+  saveComment(postId: string, data: Comment): Promise<string> {
+    const commentRef = this.afs.collection<Post>('posts')
+      .doc(postId)
+      .collection<Comment>('comments')
+      .doc();
+
+    data.commentId = commentRef.ref.id;
+    return commentRef.set(data).then(() => {
+      console.log("Comment saved with ID:", data.commentId);
+      return commentRef.ref.id;
+    });
+  }
 
   getMostRecentPosts(): Observable<Post[]> {
     return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
@@ -29,11 +41,6 @@ export class PostsService {
     .pipe(debounceTime(1000),
     distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
   }
-
-  // getMostRecentPosts(): Observable<Post[]> {
-  //   return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
-  //   .valueChanges();
-  // }
 
   incrementView(postId: string): Promise<void> {
     const incrementViewFn = this.fns.httpsCallable('incrementPostView');

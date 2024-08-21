@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable, from, of, concatMap, Subject } from 'rxjs';
-import { User } from '../interface';
 import {
   UserInfo,
   updateProfile,
-  signInWithEmailAndPassword,
   Auth,
   authState
 } from '@angular/fire/auth';
