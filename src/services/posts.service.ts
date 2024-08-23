@@ -42,6 +42,17 @@ export class PostsService {
     distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
   }
 
+  getCommentsForPost(postId: string): Observable<Comment[]> {
+    return this.afs.collection<Post>('posts')
+      .doc(postId)
+      .collection<Comment>('comments', ref => ref.orderBy('createdAt', 'asc'))
+      .valueChanges()
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+      );
+  }
+
   incrementView(postId: string): Promise<void> {
     const incrementViewFn = this.fns.httpsCallable('incrementPostView');
     return incrementViewFn({ postId }).toPromise();

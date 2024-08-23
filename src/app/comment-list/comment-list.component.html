@@ -1,0 +1,8 @@
+<p>Comment Section:</p>
+<div *ngIf="comments.length > 0">
+    <app-comment *ngFor="let comment of comments; trackBy: trackByCommentId" [comment]="comment"></app-comment>
+</div>
+<div *ngIf="comments.length === 0" 
+style="color: white; display: flex; justify-content: center;">
+    No recent comments available.
+</div>

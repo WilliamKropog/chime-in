@@ -1,3 +1,26 @@
-<!-- <div>
-    Top Comment goes here.
-</div> -->
+<div class="comment-container" *ngIf="comment">
+    <img [src]="comment.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+    <div class="comment-name">
+        {{ comment.displayName }}
+    </div>
+    <!-- <div class="time-stamp">
+        timestamp
+    </div> -->
+    <div class="comment-body">
+        {{ comment.body }}
+    </div>
+    <div class="comment-buttons">
+        <button mat-mini-fab>
+            <mat-icon>thumb_up</mat-icon>
+        </button>
+            <div style="color: lightgreen">
+                0
+            </div>
+        <button mat-mini-fab>
+            <mat-icon>thumb_down</mat-icon>
+        </button>
+            <div style="color: lightcoral">
+                0
+            </div>
+    </div>
+</div>

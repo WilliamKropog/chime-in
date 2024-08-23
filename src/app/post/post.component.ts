@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Post } from 'src/interface';
+import { Post, Comment } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { Subscription } from 'rxjs';
@@ -12,10 +12,12 @@ import { CommentEditorService } from 'src/services/commenteditor.service';
 })
 export class PostComponent implements OnInit, OnDestroy{
   @Input() post?: Post;
+  commentsList: Comment[] = [];
   isLiked?: boolean = false; 
   isDisliked?: boolean = false;
   isCommentEditorOpen: boolean = false;
   private editorSubscription?: Subscription;
+  private commentsSubscription?: Subscription;
 
   constructor(
     private postsService: PostsService, 
@@ -31,11 +33,18 @@ export class PostComponent implements OnInit, OnDestroy{
       if (openPostId !== this.post?.postId) {
         this.isCommentEditorOpen = false;
       }
-    })
+    });
+
+    if (this.post?.postId) {
+      this.commentsSubscription = this.postsService.getCommentsForPost(this.post.postId).subscribe(comments => {
+        this.commentsList = comments;
+      })
+    }
   }
 
   ngOnDestroy(): void {
     this.editorSubscription?.unsubscribe();
+    this.commentsSubscription?.unsubscribe();
   }
 
   likePost() {
