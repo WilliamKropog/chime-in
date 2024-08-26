@@ -3,9 +3,9 @@
     <div class="comment-name">
         {{ comment.displayName }}
     </div>
-    <!-- <div class="time-stamp">
-        timestamp
-    </div> -->
+    <div class="time-stamp">
+        • {{ comment.createdAt | relativeTime }}
+    </div>
     <div class="comment-body">
         {{ comment.body }}
     </div>
