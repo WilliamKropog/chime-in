@@ -19,7 +19,7 @@
     height: 50px;
     border-radius: 100%;
     margin-right: auto;
-    margin-top: 5px;
+    margin-top: 20px;
     margin-left: 25px;
     position: absolute;
     object-fit: cover;
@@ -57,9 +57,9 @@
 
   .comment-buttons {
     grid-area: buttons;
-    position: relative;
-    margin-top: auto;
+    position: absolute;
     margin-left: auto;
+    margin-top: 35px;
     display: flex;
     justify-content: right;
   }

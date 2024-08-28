@@ -8,8 +8,13 @@ import { Comment } from 'src/interface';
 })
 export class CommentListComponent {
   @Input() comments: Comment[] = [];
+  isCommentSectionOpen: boolean = false;
 
   trackByCommentId(index: number, comment: Comment): string {
     return comment.commentId;
+  }
+
+  toggleCommentSection(): void {
+    this.isCommentSectionOpen = !this.isCommentSectionOpen;
   }
 }

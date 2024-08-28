@@ -1,4 +1,22 @@
 <div *ngIf="comments.length > 0">
-    <p>Comment Section:</p>
-    <app-comment *ngFor="let comment of comments; trackBy: trackByCommentId" [comment]="comment"></app-comment>
+    <button mat-button (click)="toggleCommentSection()"
+    style="
+    color: white; 
+    font-size: 16px;
+    border-radius: 10px;
+    outline-style: solid;
+    outline-color: green;
+    margin-top: 20px;
+    margin-left: auto; 
+    margin-right: auto; 
+    display: flex; 
+    justify-content: center;
+    z-index: 0;">
+        {{ isCommentSectionOpen ? 'Hide Comments' : 'View Comments' }}
+    </button>
+    <div *ngIf="isCommentSectionOpen"
+    style="
+    margin-top: 20px;">
+        <app-comment *ngFor="let comment of comments; trackBy: trackByCommentId" [comment]="comment"></app-comment>
+    </div>
 </div>

@@ -29,10 +29,17 @@ export class PostsService {
       .doc();
 
     data.commentId = commentRef.ref.id;
+
     return commentRef.set(data).then(() => {
-      console.log("Comment saved with ID:", data.commentId);
-      return commentRef.ref.id;
-    });
+      console.log('Comment saved with ID:', data.commentId);
+
+      return this.incrementCommentCount(postId).then(() => {
+        return commentRef.ref.id;
+      });
+    }).catch(error => {
+      console.error('Error saving comment or incrementing comment count:', error);
+      throw error;
+    })
   }
 
   getMostRecentPosts(): Observable<Post[]> {
@@ -56,6 +63,11 @@ export class PostsService {
   incrementView(postId: string): Promise<void> {
     const incrementViewFn = this.fns.httpsCallable('incrementPostView');
     return incrementViewFn({ postId }).toPromise();
+  }
+
+  incrementCommentCount(postId: string): Promise<void> {
+    const incrementCommentCountFn = this.fns.httpsCallable('incrementCommentCount');
+    return incrementCommentCountFn({ postId }).toPromise();
   }
 
   addLike(postId: string | undefined, userId: string): Promise<void> {
@@ -87,4 +99,5 @@ export class PostsService {
     return this.afs.collection('posts').doc(postId).collection('dislikes').doc(userId).get().toPromise()
     .then(doc => doc?.exists);
   }
+
 }

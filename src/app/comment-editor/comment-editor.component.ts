@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Comment } from 'src/interface';
+import { Comment, Post } from 'src/interface';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
 
@@ -11,6 +11,7 @@ import { PostsService } from 'src/services/posts.service';
 })
 export class CommentEditorComponent implements OnInit, OnDestroy{
   @Input() postId!: string;
+  @Input() post?: Post;
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
   isLoading: boolean = false;
@@ -39,7 +40,6 @@ export class CommentEditorComponent implements OnInit, OnDestroy{
     this.isLoading = true;
 
     this.userSubscription = this.authService.currentUser$.subscribe(user => {
-      console.log('User data in CommentEditor:', user);
       if (user && this.postId) {
         const body: Comment = {
           body: this.commentText,
@@ -54,12 +54,15 @@ export class CommentEditorComponent implements OnInit, OnDestroy{
           postId: this.postId
         }; 
 
+
         if (this.commentText.length > 0) {
+
           this.postService.saveComment(this.postId, body).then((commentId) => {
             body.commentId = commentId;
             console.log('Comment successfully saved with ID:', commentId);
           }).catch(error => {
             console.error('Error saving comment: ', error);
+            this.post!.commentCount!--;
           }).finally(() => {
             this.isLoading = false;
             this.commentText = '';
