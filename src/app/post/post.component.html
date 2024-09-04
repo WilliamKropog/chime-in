@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="comment-section">
-        <app-comment-list [comments]="commentsList"></app-comment-list>
+        <app-comment-list [comments]="commentsList" [post]="post"></app-comment-list>
     </div>
     <div class="comment-editor" [ngClass]="{'open': isCommentEditorOpen}">
          <app-comment-editor [postId]="post.postId" *ngIf="isCommentEditorOpen"></app-comment-editor>

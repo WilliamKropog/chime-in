@@ -2,6 +2,9 @@
     <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
     <textarea matInput [ngModel]="commentText" (ngModelChange)="updateCommentText($event)" 
     maxlength="250" (input)="updateCharacterCount()" placeholder="Type your comment here."></textarea>
+    <div class="character-count">
+        {{ characterCount }} / 250
+    </div>
     <div class="send-button">
         <button mat-mini-fab (click)="comment();">
             <mat-icon>send</mat-icon>

@@ -207,3 +207,181 @@ exports.removeDislike = functions.https.onCall(async (data, context) => {
     );
   }
 });
+
+exports.addLikeToComment = functions.https.onCall(async (data, context) => {
+  const {postId, commentId, userId} = data;
+  if (!postId || !commentId || !userId) {
+    throw new functions.https.HttpsError(
+        "invalid-argument",
+        "The function must be called with valid commentId and userId.",
+    );
+  }
+
+  const commentRef = admin.firestore()
+      .collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .doc(commentId);
+
+  const userLikeRef = commentRef.collection("likes").doc(userId);
+
+  try {
+    const doc = await userLikeRef.get();
+    if (doc.exists) {
+      throw new functions.https.HttpsError(
+          "already-exists",
+          "User has already liked this comment.",
+      );
+    }
+
+    await userLikeRef.set({
+      likedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    await commentRef.update({
+      likeCount: admin.firestore.FieldValue.increment(1),
+    });
+
+    return {success: true};
+  } catch (error) {
+    console.error("Error adding like to comment:", error);
+    throw new functions.https.HttpsError(
+        "unknown",
+        "Error adding like to comment",
+        error,
+    );
+  }
+});
+
+exports.removeLikeFromComment = functions.https
+    .onCall(async (data, context) => {
+      const {postId, commentId, userId} = data;
+      if (!postId || !commentId || !userId) {
+        throw new functions.https.HttpsError(
+            "invalid-argument",
+            "The function must be called with valid commentId and userId.",
+        );
+      }
+
+      const commentRef = admin.firestore()
+          .collection("posts")
+          .doc(postId)
+          .collection("comments")
+          .doc(commentId);
+
+      const userLikeRef = commentRef.collection("likes").doc(userId);
+
+      try {
+        const doc = await userLikeRef.get();
+        if (!doc.exists) {
+          throw new functions.https.HttpsError(
+              "not-found",
+              "User has not liked this comment.",
+          );
+        }
+
+        await userLikeRef.delete();
+
+        await commentRef.update({
+          likeCount: admin.firestore.FieldValue.increment(-1),
+        });
+
+        return {success: true};
+      } catch (error) {
+        console.error("Error removing like from comment:", error);
+        throw new functions.https.HttpsError(
+            "unknown",
+            "Error removing like from comment",
+            error,
+        );
+      }
+    });
+
+exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
+  const {postId, commentId, userId} = data;
+  if (!postId || !commentId || !userId) {
+    throw new functions.https.HttpsError(
+        "invalid-argument",
+        "The function must be called with valid commentId and userId.",
+    );
+  }
+
+  const commentRef = admin.firestore()
+      .collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .doc(commentId);
+
+  const userLikeRef = commentRef.collection("dislikes").doc(userId);
+
+  try {
+    const doc = await userLikeRef.get();
+    if (doc.exists) {
+      throw new functions.https.HttpsError(
+          "already-exists",
+          "User has already disliked this comment.",
+      );
+    }
+
+    await userLikeRef.set({
+      likedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    await commentRef.update({
+      dislikeCount: admin.firestore.FieldValue.increment(1),
+    });
+
+    return {success: true};
+  } catch (error) {
+    console.error("Error adding dislike to comment:", error);
+    throw new functions.https.HttpsError(
+        "unknown",
+        "Error adding dislike to comment",
+        error,
+    );
+  }
+});
+
+exports.removeDislikeFromComment = functions.https
+    .onCall(async (data, context) => {
+      const {postId, commentId, userId} = data;
+      if (!postId || !commentId || !userId) {
+        throw new functions.https.HttpsError(
+            "invalid-argument",
+            "The function must be called with valid commentId and userId.",
+        );
+      }
+
+      const commentRef = admin.firestore()
+          .collection("posts")
+          .doc(postId)
+          .collection("comments")
+          .doc(commentId);
+
+      const userLikeRef = commentRef.collection("dislikes").doc(userId);
+
+      try {
+        const doc = await userLikeRef.get();
+        if (!doc.exists) {
+          throw new functions.https.HttpsError(
+              "not-found",
+              "User has not disliked this comment.",
+          );
+        }
+
+        await userLikeRef.delete();
+
+        await commentRef.update({
+          dislikeCount: admin.firestore.FieldValue.increment(-1),
+        });
+
+        return {success: true};
+      } catch (error) {
+        console.error("Error removing dislike from comment:", error);
+        throw new functions.https.HttpsError(
+            "unknown",
+            "Error removing dislike from comment",
+            error,
+        );
+      }
+    });

@@ -1,6 +1,5 @@
 .comment-container {
     border-top: solid 1px white;
-    padding-top: 10px;
     padding-bottom: 20px;
     display: grid;
     justify-content: left;
@@ -69,6 +68,17 @@
     background-color: green;
     transform: scale(0.8);
   }
+
+  .comment-buttons button.liked {
+    background-color: white;
+    color: green;
+  }
+
+  .comment-buttons button.disliked {
+    background-color: white;
+    color: green;
+  }
+
 
   .comment-buttons div {
     margin-right: 10px;

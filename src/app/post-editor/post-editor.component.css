@@ -82,7 +82,7 @@
   display: flex;
   margin-left: auto;
   padding-right: 16px;
-  padding-top: 12px;
+  margin-top: 12px;
 }
 
 .close-button button {

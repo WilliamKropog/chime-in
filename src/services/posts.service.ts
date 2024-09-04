@@ -60,6 +60,13 @@ export class PostsService {
       );
   }
 
+  getTopCommentForPost(postId: string): Observable<Comment | undefined> {
+    return this.afs.collection('posts').doc(postId)
+      .collection<Comment>('comments', ref => ref.orderBy('likeCount', 'desc').limit(1))
+      .valueChanges()
+      .pipe(map(comments => comments.length > 0 ? comments[0] : undefined));
+  }
+
   incrementView(postId: string): Promise<void> {
     const incrementViewFn = this.fns.httpsCallable('incrementPostView');
     return incrementViewFn({ postId }).toPromise();

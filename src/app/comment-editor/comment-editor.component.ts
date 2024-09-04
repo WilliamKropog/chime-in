@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, SimpleChange
 import { Subscription } from 'rxjs';
 import { Comment, Post } from 'src/interface';
 import { AuthenticationService } from 'src/services/authentication.service';
+import { CommentEditorService } from 'src/services/commenteditor.service';
 import { PostsService } from 'src/services/posts.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { PostsService } from 'src/services/posts.service';
   templateUrl: './comment-editor.component.html',
   styleUrl: './comment-editor.component.css'
 })
-export class CommentEditorComponent implements OnInit, OnDestroy{
+export class CommentEditorComponent implements OnDestroy{
   @Input() postId!: string;
   @Input() post?: Post;
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
@@ -24,17 +25,8 @@ export class CommentEditorComponent implements OnInit, OnDestroy{
   constructor(
     private authService: AuthenticationService,
     private postService: PostsService,
+    private commentEditorService: CommentEditorService,
   ) { }
-
-  ngOnInit(): void {
-    console.log('CommentEditor initialized with postId:', this.postId);
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['postId'] && !changes['postId'].isFirstChange()) {
-      console.log('CommentEditor received new postId:', this.postId);
-    }
-  }
 
   comment(): void {
     this.isLoading = true;
@@ -53,10 +45,8 @@ export class CommentEditorComponent implements OnInit, OnDestroy{
           commentId: '',
           postId: this.postId
         }; 
-
-
         if (this.commentText.length > 0) {
-
+          this.commentEditorService.closeEditor();
           this.postService.saveComment(this.postId, body).then((commentId) => {
             body.commentId = commentId;
             console.log('Comment successfully saved with ID:', commentId);

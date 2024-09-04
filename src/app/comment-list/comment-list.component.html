@@ -1,22 +1,40 @@
-<div *ngIf="comments.length > 0">
-    <button mat-button (click)="toggleCommentSection()"
-    style="
-    color: white; 
-    font-size: 16px;
-    border-radius: 10px;
-    outline-style: solid;
-    outline-color: green;
-    margin-top: 20px;
-    margin-left: auto; 
-    margin-right: auto; 
-    display: flex; 
-    justify-content: center;
-    z-index: 0;">
-        {{ isCommentSectionOpen ? 'Hide Comments' : 'View Comments' }}
-    </button>
-    <div *ngIf="isCommentSectionOpen"
-    style="
-    margin-top: 20px;">
-        <app-comment *ngFor="let comment of comments; trackBy: trackByCommentId" [comment]="comment"></app-comment>
+<div *ngIf="comments.length > 0" style="margin-top: 20px;">
+    <p style="
+        margin-top: 6px;
+        margin-bottom: 6px;
+        margin-left: 355px;
+        position: absolute;
+        display: flex; 
+        text-align: center;
+        color: limegreen">
+        Top Comment:
+    </p>
+
+    <app-comment [comment]="topComment" [postId]="post!.postId"></app-comment>
+
+    <div *ngIf="isCommentSectionOpen" style="margin-top: 20px;">
+
+        <app-comment *ngFor="let comment of comments; trackBy: trackByCommentId" 
+        [comment]="comment" [postId]="post!.postId">
+        </app-comment>
+
+    </div>
+    <div *ngIf="comments.length > 1">
+        <button mat-button (click)="toggleCommentSection()"
+        style="
+        color: white; 
+        font-size: 12px;
+        height: 16px;
+        border-radius: 10px;
+        outline-style: solid;
+        outline-color: green;
+        margin-top: 10px;
+        margin-left: auto; 
+        margin-right: auto; 
+        display: flex; 
+        justify-content: center;
+        z-index: 0;">
+            {{ isCommentSectionOpen ? ('Hide All ' + post?.commentCount + ' Comments') : ('View All ' + post?.commentCount + ' Comments') }}
+        </button>
     </div>
 </div>
