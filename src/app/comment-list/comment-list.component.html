@@ -1,4 +1,4 @@
-<div *ngIf="comments.length > 0" style="margin-top: 20px;">
+<div *ngIf="topComment" style="margin-top: 20px;">
     <p style="
         margin-top: 6px;
         margin-bottom: 6px;
@@ -15,11 +15,10 @@
     <div *ngIf="isCommentSectionOpen" style="margin-top: 20px;">
 
         <app-comment *ngFor="let comment of comments; trackBy: trackByCommentId" 
-        [comment]="comment" [postId]="post!.postId">
-        </app-comment>
+        [comment]="comment" [postId]="post!.postId"></app-comment>
 
     </div>
-    <div *ngIf="comments.length > 1">
+    <div *ngIf="comments.length > 0">
         <button mat-button (click)="toggleCommentSection()"
         style="
         color: white; 

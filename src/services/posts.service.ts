@@ -49,12 +49,15 @@ export class PostsService {
     distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
   }
 
-  getCommentsForPost(postId: string): Observable<Comment[]> {
+  getCommentsForPost(postId: string, topCommentId?: string): Observable<Comment[]> {
     return this.afs.collection<Post>('posts')
       .doc(postId)
       .collection<Comment>('comments', ref => ref.orderBy('createdAt', 'asc'))
       .valueChanges()
       .pipe(
+        map(comments => {
+          return topCommentId ? comments.filter(comment => comment.commentId !== topCommentId) : comments;
+        }),
         debounceTime(500),
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
       );

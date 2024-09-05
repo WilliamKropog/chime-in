@@ -40,8 +40,10 @@
   .time-stamp {
     grid-area: timestamp;
     font-size: 12px;
+    width: 150px;
     color: gray;
     display: flex;
+    position: absolute;
     text-align: left;
     margin-top: 20px;
   }
@@ -56,10 +58,10 @@
 
   .comment-buttons {
     grid-area: buttons;
-    position: absolute;
-    margin-left: auto;
-    margin-top: 35px;
     display: flex;
+    position: absolute;
+    margin-left: 10px;
+    margin-top: 35px;
     justify-content: right;
   }
 

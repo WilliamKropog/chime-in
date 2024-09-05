@@ -13,10 +13,12 @@ import { CommentEditorService } from 'src/services/commenteditor.service';
 export class PostComponent implements OnInit, OnDestroy{
   @Input() post?: Post;
   commentsList: Comment[] = [];
+  topComment?: Comment;
   isLiked?: boolean = false; 
   isDisliked?: boolean = false;
   isCommentEditorOpen: boolean = false;
   private editorSubscription?: Subscription;
+  private topCommentSubscription?: Subscription;
   private commentsSubscription?: Subscription;
 
   constructor(
@@ -36,15 +38,23 @@ export class PostComponent implements OnInit, OnDestroy{
     });
 
     if (this.post?.postId) {
-      this.commentsSubscription = this.postsService.getCommentsForPost(this.post.postId).subscribe(comments => {
-        this.commentsList = comments;
-      })
+      this.topCommentSubscription = this.postsService.getTopCommentForPost(this.post.postId)
+      .subscribe(topComment => {
+        this.topComment = topComment;
+        const topCommentId = topComment ? topComment.commentId : undefined;
+
+        this.commentsSubscription = this.postsService.getCommentsForPost(this.post!.postId, topCommentId)
+        .subscribe(comments => {
+          this.commentsList = comments;
+        });
+      });
     }
   }
 
   ngOnDestroy(): void {
     this.editorSubscription?.unsubscribe();
     this.commentsSubscription?.unsubscribe();
+    this.topCommentSubscription?.unsubscribe();
   }
 
   likePost() {
