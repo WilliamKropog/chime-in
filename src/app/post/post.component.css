@@ -5,7 +5,7 @@
     height: auto;
     margin: auto;
     margin-bottom: 40px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .item1 {
@@ -80,6 +80,7 @@
     gap: 20px;
     width: 100%;
     justify-content: left;
+    padding-bottom: 20px;
 }
 
 .post-content img {
@@ -117,10 +118,7 @@
     width: 700px;
     color: white;
     margin-left: 50px;
-}
-
-.comment-section{
-    
+    padding-bottom: 20px;
 }
   
 .comment-editor.open {

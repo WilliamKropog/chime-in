@@ -4,3 +4,47 @@
     color: white;
     margin-top: 20px;
 }
+
+.topCommentText {
+    margin-bottom: 6px;
+    margin-left: auto;
+    position: relative;
+    display: flex; 
+    justify-content: center;
+    text-align: center;
+    color: limegreen;   
+}
+
+.scrollable-comments {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: auto;
+}
+
+.scrollable-comments.open {
+    overflow-y: scroll;
+    max-height: 500px;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: grey;
+  }
+
+.viewAllCommentsButton.button {
+    color: white; 
+    font-size: 12px;
+    height: 16px;
+    border-radius: 10px;
+    outline-style: solid;
+    outline-color: green;
+    margin-top: 10px;
+    margin-left: auto; 
+    margin-right: auto; 
+    display: flex; 
+    justify-content: center;
+    z-index: 0;
+}

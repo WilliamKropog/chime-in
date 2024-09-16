@@ -1,24 +1,27 @@
-<div *ngIf="topComment" style="margin-top: 20px;">
-    <p style="
-        margin-top: 6px;
-        margin-bottom: 6px;
-        margin-left: 355px;
-        position: absolute;
-        display: flex; 
-        text-align: center;
-        color: limegreen">
-        Top Comment:
-    </p>
-
-    <app-comment [comment]="topComment" [postId]="post!.postId"></app-comment>
-
-    <div *ngIf="isCommentSectionOpen" style="margin-top: 20px;">
-
-        <app-comment *ngFor="let comment of comments; trackBy: trackByCommentId" 
-        [comment]="comment" [postId]="post!.postId"></app-comment>
-
+<div class="comment-list">
+    <div class="scrollable-comments" [ngClass]="{ 'open': isCommentSectionOpen }">
+<!--Top Comment-->
+        <div *ngIf="topComment" style="margin-top: 20px;">
+            <div class="topCommentText">
+                Top Comment:
+            </div>
+            <app-comment [comment]="topComment" [postId]="post!.postId"></app-comment>
+        </div>
+<!--Comment Section-->
+        <div *ngIf="isCommentSectionOpen" style="margin-top: 20px;">
+            <app-comment 
+                *ngFor="let comment of comments; trackBy: trackByCommentId" 
+                [comment]="comment" 
+                [postId]="post!.postId">
+            </app-comment>
+        </div>
     </div>
-    <div *ngIf="comments.length > 0">
+<!--View / Hide all comments button-->
+<!--
+Note: CSS for this class is not implenting itself correctly.
+Doing forced styling in the mean time.
+-->
+    <div class="viewAllCommentsButton" *ngIf="comments.length > 0">
         <button mat-button (click)="toggleCommentSection()"
         style="
         color: white; 
