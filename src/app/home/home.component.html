@@ -3,9 +3,9 @@
   <h1>• In Progress: Displaying comments on Posts from database.</h1>
 </div>
 <div class="version">
-  Pre-Dev Version 3.9.3b
+  Pre-Dev Version 3.9.3c
   <h1>
-    9/16/24
+    9/17/24
     <br>
     - New Posting feature: Users can now create and upload text posts.
     <br>
@@ -13,10 +13,14 @@
     <br>
     - Top comment no longer re-appears in the comment section.
     <br>
-    - Added scrolling feature for long comment sections and few UI updates.
+    - Load more posts by scrolling to the bottom of the page now.
   </h1>
 </div>
 
 <div *ngIf="mostRecentPosts.length > 0">
   <app-home-posts [posts]="mostRecentPosts"></app-home-posts>
+</div>
+<div class="loading-spinner" *ngIf="isLoadingPosts"></div>
+<div class="loading-posts" *ngIf="isLoadingPosts">
+  Loading Posts...
 </div>

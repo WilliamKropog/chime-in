@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, QuerySnapshot } from '@angular/fire/compat/firestore';
 import { Observable, pipe } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Post } from '../interface';
@@ -10,6 +10,8 @@ import { AngularFireFunctions } from '@angular/fire/compat/functions';
   providedIn: 'root'
 })
 export class PostsService {
+
+  private lastVisible: any = null;
 
   constructor(private afs: AngularFirestore, private fns: AngularFireFunctions) { }
 
@@ -42,11 +44,34 @@ export class PostsService {
     })
   }
 
+  //Home Page initial list of Posts.
+
   getMostRecentPosts(): Observable<Post[]> {
     return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
     .valueChanges()
-    .pipe(debounceTime(1000),
-    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
+    .pipe(
+      debounceTime(1000),
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
+  }
+
+  //Home Page load more Posts when user scrolls to the bottom of page.
+
+  getMorePosts(): Observable<Post[]> {
+    return this.afs.collection<Post>('posts', ref => {
+      let query = ref.orderBy('createdAt', 'desc').limit(10);
+      if (this.lastVisible) {
+        query = query.startAfter(this.lastVisible);
+      }
+      return query;
+    }).get()
+    .pipe(
+      map((querySnapShot: QuerySnapshot<Post>) => {
+        if (querySnapShot.size > 0) {
+          this.lastVisible = querySnapShot.docs[querySnapShot.docs.length - 1];
+        }
+        return querySnapShot.docs.map(doc => doc.data());
+      })
+    )
   }
 
   getCommentsForPost(postId: string, topCommentId?: string): Observable<Comment[]> {

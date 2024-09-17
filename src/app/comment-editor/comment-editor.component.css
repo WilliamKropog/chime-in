@@ -1,6 +1,7 @@
 .comment-editor{
   border-top: solid 1px white;
-  padding-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   margin-top: 20px;
   display: flex;
   align-items: center;
