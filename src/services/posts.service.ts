@@ -74,6 +74,32 @@ export class PostsService {
     )
   }
 
+  getUserPosts(userId: string): Observable<Post[]> {
+    return this.afs.collection<Post>('posts', ref => 
+      ref.where('userId', '==', userId).orderBy('createdAt', 'desc').limit(10)
+    ).valueChanges().pipe(
+      debounceTime(1000),
+      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+    );
+  }
+
+  getMoreUserPosts(userId: string): Observable<Post[]> {
+    return this.afs.collection<Post>('posts', ref => {
+      let query = ref.where('userId', '==', userId).orderBy('createdAt', 'desc').limit(10);
+      if (this.lastVisible) {
+        query = query.startAfter(this.lastVisible);
+      }
+      return query;
+    }).get().pipe(
+      map((querySnapShot: QuerySnapshot<Post>) => {
+        if (querySnapShot.size > 0) {
+          this.lastVisible = querySnapShot.docs[querySnapShot.docs.length - 1];
+        }
+        return querySnapShot.docs.map(doc => doc.data());
+      })
+    )
+  }
+
   getCommentsForPost(postId: string, topCommentId?: string): Observable<Comment[]> {
     return this.afs.collection<Post>('posts')
       .doc(postId)

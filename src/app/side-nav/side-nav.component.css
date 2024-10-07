@@ -60,6 +60,9 @@
     border-radius: 100%;
     object-fit: cover;
     object-position: center;
+    outline-style: solid;
+    outline-color: green;
+    outline-width: 2px;
   }
 
   .pfp-upload {

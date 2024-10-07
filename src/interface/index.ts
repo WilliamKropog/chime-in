@@ -13,7 +13,7 @@ export interface User {
     emailVerified: boolean;
     username?: string;
     createdAt: any;
-    bio?: string;
+    backgroundImageURL?: string | null;
 }
 
 export interface Post {

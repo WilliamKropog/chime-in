@@ -1,0 +1,74 @@
+<div class="modal-overlay">
+    <div class="modal">
+        <div class="modal-content" *ngIf="user$ | async as user">
+
+            <div class="edit-pfp-and-username">
+                <h2>Profile Picture:</h2>
+                <img 
+                [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" 
+                alt="Profile Picture"
+                />
+                <button mat-fab mini style=
+                "position: absolute;
+                margin-top: 70px;
+                margin-left: 150px;"
+                (click)="fileInput.click()">
+                    <mat-icon>camera_alt</mat-icon>
+                </button>
+                <input type="file"
+                    #fileInput
+                    accept=".png, .jpg, .jpeg"
+                    (change)="uploadImage($event, user)"
+                    style="display: none;">
+                <h2 style="margin-top: 150px;">
+                    Username: 
+                    <br> &#64;{{ user.displayName }} 
+                </h2> 
+            </div>
+
+            <div class="edit-profile-page">
+                <h2>Background Image:</h2>
+                <div class="background-image">
+                    <div *ngIf="!hasBackgroundImage" style=
+                        "background-color: rgb(10, 26, 14); 
+                        width: 100%; 
+                        height: 100%;
+                        outline-style: solid;
+                        outline-color: green;
+                        outline-width: 2px;">
+                    </div>
+                    <img *ngIf="hasBackgroundImage" [src]="user.backgroundImageURL" alt="User Background" style=
+                        "width: 100%; 
+                        height: 100%; 
+                        object-fit: cover;
+                        outline-style: solid;
+                        outline-color: green;
+                        outline-width: 2px;">
+                </div>
+
+                <input type="file" accept=".jpg, .jpeg, .png" style="display: none" #backgroundInput (change)="uploadBackgroundImage($event, user)">
+                <a class="upload-link" (click)="backgroundInput.click()">
+                    Upload Background
+                </a>
+
+                <h2 style="margin-top: 20px;">Bio:</h2>
+                <textarea 
+                    matInput [ngModel]="bioText" 
+                    (ngModelChange)="updateBioText($event)" 
+                    maxlength="400"
+                    (input)="updateCharacterCount()" 
+                    placeholder="Type your bio here.">
+                </textarea>
+                <h3>{{ characterCount }} / 400</h3>
+                <button mat-fab extended (click)="saveProfile(user)">
+                    <mat-icon>save</mat-icon>
+                        Save
+                </button>
+            </div>
+
+            <button mat-mini-fab (click)="onClose()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+</div>

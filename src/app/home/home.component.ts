@@ -19,12 +19,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadInitialPosts();
-    // console.log('HomeComponent initialized.');
-    // this.postsSubscription = this.postsService.getMostRecentPosts().subscribe(posts => {
-    //   console.log('Subscription updated.');
-    //   this.mostRecentPosts = posts;
-    //   this.incrementViewCount(posts);  
-    // });
   }
 
   loadInitialPosts() {
@@ -80,20 +74,4 @@ export class HomeComponent implements OnInit {
     this.postsService.incrementView(postId);
     console.log(`Increment view count for post ${postId}`);
   }
-
-  //OLD POST UPDATES FUNCTION
-
-  // updatePosts(newPosts: Post[]): void {
-  //   const updatedPosts = [...this.mostRecentPosts];
-  
-  //   newPosts.forEach((newPost) => {
-  //     const existingPostIndex = updatedPosts.findIndex(post => post.postId === newPost.postId);
-  //     if (existingPostIndex > -1) {
-  //       updatedPosts[existingPostIndex] = newPost;
-  //     } else {
-  //       updatedPosts.push(newPost);
-  //     }
-  //   });
-  //   this.mostRecentPosts = updatedPosts;
-  // }
 }

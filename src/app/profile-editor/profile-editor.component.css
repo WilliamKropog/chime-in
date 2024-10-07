@@ -1,0 +1,119 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
+  
+  .modal {
+    background-color: rgb(10, 26, 14);
+    margin: auto;
+    width: 800px;
+    height: 500px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modal-content {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    color: white;
+  }
+
+  .modal-content button {
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-left: auto;
+    background-color: green;
+  }
+
+  .edit-pfp-and-username {
+    width: 250px;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+
+  .edit-pfp-and-username h2 {
+    text-align: center;
+  }
+
+  .edit-pfp-and-username h1 {
+    text-align: center;
+  }
+
+  .edit-pfp-and-username img {
+    width: 100px;
+    height: 100px;
+    margin-left: 75px;
+    border-radius: 100%;
+    position: absolute;
+    object-fit: cover;
+    object-position: center;
+    outline-style: solid;
+    outline-color: green;
+    outline-width: 2px;
+  }
+
+  .edit-pfp-and-username button {
+    width: 45px; 
+    height: 45px;
+    transform: scale(0.85);
+  }
+
+  .edit-pfp-and-username h1 {
+    margin-bottom: 100px;
+  }
+
+  .edit-profile-page {
+    width: 450px;
+    height: 450px;
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+
+  .edit-profile-page div {
+    height: 100px;
+    width: 450px;
+    background-color: gray;
+  }
+
+  .edit-profile-page a {
+    float: right;
+  }
+
+  .edit-profile-page textarea {
+    height: 150px;
+    width: 444px;
+    border-radius: 10px;
+  }
+
+  .edit-profile-page h3 {
+    font-size: 14px;
+    float: right;
+  }
+
+  .edit-profile-page button {
+    height: 50px;
+    width: 100px;
+    transform: scale(0.9);
+    margin-top: auto;
+    margin-left: 355px;
+  }
+
+  .upload-link {
+    color: limegreen;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .upload-link:hover {
+    color: green;
+    text-decoration: none;
+  }

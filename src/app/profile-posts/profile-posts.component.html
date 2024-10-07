@@ -1,0 +1,6 @@
+<div *ngIf="posts.length > 0">
+    <app-post *ngFor="let post of posts; trackBy: trackByPostId" [post]="post"></app-post>
+</div>
+<div *ngIf="posts.length === 0">
+    No profile posts yet.
+</div>

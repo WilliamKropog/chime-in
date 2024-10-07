@@ -27,6 +27,7 @@ import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { PostEditorComponent } from './post-editor/post-editor.component';
+import { ProfileEditorComponent } from './profile-editor/profile-editor.component';
 import { getAuth } from 'firebase/auth';
 import { provideStorage } from '@angular/fire/storage';
 import { getStorage } from 'firebase/storage';
@@ -34,6 +35,7 @@ import { provideAuth } from '@angular/fire/auth';
 import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
 import { HomePostsComponent } from './home-posts/home-posts.component';
+import { ProfilePostsComponent } from './profile-posts/profile-posts.component';
 import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
 
 @NgModule({
@@ -51,9 +53,11 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     RegisterComponent,
     HomeComponent,
     PostEditorComponent,
+    ProfileEditorComponent,
     ProfileComponent,
     PostComponent,
     HomePostsComponent,
+    ProfilePostsComponent,
     RelativeTimePipe
   ],
   imports: [

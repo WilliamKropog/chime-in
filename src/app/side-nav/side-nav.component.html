@@ -3,14 +3,8 @@
     <li>
       <div *ngIf="user$ | async as user">
         <a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
-          <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+          <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
         </a>
-      </div>
-      <div class="pfp-upload" *ngIf="user$ | async as user">
-        <button mat-mini-fab (click)="inputField.click()">
-          <mat-icon class="pfp-upload-icon">photo_camera</mat-icon>
-        </button>
-        <input #inputField type="file" accept="image/png, image/jpeg" hidden (change)="uploadImage($event, user)">
       </div>
     </li>
     <li>
