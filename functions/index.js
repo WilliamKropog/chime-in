@@ -385,3 +385,40 @@ exports.removeDislikeFromComment = functions.https
         );
       }
     });
+
+exports.updateAllUsernames = functions.https.onRequest(async (req, res) => {
+  try {
+    const usersCollection = admin.firestore().collection("users");
+    const usersSnapshot = await usersCollection.get();
+    const batch = admin.firestore().batch();
+
+    if (usersSnapshot.empty) {
+      return res.status(404).send("No users found");
+    }
+
+    const users = await admin.auth().listUsers();
+    const userMap = {};
+
+
+    users.users.forEach((user) => {
+      userMap[user.uid] = user.displayName || null;
+    });
+
+
+    usersSnapshot.forEach((doc) => {
+      const userId = doc.id;
+      const username = userMap[userId];
+
+      if (username) {
+        batch.update(usersCollection.doc(userId), {username: username});
+      }
+    });
+
+    await batch.commit();
+    return res.status(200)
+        .send("Batch update of usernames completed successfully.");
+  } catch (error) {
+    console.error("Error updating usernames:", error);
+    return res.status(500).send("Error updating usernames");
+  }
+});

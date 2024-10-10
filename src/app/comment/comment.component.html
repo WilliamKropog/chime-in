@@ -1,7 +1,9 @@
 <div class="comment-container" *ngIf="comment">
     <img [src]="comment.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
     <div class="comment-name">
-        {{ comment.displayName }}
+        <a [routerLink]="['/profile', comment.displayName]" style="text-decoration: none; color: white;">
+            {{ comment.displayName }}
+        </a>
     </div>
     <div class="time-stamp">
         • {{ comment.createdAt | relativeTime }}

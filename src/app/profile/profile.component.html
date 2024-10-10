@@ -7,17 +7,17 @@
             width: 100%; 
             height: 100%;">
             </div>
-            <img *ngIf="hasBackgroundImage" [src]="user.backgroundImageURL" alt="User Background" style=
+            <img *ngIf="hasBackgroundImage" [src]="user?.backgroundImageURL" alt="User Background" style=
             "width: 100%; 
             height: 100%; 
             object-fit: cover;">
         </div>
         <div class="profile-image">
-            <img [src]= "user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
+            <img [src]= "userPhotoUrl ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
         </div>
 
         <!--Edit Profile Button--> 
-        <button mat-mini-fab (click)="openProfileEditor()">
+        <button *ngIf="loggedInUserId === currentUserId" mat-mini-fab (click)="openProfileEditor()">
             Edit Profile
             <mat-icon>edit</mat-icon>
         </button>
@@ -25,7 +25,7 @@
         <!--Profile Stats-->
         <div class="profile-stats">
             <h1>
-                <b>&#64;{{ user.displayName }}</b>
+                <b>&#64;{{ user?.username }}</b>
             </h1>
             <p>
                 <b>Following: 0 Follows: 0</b>
@@ -35,7 +35,7 @@
         <!--Profile Bio-->
         <div class="profile-bio">
             <h1><b>Bio:</b></h1>
-            <p *ngIf="hasBio; else noBio">{{ user.bio }}</p>
+            <p *ngIf="hasBio; else noBio">{{ user?.bio }}</p>
             <ng-template #noBio>
                 <p>No bio yet.</p>
             </ng-template>

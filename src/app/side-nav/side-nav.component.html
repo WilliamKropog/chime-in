@@ -8,11 +8,11 @@
       </div>
     </li>
     <li>
-      <a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
-        <p style="font-size: 24px;" *ngIf="user$ | async as user">
-          {{user.displayName}}
-        </p>
-      </a>
+      <p style="font-size: 24px;" *ngIf="user$ | async as user">
+        <a [routerLink]="['/profile', user.displayName]" class="user-link">
+          {{ user.displayName }}
+        </a>
+      </p>
     </li>
     <li>
       <p>

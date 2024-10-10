@@ -3,7 +3,11 @@
         <img [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
         <div class="item6">• {{ post.createdAt | relativeTime}}</div>
         <div class="item3">{{ post.views }} views</div>
-        <h1>{{ post.displayName }}</h1>
+
+        <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
+            <h1>{{ post.displayName }}</h1>
+        </a>
+
         <div class="item4 body">
             {{ post.body }}
         </div>

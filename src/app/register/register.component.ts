@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ElementRef } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Validators, NonNullableFormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BackgroundService } from 'src/services/background.service';
@@ -17,6 +18,7 @@ export class RegisterComponent implements AfterViewInit{
 
   constructor(
     private auth: AngularFireAuth,
+    private firestore: AngularFirestore,
     private fb: NonNullableFormBuilder,
     private router: Router,
     private backgroundService: BackgroundService,
@@ -67,8 +69,16 @@ export class RegisterComponent implements AfterViewInit{
 
     this.auth.createUserWithEmailAndPassword(email, password)
       .then(response => {
-        return response.user?.updateProfile({
+        const user = response.user;
+        return user?.updateProfile({
           displayName: username,
+        }).then(() => {
+          return this.firestore.collection('users').doc(user?.uid).set({
+            username: username,
+            email: email,
+            bio: '',
+            backgroundImageURL: ''
+          });
         });
       })
       .then(() => {

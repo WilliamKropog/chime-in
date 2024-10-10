@@ -33,6 +33,12 @@ const routes: Routes = [
   { 
     path: 'profile', 
     component: ProfileComponent
+  },
+  {
+    path: 'profile/:username', component: ProfileComponent
+  },
+  {
+    path: '**', redirectTo: '', pathMatch: 'full'
   }
   // ... other routes
 ];

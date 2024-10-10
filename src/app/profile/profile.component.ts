@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { User } from 'firebase/auth';
 import { map, of, switchMap } from 'rxjs';
@@ -13,31 +13,48 @@ import { PostsService } from 'src/services/posts.service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit{
 
   hasBackgroundImage: boolean = false;
   hasBio: boolean = false;
   isProfileEditorOpen: boolean = false;
   userPosts: Post[] = [];
+  username: string = '';
+  userData: any = null;
   viewedPosts: Set<string> = new Set();
   isLoadingPosts: boolean = false;
   scrollTimeout: any = null;
   scrollThreshHold: number = 200;
   currentUserId: string = '';
+  loggedInUserId: string = '';
+  userPhotoUrl: string = 'assets/images/png-transparent-default-avatar.png';
 
-  user$ = this.authService.currentUser$.pipe(
-    switchMap((authUser: User | null) => {
-      if (authUser) {
-        this.currentUserId = authUser.uid;
-        return this.userService.getUserProfile(authUser.uid).pipe(
-          map((firestoreData: any) => {
-            this.hasBackgroundImage = !!firestoreData?.backgroundImageURL;
-            this.hasBio = !!firestoreData?.bio;
-            this.loadUserPosts(authUser.uid);
-            return { ...authUser, ...firestoreData };
-          })
-        );
+  user$ = this.route.paramMap.pipe(
+    switchMap(params => {
+      this.username = params.get('username') || '';
+      if (!this.username || typeof this.username !== 'string' || this.username.trim() === '') {
+        console.error('Invalid username provided: Profile.ts');
+        return of(null);
+      }
+      return this.userService.getUserByUsername(this.username);
+    }),
+    switchMap((userData: any) => {
+      if (userData && userData.length > 0) {
+        this.userData = userData[0];
+        this.currentUserId = this.userData.uid || '';
+        this.hasBackgroundImage = !!this.userData.backgroundImageURL;
+        this.hasBio = !!this.userData.bio;
+
+        if (this.currentUserId) {
+          this.loadUserProfileImage(this.currentUserId);
+          this.loadUserPosts(this.currentUserId);
+        } else {
+          console.error('User ID is missing: Profile.ts')
+        }
+
+        return of(this.userData);
       } else {
+        console.error('User data not found for username:', this.username);
         return of(null);
       }
     })
@@ -47,8 +64,18 @@ export class ProfileComponent {
     private authService: AuthenticationService,
     private userService: UserService,
     private postsService: PostsService,
-    private router: Router
+    private route: ActivatedRoute
   ){}
+
+  ngOnInit(): void {
+    this.authService.currentUser$.subscribe((authUser: User | null) => {
+      if (authUser) {
+        this.loggedInUserId = authUser.uid;
+      }
+    })
+
+    this.user$.subscribe();
+  }
 
   loadUserPosts(userId: string): void {
     this.isLoadingPosts = true;
@@ -57,6 +84,12 @@ export class ProfileComponent {
       this.incrementViewCount(posts);
       this.isLoadingPosts = false;
     });
+  }
+
+  loadUserProfileImage(uid: string): void {
+    this.userService.getUserProfileImageUrl(uid).subscribe((url: string) => {
+      this.userPhotoUrl = url;
+    })
   }
 
   @HostListener('window:scroll', [])
