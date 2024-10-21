@@ -10,7 +10,8 @@
             <img *ngIf="hasBackgroundImage" [src]="user?.backgroundImageURL" alt="User Background" style=
             "width: 100%; 
             height: 100%; 
-            object-fit: cover;">
+            object-fit: cover;
+            object-position: center;">
         </div>
         <div class="profile-image">
             <img [src]= "userPhotoUrl ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
@@ -20,6 +21,14 @@
         <button *ngIf="loggedInUserId === currentUserId" mat-mini-fab (click)="openProfileEditor()">
             Edit Profile
             <mat-icon>edit</mat-icon>
+        </button>
+        <button *ngIf="loggedInUserId !== currentUserId && !isFollowing" mat-mini-fab (click)="follow()">
+            &nbsp;Follow
+            <mat-icon>person_add</mat-icon>
+        </button>
+        <button *ngIf="loggedInUserId !== currentUserId && isFollowing" mat-mini-fab (click)="unfollow()">
+            &nbsp;Unfollow
+            <mat-icon>person_remove</mat-icon>
         </button>
 
         <!--Profile Stats-->

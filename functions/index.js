@@ -422,3 +422,48 @@ exports.updateAllUsernames = functions.https.onRequest(async (req, res) => {
     return res.status(500).send("Error updating usernames");
   }
 });
+
+exports.addMissingUsersToFirestore =
+functions.https.onRequest(async (req, res) => {
+  const auth = admin.auth();
+  const firestore = admin.firestore();
+  const usersRef = firestore.collection("users");
+
+  try {
+    let usersAdded = 0;
+    const listAllUsers = async (nextPageToken) => {
+      const result = await auth.listUsers(1000, nextPageToken);
+      const users = result.users;
+
+      for (const userRecord of users) {
+        const uid = userRecord.uid;
+        const email = userRecord.email;
+        const displayName = userRecord.displayName || "Unknown Username";
+
+        const userDoc = await usersRef.doc(uid).get();
+        if (!userDoc.exists) {
+          await usersRef.doc(uid).set({
+            bio: "No bio yet.",
+            username: displayName,
+            email: email || "",
+            backgroundImageURL: "",
+          });
+          usersAdded++;
+          console.log(`Added missing user to Firestore: ${uid}`);
+        }
+      }
+
+      if (result.pageToken) {
+        await listAllUsers(result.pageToken);
+      }
+    };
+
+    await listAllUsers();
+
+    res.status(200)
+        .send(`Script executed. ${usersAdded} users were added to Firestore.`);
+  } catch (error) {
+    console.error("Error updating Firestore with missing users:", error);
+    res.status(500).send("Error executing batch script.");
+  }
+});

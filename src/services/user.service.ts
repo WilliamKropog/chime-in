@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { User } from 'firebase/auth';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
@@ -40,6 +39,61 @@ export class UserService {
         console.error('Error fetching profile image URL:', error);
         return of('assets/images/png-transparent-default-avatar.png');
       })
-    )
+    );
+  }
+
+  followUser(targetUserId: string, loggedInUserId: string): Promise<void> {
+    const userRef: DocumentReference<any> = this.firestore.collection('users').doc(targetUserId).ref;
+    return this.firestore.firestore.runTransaction(async (transaction) => {
+      const userDoc = await transaction.get(userRef);
+
+      if(!userDoc.exists) {
+        throw new Error('User not found');
+      }
+
+      const userData = userDoc.data();
+      const followers = userData?.['followers'] || [];
+      const followerCount = userData?.['followerCount'] || 0;
+
+      if (!followers.includes(loggedInUserId)) {
+        transaction.update(userRef, {
+          followers: [...followers, loggedInUserId],
+          followerCount: followerCount + 1
+        });
+        console.log('Successfully followed', targetUserId);
+      }
+    });
+  }
+
+  unfollowUser(targetUserId: string, loggedInUserId: string): Promise<void> {
+    const userRef: DocumentReference<any> = this.firestore.collection('users').doc(targetUserId).ref;
+    return this.firestore.firestore.runTransaction(async (transaction) => {
+      const userDoc = await transaction.get(userRef);
+
+      if (!userDoc.exists) {
+        throw new Error('User not found');
+      }
+
+      const userData = userDoc.data();
+      const followers = userData?.['followers'] || [];
+      const followerCount = userData?.['followerCount'] || 0;
+
+      if (followers.includes(loggedInUserId)) {
+        transaction.update(userRef, {
+          followers: followers.filter((id: string) => id !== loggedInUserId),
+          followerCount: followerCount - 1
+        });
+        console.log('Successfully unfollowed', targetUserId);
+      }
+    });
+  }
+
+  isFollowing(targetUserId: string, loggedInUserId: string): Observable<boolean> {
+    return this.firestore.doc(`users/${targetUserId}`).valueChanges().pipe(
+      switchMap((userData: any) => {
+        const followers = userData?.followers || [];
+        return of(followers.includes(loggedInUserId));
+      })
+    );
   }
 }
