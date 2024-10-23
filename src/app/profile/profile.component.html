@@ -26,7 +26,10 @@
             &nbsp;Follow
             <mat-icon>person_add</mat-icon>
         </button>
-        <button *ngIf="loggedInUserId !== currentUserId && isFollowing" mat-mini-fab (click)="unfollow()">
+        <button 
+            *ngIf="loggedInUserId !== currentUserId && isFollowing" 
+            mat-mini-fab (click)="unfollow()"
+            [ngClass]="{'followed': isFollowing}">
             &nbsp;Unfollow
             <mat-icon>person_remove</mat-icon>
         </button>
@@ -37,7 +40,7 @@
                 <b>&#64;{{ user?.username }}</b>
             </h1>
             <p>
-                <b>Following: 0 Follows: 0</b>
+                <b>Following: {{ user?.followingCount ?? 0 }} Followers: {{ user?.followerCount ?? 0}}</b>
             </p>
         </div>
 

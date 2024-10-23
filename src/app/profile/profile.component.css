@@ -20,6 +20,12 @@
     border-radius: 20px;
     background-color: green;
     margin-top: 206px;
+    z-index: 0;
+}
+
+.profile-page-body button.followed {
+    background-color: rgb(10, 26, 14);
+    color: white;
 }
 
 .background-image {

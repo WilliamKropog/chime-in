@@ -43,52 +43,82 @@ export class UserService {
   }
 
   followUser(targetUserId: string, loggedInUserId: string): Promise<void> {
-    const userRef: DocumentReference<any> = this.firestore.collection('users').doc(targetUserId).ref;
-    return this.firestore.firestore.runTransaction(async (transaction) => {
-      const userDoc = await transaction.get(userRef);
+    const targetUserRef: DocumentReference<any> = this.firestore.collection('users').doc(targetUserId).ref;
+    const loggedInUserRef: DocumentReference<any> = this.firestore.collection('users').doc(loggedInUserId).ref;
 
-      if(!userDoc.exists) {
+    return this.firestore.firestore.runTransaction(async (transaction) => {
+      const targetUserDoc = await transaction.get(targetUserRef);
+      const loggedInUserDoc = await transaction.get(loggedInUserRef);
+
+      if(!targetUserDoc.exists || !loggedInUserDoc.exists) {
         throw new Error('User not found');
       }
 
-      const userData = userDoc.data();
-      const followers = userData?.['followers'] || [];
-      const followerCount = userData?.['followerCount'] || 0;
+      const targetUserData = targetUserDoc.data();
+      const targetFollowers = targetUserData?.['followers'] || [];
+      const targetFollowerCount = targetUserData?.['followerCount'] || 0;
 
-      if (!followers.includes(loggedInUserId)) {
-        transaction.update(userRef, {
-          followers: [...followers, loggedInUserId],
-          followerCount: followerCount + 1
+      if (!targetFollowers.includes(loggedInUserId)) {
+        transaction.update(targetUserRef, {
+          followers: [...targetFollowers, loggedInUserId],
+          followerCount: targetFollowerCount + 1
         });
-        console.log('Successfully followed', targetUserId);
       }
+
+      const loggedInUserData = loggedInUserDoc.data();
+      const loggedInFollowing = loggedInUserData?.['following'] || [];
+      const loggedInFollowingCount = loggedInUserData?.['followingCount'] || 0;
+
+      if (!loggedInFollowing.includes(targetUserId)) {
+        transaction.update(loggedInUserRef, {
+          following: [...loggedInFollowing, targetUserId],
+          followingCount: loggedInFollowingCount + 1
+        });
+      }
+
+      console.log('Successfully followed', targetUserId);
     });
   }
 
   unfollowUser(targetUserId: string, loggedInUserId: string): Promise<void> {
-    const userRef: DocumentReference<any> = this.firestore.collection('users').doc(targetUserId).ref;
-    return this.firestore.firestore.runTransaction(async (transaction) => {
-      const userDoc = await transaction.get(userRef);
+    const targetUserRef: DocumentReference<any> = this.firestore.collection('users').doc(targetUserId).ref;
+    const loggedInUserRef: DocumentReference<any> = this.firestore.collection('users').doc(loggedInUserId).ref;
 
-      if (!userDoc.exists) {
+    return this.firestore.firestore.runTransaction(async (transaction) => {
+      const targetUserDoc = await transaction.get(targetUserRef);
+      const loggedInUserDoc = await transaction.get(loggedInUserRef);
+
+      if(!targetUserDoc.exists || !loggedInUserDoc.exists) {
         throw new Error('User not found');
       }
 
-      const userData = userDoc.data();
-      const followers = userData?.['followers'] || [];
-      const followerCount = userData?.['followerCount'] || 0;
+      const targetUserData = targetUserDoc.data();
+      const targetFollowers = targetUserData?.['followers'] || [];
+      const targetFollowerCount = targetUserData?.['followerCount'] || 0;
 
-      if (followers.includes(loggedInUserId)) {
-        transaction.update(userRef, {
-          followers: followers.filter((id: string) => id !== loggedInUserId),
-          followerCount: followerCount - 1
+      if (targetFollowers.includes(loggedInUserId)) {
+        transaction.update(targetUserRef, {
+          followers: targetFollowers.filter((id: string) => id !== loggedInUserId),
+          followerCount: targetFollowerCount - 1
         });
-        console.log('Successfully unfollowed', targetUserId);
       }
+
+      const loggedInUserData = loggedInUserDoc.data();
+      const loggedInFollowing = loggedInUserData?.['following'] || [];
+      const loggedInFollowingCount = loggedInUserData?.['followingCount'] || 0;
+
+      if (loggedInFollowing.includes(targetUserId)) {
+        transaction.update(loggedInUserRef, {
+          following: loggedInFollowing.filter((id: string) => id !== targetUserId),
+          followingCount: loggedInFollowingCount - 1
+        });
+      }
+
+      console.log('Successfully unfollowed', targetUserId);
     });
   }
 
-  isFollowing(targetUserId: string, loggedInUserId: string): Observable<boolean> {
+  isFollowing(loggedInUserId: string, targetUserId: string): Observable<boolean> {
     return this.firestore.doc(`users/${targetUserId}`).valueChanges().pipe(
       switchMap((userData: any) => {
         const followers = userData?.followers || [];

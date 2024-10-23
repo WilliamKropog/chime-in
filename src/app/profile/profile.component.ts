@@ -79,9 +79,13 @@ export class ProfileComponent implements OnInit{
     this.authService.currentUser$.subscribe((authUser: User | null) => {
       if (authUser) {
         this.loggedInUserId = authUser.uid;
+        this.user$.subscribe(() => {
+          if (this.currentUserId) {
+            this.checkFollowingStatus();
+          }
+        })
       }
     })
-    this.user$.subscribe();
   }
 
   loadUserPosts(userId: string): void {
@@ -145,7 +149,7 @@ export class ProfileComponent implements OnInit{
   //Following Functions:
   checkFollowingStatus(): void {
     if (this.currentUserId && this.loggedInUserId) {
-      this.userService.isFollowing(this.currentUserId, this.loggedInUserId).subscribe(isFollowing => {
+      this.userService.isFollowing(this.loggedInUserId, this.currentUserId).subscribe(isFollowing => {
         this.isFollowing = isFollowing;
       });
     }
