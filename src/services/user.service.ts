@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { firestore } from 'firebase-admin';
 import { Observable, of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,17 @@ export class UserService {
     }
     return this.firestore.collection('users', ref => ref.where('username', '==', username))
       .valueChanges({ idField: 'uid'});
+  }
+
+  getRandomRecommendedUser(): Observable<any> {
+    return this.firestore.collection('users', ref => ref.where('followerCount', '>=', 1))
+      .get().pipe(map(snapshot => {
+        const users = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...(doc.data() as firestore.DocumentData)
+        }))
+        return users.length ? users[Math.floor(Math.random() * users.length)] : null;
+      }));
   }
 
   getUserProfileImageUrl(uid: string): Observable<string> {

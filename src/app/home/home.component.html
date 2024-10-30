@@ -1,19 +1,19 @@
-<div class="heading">
-  Welcome to Chime-in Development!
+<div class="news-container">
+  <div class="heading">
+    Welcome to Chime-in Development!
+  </div>
+  <div class="version">
+    <h1>10/30/24</h1>
+    <h1>
+      Dev 1.0.0: 
+      <br>
+       - New Following Page. We have just started on it, but you can access it while it's in development.
+       It will recommend you a profile everytime you refresh or visit it.
+    </h1>
+    • In progress: Adding the Following Page to show all posts and updates of users you follow.
+  </div>
 </div>
-<div class="version">
-  <h1>10/29/24</h1>
-  <h1>
-    Dev 0.2.1: 
-    <br>
-     - New Profile Page! Click on your name and customize your new profile page.
-    <br>
-     - New Following Feature. Follow your favorite profiles! 
-    <br>
-     - Following Page development preparations.  
-  </h1>
-  • In progress: Adding the Following Page to show all posts and updates of users you follow.
-</div>
+
 
 <div *ngIf="mostRecentPosts.length > 0">
   <app-home-posts [posts]="mostRecentPosts"></app-home-posts>

@@ -36,6 +36,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
 import { HomePostsComponent } from './home-posts/home-posts.component';
 import { ProfilePostsComponent } from './profile-posts/profile-posts.component';
+import { RecommendedProfileComponent } from './recommended-profile/recommended-profile.component';
 import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
 
 @NgModule({
@@ -58,6 +59,7 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     PostComponent,
     HomePostsComponent,
     ProfilePostsComponent,
+    RecommendedProfileComponent,
     RelativeTimePipe
   ],
   imports: [

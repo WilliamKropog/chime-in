@@ -1,0 +1,84 @@
+.rp-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    border: solid 1px rgb(10, 26, 14);
+    border-radius: 10px;
+    width: 1000px;
+    height: 500px;
+}
+
+.rp-user-profile {
+    width: 750px;
+    height: 150px;
+    background-color: rgb(10, 26, 14);
+    border-radius: 10px;
+    border: solid 1px rgb(10, 26, 14);
+    position: absolute;
+    margin-top: 10px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.rp-user-profile .user-identity {
+    color: white;
+    position: absolute;
+    justify-content: center;
+    display: flex;
+    width: 200px;
+    height: 70px;
+    margin-top: 35px;
+    margin-left: 25px;
+    padding-top: 10px;
+    padding-right: 10px;
+    background-color: rgb(10, 26, 14);
+    border-radius: 10px;
+}
+
+.user-identity img {
+    width: 60px; 
+    height: 60px;
+    border-radius: 100%;
+    object-fit: cover;
+    object-position: center;
+    outline-style: solid;
+    outline-color: green;
+    outline-width: 2px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.user-identity h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.rp-user-profile .user-bio {
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-left: 275px;
+    margin-top: 20px;
+    padding-top: 6px;
+    color: white;
+    width: 450px;
+    height: 100px;
+    background-color: rgb(10, 26, 14);
+    border-radius: 10px;
+}
+
+.user-bio h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.user-bio p {
+    font-size: 16px;
+    width: 425px;
+    margin-left: 10px;
+    text-align: left;
+}

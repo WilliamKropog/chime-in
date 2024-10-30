@@ -1,8 +1,9 @@
 .post {
-    width: 800px;
+    width: 600px;
     background-color: rgb(10, 26, 14);
     border-radius: 20px;
     height: auto;
+    max-height: 800px;
     margin: auto;
     margin-bottom: 40px;
     padding-bottom: 10px;
@@ -36,7 +37,8 @@
 
 .item5 button {
     background-color: green;
-    margin-left: 20px;
+    transform: scale(0.8);
+    margin-left: 6px;
 }
 
 .item5 button.liked {
@@ -55,9 +57,9 @@
 }
 
 .item5 div{
-    font-size: 24px;
+    font-size: 18px;
     padding-top: 10px;
-    padding-left: 12px;
+    padding-left: 6px;
     color: white;
 }
 
@@ -65,6 +67,8 @@
     grid-area: timestamp;
     color: gray;
     margin-top: 45px;
+    font-size: 12px;
+    width: 150px;
 }
 
 .item7 {
@@ -98,7 +102,7 @@
 }
 
 .post-content h1 {
-    font-size: 24px;
+    font-size: 22px;
     color: white;
     text-align: left;
     justify-content: center;
@@ -107,15 +111,15 @@
 }
 
 .post-content p {
-    font-size: 18px;
+    font-size: 14px;
     color: white;
     display: flex;
 }
 
 .body {
-    font-size: 24px;
+    font-size: 22px;
     line-height: normal;
-    width: 700px;
+    width: 500px;
     color: white;
     margin-left: 50px;
 }

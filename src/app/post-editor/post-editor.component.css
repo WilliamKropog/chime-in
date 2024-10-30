@@ -28,10 +28,9 @@
 .modal-content img {
   width: 60px;
   height: 60px;
-  margin-right: auto;
   border-radius: 100%;
   margin-top: 12px;
-  margin-left: 10px;
+  margin-left: 20px;
   position: absolute;
   object-fit: cover;
   object-position: center;
@@ -62,13 +61,13 @@
 }
 
 .modal-content textarea {
-  margin-top: 40px;
+  margin-top: 60px;
   display: flex;
   justify-content: center;
-  margin-left: 80px;
+  margin-left: 100px;
   border-radius: 10px;
-  width: 650px;
-  height: 270px;
+  width: 600px;
+  height: 250px;
   font-size: 24px;
 }
 
@@ -81,7 +80,7 @@
 .close-button {
   display: flex;
   margin-left: auto;
-  padding-right: 16px;
+  padding-right: 25px;
   margin-top: 12px;
 }
 
