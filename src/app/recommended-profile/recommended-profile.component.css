@@ -6,7 +6,7 @@
     border: solid 1px rgb(10, 26, 14);
     border-radius: 10px;
     width: 1000px;
-    height: 500px;
+    height: 600px;
 }
 
 .rp-user-profile {
@@ -81,4 +81,56 @@
     width: 425px;
     margin-left: 10px;
     text-align: left;
+}
+
+.rp-user-posts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 200px;
+    text-align: left;
+}
+
+.rp-container button {
+    background-color: rgb(10, 26, 14);
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    border: none;
+    display: flex;
+    position: absolute;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    z-index: 0;
+    margin-top: 325px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.carousel-slide {
+    position: absolute;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.carousel-slide.center {
+    transform: scale(0.8);
+    z-index: 3;
+    opacity: 1;
+}
+
+.carousel-slide.left,
+.carousel-slide.right {
+    transform: scale(0.6);
+    opacity: 0.9;
+    z-index: 2;
+}
+
+.carousel-slide.left {
+    transform: translateX(-200px) scale(0.7);
+}
+
+.carousel-slide.right {
+    transform: translateX(200px) scale(0.7);
 }

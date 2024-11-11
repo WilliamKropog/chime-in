@@ -14,7 +14,14 @@
         </div>
     </div>
     <!--Featured Posts from Selected Profile-->
-    <div class="rp-user-posts">
+    <button (click)="prevPost()" style="margin-right: 900px;">❮</button>
 
+    <div class="rp-user-posts">
+        <div class="carousel-slide" *ngFor="let post of recentPosts; let i = index" [ngClass]="getPostClass(i)">
+            <app-post [post]="post"></app-post>
+        </div>
     </div>
+
+    <button (click)="nextPost()" style="margin-left: 900px;">❯</button>
+
 </div>

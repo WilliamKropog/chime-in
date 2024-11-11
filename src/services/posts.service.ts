@@ -121,6 +121,18 @@ export class PostsService {
       .pipe(map(comments => comments.length > 0 ? comments[0] : undefined));
   }
 
+  getThreeMostRecentPostsByUser(userId: string): Observable<Post[]> {
+    return this.afs.collection<Post>('posts', ref => 
+      ref.where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .limit(3)
+    )
+    .valueChanges()
+    .pipe(
+      map((posts: Post[]) => posts || [])
+    );
+  }
+
   incrementView(postId: string): Promise<void> {
     const incrementViewFn = this.fns.httpsCallable('incrementPostView');
     return incrementViewFn({ postId }).toPromise();
