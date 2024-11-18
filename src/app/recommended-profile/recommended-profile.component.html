@@ -18,7 +18,7 @@
 
     <div class="rp-user-posts">
         <div class="carousel-slide" *ngFor="let post of recentPosts; let i = index" [ngClass]="getPostClass(i)">
-            <app-post [post]="post"></app-post>
+            <app-recommended-post [post]="post"></app-recommended-post>
         </div>
     </div>
 

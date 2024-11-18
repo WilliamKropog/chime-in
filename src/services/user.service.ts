@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { firestore } from 'firebase-admin';
@@ -10,7 +11,11 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 })
 export class UserService {
 
-  constructor(private firestore: AngularFirestore, private storage: AngularFireStorage) {}
+  constructor(
+    private firestore: AngularFirestore, 
+    private storage: AngularFireStorage, 
+    private afAuth: AngularFireAuth
+  ) {}
 
   getUserProfile(uid: string): Observable<any> {
     return this.firestore.collection('users').doc(uid).valueChanges();
@@ -44,12 +49,42 @@ export class UserService {
       }));
   }
 
+  getMultipleRandomRecommendedUsers(limit: number): Observable<any> {
+    return this.firestore.collection('users', ref => ref.where('followerCount', '>=', limit))
+      .get().pipe(map(snapshot => {
+        const users = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...(doc.data() as firestore.DocumentData)
+        }))
+        return users.length ? users[Math.floor(Math.random() * users.length)] : null;
+      }));
+  }
+
   getUserProfileImageUrl(uid: string): Observable<string> {
     const path = `images/profile/${uid}`;
     return this.storage.ref(path).getDownloadURL().pipe(
       catchError(error => {
         console.error('Error fetching profile image URL:', error);
         return of('assets/images/png-transparent-default-avatar.png');
+      })
+    );
+  }
+
+  getCurrentUserId(): Observable<string | null> {
+    return this.afAuth.authState.pipe(
+      map(user => user ? user.uid : null)
+    );
+  }
+
+  getFollowedUserIds(): Observable<string[]> {
+    return this.getCurrentUserId().pipe(
+      switchMap((userId) => {
+        if (!userId) {
+          return of([]);
+        }
+        return this.firestore.collection('users').doc(userId).valueChanges().pipe(
+          map((userData: any) => userData?.following || [])
+        );
       })
     );
   }

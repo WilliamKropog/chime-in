@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { UserService } from 'src/services/user.service';
 import { Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
@@ -11,6 +11,8 @@ import { interval, Subscription } from 'rxjs';
 })
 export class RecommendedProfileComponent implements OnInit, OnDestroy{
 
+  @Input() user: any = null;
+
   recommendedUser: any = null;
   backgroundImageUrl: string | null = null;
   recentPosts: Post[] = [];
@@ -21,8 +23,10 @@ export class RecommendedProfileComponent implements OnInit, OnDestroy{
   constructor(private userService: UserService, private postsService: PostsService) {}
 
   ngOnInit(): void {
-    this.loadRecommendedUser();
-    this.carouselInterval = interval(30000).subscribe(() => this.nextPost());
+    if (this.user) {
+      this.loadRecommendedUser();
+      this.carouselInterval = interval(30000).subscribe(() => this.nextPost());
+    }
   }
 
   ngOnDestroy(): void {
@@ -54,12 +58,10 @@ export class RecommendedProfileComponent implements OnInit, OnDestroy{
 
   nextPost(): void {
     this.currentPostIndex = (this.currentPostIndex + 1) % this.recentPosts.length;
-    this.carouselInterval = interval(30000).subscribe(() => this.nextPost());
   }
 
   prevPost(): void {
     this.currentPostIndex = (this.currentPostIndex - 1) % this.recentPosts.length % this.recentPosts.length;
-    this.carouselInterval = interval(30000).subscribe(() => this.nextPost());
   }
 
   goToPost(index: number): void {

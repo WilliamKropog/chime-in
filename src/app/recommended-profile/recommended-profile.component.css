@@ -3,7 +3,6 @@
     justify-content: center;
     text-align: center;
     margin: auto;
-    border: solid 1px rgb(10, 26, 14);
     border-radius: 10px;
     width: 1000px;
     height: 600px;
@@ -87,7 +86,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 200px;
+    margin-top: 150px;
     text-align: left;
 }
 
@@ -115,14 +114,14 @@
 }
 
 .carousel-slide.center {
-    transform: scale(0.8);
+    transform: scale(1);
     z-index: 3;
     opacity: 1;
 }
 
 .carousel-slide.left,
 .carousel-slide.right {
-    transform: scale(0.6);
+    transform: scale(0.5);
     opacity: 0.9;
     z-index: 2;
 }

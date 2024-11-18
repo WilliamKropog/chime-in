@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from 'src/interface';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',

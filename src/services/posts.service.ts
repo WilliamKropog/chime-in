@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, QuerySnapshot } from '@angular/fire/compat/firestore';
-import { Observable, pipe } from 'rxjs';
+import { Observable, of, pipe } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { Post } from '../interface';
 import { Comment } from '../interface';
@@ -74,6 +74,8 @@ export class PostsService {
     )
   }
 
+  //Posts for Profile Page
+
   getUserPosts(userId: string): Observable<Post[]> {
     return this.afs.collection<Post>('posts', ref => 
       ref.where('userId', '==', userId).orderBy('createdAt', 'desc').limit(10)
@@ -100,6 +102,8 @@ export class PostsService {
     )
   }
 
+  //Comments for Posts
+
   getCommentsForPost(postId: string, topCommentId?: string): Observable<Comment[]> {
     return this.afs.collection<Post>('posts')
       .doc(postId)
@@ -121,6 +125,8 @@ export class PostsService {
       .pipe(map(comments => comments.length > 0 ? comments[0] : undefined));
   }
 
+  //Posts for Recommended Profile
+
   getThreeMostRecentPostsByUser(userId: string): Observable<Post[]> {
     return this.afs.collection<Post>('posts', ref => 
       ref.where('userId', '==', userId)
@@ -132,6 +138,46 @@ export class PostsService {
       map((posts: Post[]) => posts || [])
     );
   }
+
+  //Posts for Featured Page
+
+  getPostsFromUsers(userIds: string[], limit: number): Observable<Post[]> {
+    return this.afs.collection<Post>('posts', ref => 
+      ref.where('userId', 'in', userIds)
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
+    ).get().pipe(
+      map((snapshot) => {
+        if (snapshot.docs.length > 0) {
+          this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
+        }
+        return snapshot.docs.map((doc) => doc.data());
+      })
+    );
+  }
+
+  getMorePostsFromUsers(userIds: string[], limit: number): Observable<Post[]> {
+    if (!this.lastVisible) {
+      console.error('No reference for the next page. Load initial posts first');
+      return of([]);
+    }
+
+    return this.afs.collection<Post>('posts', (ref) => 
+      ref.where('userId', 'in', userIds)
+      .orderBy('createdAt', 'desc')
+      .startAfter(this.lastVisible)
+      .limit(limit)  
+    ).get().pipe(
+      map((snapshot) => {
+        if (snapshot.docs.length > 0) {
+          this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
+        }
+        return snapshot.docs.map((doc) => doc.data());
+      })
+    )
+  }
+
+  //Posts Functionalities
 
   incrementView(postId: string): Promise<void> {
     const incrementViewFn = this.fns.httpsCallable('incrementPostView');

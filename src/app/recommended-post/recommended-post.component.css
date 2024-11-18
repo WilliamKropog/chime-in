@@ -1,0 +1,130 @@
+.post {
+    width: 600px;
+    background-color: rgb(10, 26, 14);
+    border-radius: 20px;
+    height: auto;
+    max-height: 800px;
+    margin: auto;
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+}
+
+.item1 {
+    grid-area: pfp;
+}
+
+.item2 {
+    grid-area: username;
+}
+
+.item3 {
+    grid-area: views;
+    color: white;
+    margin-top: 40px;
+    font-size: 18px;
+}
+
+.item4 {
+    grid-area: body;
+}
+
+.item5 {
+    grid-area: footer;
+    display: flex;
+    margin-top: 10px;
+    z-index: 0;
+}
+
+.item5 button {
+    background-color: green;
+    transform: scale(0.8);
+    margin-left: 6px;
+}
+
+.item5 button.liked {
+    background-color: white;
+    color: green;
+}
+
+.item5 button.disliked {
+    background-color: white;
+    color: green;
+}
+
+.item5 button.commenting {
+    background-color: white;
+    color: green;
+}
+
+.item5 div{
+    font-size: 18px;
+    padding-top: 10px;
+    padding-left: 6px;
+    color: white;
+}
+
+.item6 {
+    grid-area: timestamp;
+    color: gray;
+    margin-top: 45px;
+    font-size: 12px;
+    width: 150px;
+}
+
+.item7 {
+    grid-area: header;
+}
+
+.post-content {
+    display: grid;
+    grid-template-areas:
+        'pfp username timestamp header header views'
+        'body body body body body body'
+        'footer footer footer footer footer footer';
+    gap: 20px;
+    width: 100%;
+    justify-content: left;
+    padding-bottom: 20px;
+}
+
+.post-content img {
+    width: 60px;
+    height: 60px;
+    margin-right: auto;
+    border-radius: 100%;
+    margin-top: 20px;
+    margin-left: 20px;
+    object-fit: cover;
+    object-position: center;
+    outline-style: solid;
+    outline-color: green;
+    outline-width: 2px;
+}
+
+.post-content h1 {
+    font-size: 22px;
+    color: white;
+    text-align: left;
+    justify-content: center;
+    grid-column-start: 2;
+    margin-top: 35px;
+}
+
+.post-content p {
+    font-size: 14px;
+    color: white;
+    display: flex;
+}
+
+.body {
+    font-size: 22px;
+    line-height: normal;
+    width: 500px;
+    color: white;
+    margin-left: 50px;
+}
+  
+.comment-editor.open {
+    overflow: hidden;
+    transition: 0.3s ease-out;
+}

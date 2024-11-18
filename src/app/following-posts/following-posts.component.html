@@ -1,0 +1,12 @@
+<div *ngIf="posts.length > 0">
+    <ng-container *ngFor="let post of posts; let i = index; trackBy: trackbyPostId">
+      <!--Post Componenet List-->
+      <app-post [post]="post"></app-post>
+
+      <!--Recommended Profile Component-->
+      <ng-container *ngIf="(i + 1) % 9 === 0">
+        <app-recommended-profile [user]="post"></app-recommended-profile>
+      </ng-container>
+
+    </ng-container>
+</div>

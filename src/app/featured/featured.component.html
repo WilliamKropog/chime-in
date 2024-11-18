@@ -1,10 +1,18 @@
-<div class="heading">
-    Following Page 
+<div class="heading-container">
+  <div class="heading">
+      Following Page 
+  </div>
+  <div class="subheading">
+      <h1>
+        Updates and most recent posts of those you follow.
+      </h1>
+      Not following anyone yet? Check out some of our recommended profiles!
+  </div>
 </div>
-<div class="subheading">
-    <h1>
-      Updates and most recent posts of those you follow.
-    </h1>
-    Not following anyone yet? Check out some of our recommended profiles!
+<div *ngIf="followedPosts.length > 0">
+  <app-following-posts [posts]="followedPosts"></app-following-posts>
 </div>
-<app-recommended-profile></app-recommended-profile>
+<div class="loading-spinner" *ngIf="isLoadingPosts"></div>
+<div class="loading-posts" *ngIf="isLoadingPosts">
+  Loading Posts...
+</div>

@@ -1,3 +1,13 @@
+.heading-container {
+    color: white;
+    background-color: rgb(10, 26, 14);
+    width: 50%;
+    margin: auto;
+    margin-bottom: 60px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+}
+
 .heading {
     font-size: 56px;
     font-weight: bold;
@@ -9,7 +19,6 @@
 .subheading {
     font-size: 24px;
     line-height: normal;
-    margin-bottom: 60px;
     margin-top: 20px;
     text-align: center;
 }
@@ -18,3 +27,25 @@
     font-size: 24px;
     font-weight: bold;
 }
+
+.loading-posts {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    font-size: 32px;
+  }
+
+  .loading-spinner {
+    border: 6px solid limegreen;
+    border-radius: 50%;
+    border-top: 6px solid darkgreen;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin: 20px auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg);}
+  }

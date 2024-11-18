@@ -1,0 +1,51 @@
+<div class="post" *ngIf="post">
+    <div class="post-content">
+        <img [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+        <div class="item6">• {{ post.createdAt | relativeTime}}</div>
+        <div class="item3">{{ post.views }} views</div>
+
+        <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
+            <h1>{{ post.displayName }}</h1>
+        </a>
+
+        <div class="item4 body">
+            {{ post.body }}
+        </div>
+        <div class="item5">
+            <button mat-mini-fab (click)="likePost()" [ngClass]="{'liked': isLiked}"
+            style="margin-left: 40px;">
+                <mat-icon>thumb_up</mat-icon>
+            </button>
+                <div style="color: lightgreen;">
+                    {{ post.likeCount }}
+                </div>
+            <button mat-mini-fab (click)="dislikePost()" [ngClass]="{'disliked': isDisliked}">
+                <mat-icon>thumb_down</mat-icon>
+            </button>
+                <div style="color: lightcoral;">
+                    {{ post.dislikeCount }}
+                </div>
+            <button mat-mini-fab>
+                <mat-icon>bookmark</mat-icon>
+            </button>
+                <div style="color: lightgoldenrodyellow">
+                    {{ post.bookmarkCount }}
+                </div>
+            <button mat-mini-fab>
+                <mat-icon>repeat</mat-icon>
+            </button>
+                <div style="color: lightblue">
+                    {{ post.repostCount }}
+                </div>
+            <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
+            <button mat-mini-fab
+            style="width: 100px; border-radius: 10px; margin-left: 180px;">
+                <mat-icon>chat_bubble</mat-icon>
+            </button>
+            </a>
+                <div>
+                    {{ post.commentCount }}
+                </div>
+        </div>
+    </div>
+</div>
