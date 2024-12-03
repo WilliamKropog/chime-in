@@ -15,6 +15,8 @@ export class PostsService {
 
   constructor(private afs: AngularFirestore, private fns: AngularFireFunctions) { }
 
+  //Post Creation
+
   savePost(data: Post): Promise<string> {
     const postRef = this.afs.collection<Post>('posts').doc();
     data.postId = postRef.ref.id;
@@ -42,6 +44,20 @@ export class PostsService {
       console.error('Error saving comment or incrementing comment count:', error);
       throw error;
     })
+  }
+
+  //Following Page Notification Methods.
+
+  getUnseenPostsCount(userIds: string[], lastVisit: Date | null): Observable<number> {
+    return this.afs.collection<Post>('posts', (ref) => {
+      let query = ref.where('userId', 'in', userIds);
+      if (lastVisit) {
+        query = query.where('createdAt', '>', lastVisit);
+      }
+      return query;
+    })
+    .valueChanges()
+    .pipe(map(posts => posts.length));
   }
 
   //Home Page initial list of Posts.
@@ -199,7 +215,7 @@ export class PostsService {
     return removeLikeFn({ postId, userId }).toPromise();
   }
 
-  checkIfUserLiked(postId: string, userId: string): Promise<boolean | undefined>{
+  checkIfUserLiked(postId: string, userId: string): Promise<boolean | undefined> {
     return this.afs.collection('posts').doc(postId).collection('likes').doc(userId).get().toPromise()
       .then(doc => doc?.exists);
   }
@@ -214,7 +230,7 @@ export class PostsService {
     return removeDislikeFn({ postId, userId }).toPromise();
   }
   
-  checkIfUserDisliked(postId: string, userId: string): Promise<boolean | undefined>{
+  checkIfUserDisliked(postId: string, userId: string): Promise<boolean | undefined> {
     return this.afs.collection('posts').doc(postId).collection('dislikes').doc(userId).get().toPromise()
     .then(doc => doc?.exists);
   }

@@ -71,6 +71,6 @@ export class HomeComponent implements OnInit {
 
   incrementPostView(postId: string): void {
     this.postsService.incrementView(postId);
-    console.log(`Increment view count for post ${postId}`);
+    // console.log(`Increment view count for post ${postId}`);
   }
 }

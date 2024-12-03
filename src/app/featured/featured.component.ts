@@ -2,14 +2,14 @@ import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from 'src/interface';
 import { UserService } from 'src/services/user.service';
-import { take } from 'rxjs';
+import { take, timestamp } from 'rxjs';
 
 @Component({
   selector: 'app-featured',
   templateUrl: './featured.component.html',
   styleUrls: ['./featured.component.css']
 })
-export class FeaturedComponent implements OnInit{
+export class FeaturedComponent implements OnInit, OnDestroy{
 
   followedPosts: Post[] = [];
   isLoadingPosts: boolean = false;
@@ -32,13 +32,11 @@ export class FeaturedComponent implements OnInit{
   }
 
   loadFollowedUserPosts(): void {
-    console.log('loadFollowedUserPosts called.')
     this.isLoadingPosts = true;
     this.userService.getFollowedUserIds()
     .subscribe(userIds => {
       if (userIds && userIds.length > 0) {
         this.followedUserIds = userIds;
-        console.log('Starting loadInitialPosts...')
         this.loadInitialPosts();
       } else {
         this.loadRecommendedProfiles(3);
@@ -54,7 +52,6 @@ export class FeaturedComponent implements OnInit{
         this.followedPosts = posts;
         this.incrementViewCount(posts);
         this.isLoadingPosts = false;
-        console.log('Initial posts loaded, total posts:', this.followedPosts.length);
       });
   }
 
@@ -62,13 +59,11 @@ export class FeaturedComponent implements OnInit{
     if (this.isLoadingPosts) return;
 
     this.isLoadingPosts = true;
-    console.log('Loading more posts...');
     this.postsService.getMorePostsFromUsers(this.followedUserIds, this.postLoadLimit)
       .subscribe(posts => {
         this.followedPosts = [...this.followedPosts, ...posts];
         this.incrementViewCount(posts);
         this.isLoadingPosts = false;
-        console.log('Additional posts loaded, total posts:', this.followedPosts.length);
       });
   }
 
@@ -110,7 +105,6 @@ export class FeaturedComponent implements OnInit{
 
   incrementPostView(postId: string): void {
     this.postsService.incrementView(postId);
-    // console.log(`Increment view count for post ${postId}`);
   }
 
 }

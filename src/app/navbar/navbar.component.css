@@ -14,11 +14,6 @@
     z-index: 2;
   }
 
-  .toolbar div:hover {
-    transition: 0.4s;
-    background: rgb(0, 53, 13);
-  }
-
   .toolbar div:last-child {
     border-right: none;
   }
@@ -38,4 +33,33 @@
     width: 20%;
     text-align: center;
     line-height: 60px;
+  }
+
+  .toolbar a:hover {
+    transition: 0.4s;
+    background: rgb(0, 53, 13);
+  }
+  
+  .Following {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    text-align: center;
+    gap: 5px;
+  }
+
+  .FollowingNotification {
+    position: absolute;
+    top: 10px;
+    right: -20px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
   }

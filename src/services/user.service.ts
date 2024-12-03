@@ -3,19 +3,25 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore, DocumentData, DocumentReference } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { firestore } from 'firebase-admin';
-import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
+import { catchError, debounceTime, last, map, switchMap } from 'rxjs/operators';
+import { PostsService } from './posts.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
+  private lastVisitToFollowingPage: Date | null = null;
+  private unseenPostsCount$ = new BehaviorSubject<number>(0);
+  private unseenPostsSubscription: Subscription | null = null;
+
   constructor(
     private firestore: AngularFirestore, 
     private storage: AngularFireStorage, 
-    private afAuth: AngularFireAuth
-  ) {}
+    private afAuth: AngularFireAuth,
+    private postsService: PostsService
+  ) {  }
 
   getUserProfile(uid: string): Observable<any> {
     return this.firestore.collection('users').doc(uid).valueChanges();
@@ -29,6 +35,62 @@ export class UserService {
     return this.firestore.collection('users').doc(uid).update(data);
   }
 
+  //Following Notification Methods
+
+  getLastVisitToFollowingPage(): Date | null {
+    const storedTimestamp = localStorage.getItem('lastVisitToFollowingPage');
+    this.lastVisitToFollowingPage = storedTimestamp ? new Date(storedTimestamp) : null;
+    return this.lastVisitToFollowingPage;
+  }
+
+  updateLastVisitToFollowingPage(): void {
+    const now = new Date();
+    console.log('Updating last visit to FOllowing page: ', now);
+    this.lastVisitToFollowingPage = now;
+    localStorage.setItem('lastVisitToFollowingPage', now.toISOString());
+  }
+
+  getUnseenPostsCount$(): Observable<number> {
+    return this.unseenPostsCount$.asObservable();
+  }
+
+  startTrackingUnseenPosts(): void {
+    console.log('starting startTrackingUnseenPosts');
+  
+    if (this.unseenPostsSubscription) {
+      this.unseenPostsSubscription.unsubscribe();
+    }
+  
+    this.unseenPostsSubscription = this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (!user) return of([]); 
+        return this.getFollowedUserIds();
+      }),
+      switchMap(userIds => {
+        const lastVisit = this.getLastVisitToFollowingPage();
+        return this.postsService.getUnseenPostsCount(userIds, lastVisit);
+      })
+    ).subscribe(count => {
+      console.log('Updating startTracking UnseenPosts count: ', count);
+      this.unseenPostsCount$.next(count);
+    });
+  }
+  
+  clearUnseenPostsCount(): void {
+    console.log('Clearing unseen posts count and stopping tracking.');
+    this.unseenPostsCount$.next(0);
+    this.updateLastVisitToFollowingPage();
+  
+    if (this.unseenPostsSubscription) {
+      this.unseenPostsSubscription.unsubscribe();
+      this.unseenPostsSubscription = null;
+    }
+  
+    setTimeout(() => this.startTrackingUnseenPosts(), 1000);
+  }
+
+  //Get User's Profile Page
+
   getUserByUsername(username: string): Observable<any> {
     if (!username || typeof username !== 'string' || username.trim() === '') {
       console.error('Invalid or undefined username passted to Firestore query.');
@@ -37,6 +99,8 @@ export class UserService {
     return this.firestore.collection('users', ref => ref.where('username', '==', username))
       .valueChanges({ idField: 'uid'});
   }
+
+  //Select random User to recommend
 
   getRandomRecommendedUser(): Observable<any> {
     return this.firestore.collection('users', ref => ref.where('followerCount', '>=', 1))
@@ -60,6 +124,8 @@ export class UserService {
       }));
   }
 
+  //Get User's Profile Picture by UserID
+
   getUserProfileImageUrl(uid: string): Observable<string> {
     const path = `images/profile/${uid}`;
     return this.storage.ref(path).getDownloadURL().pipe(
@@ -70,11 +136,15 @@ export class UserService {
     );
   }
 
+  //Get logged-in User's UserID
+
   getCurrentUserId(): Observable<string | null> {
     return this.afAuth.authState.pipe(
       map(user => user ? user.uid : null)
     );
   }
+
+  //Get logged-in User's list of follows
 
   getFollowedUserIds(): Observable<string[]> {
     return this.getCurrentUserId().pipe(
@@ -88,6 +158,8 @@ export class UserService {
       })
     );
   }
+
+  //Follow button for Profile Page
 
   followUser(targetUserId: string, loggedInUserId: string): Promise<void> {
     const targetUserRef: DocumentReference<any> = this.firestore.collection('users').doc(targetUserId).ref;
@@ -173,4 +245,6 @@ export class UserService {
       })
     );
   }
+
+
 }
