@@ -44,7 +44,7 @@
 .character-count {
   display: flex;
   position: absolute;
-  margin-left: 650px;
+  margin-left: 450px;
   margin-top: 125px;
   text-align: right;
   margin-bottom: 5px;

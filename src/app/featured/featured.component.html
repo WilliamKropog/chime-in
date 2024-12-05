@@ -12,6 +12,13 @@
 <div *ngIf="followedPosts.length > 0">
   <app-following-posts [posts]="followedPosts"></app-following-posts>
 </div>
+
+<div *ngIf="followedPosts.length === 0 && recommendedProfiles.length > 0">
+  <ng-container *ngFor="let profile of recommendedProfiles">
+    <app-recommended-profile [user]="profile"></app-recommended-profile>
+  </ng-container>
+</div>
+
 <div class="loading-spinner" *ngIf="isLoadingPosts"></div>
 <div class="loading-posts" *ngIf="isLoadingPosts">
   Loading Posts...

@@ -12,6 +12,7 @@ import { take, timestamp } from 'rxjs';
 export class FeaturedComponent implements OnInit, OnDestroy{
 
   followedPosts: Post[] = [];
+  recommendedProfiles: any[] = [];
   isLoadingPosts: boolean = false;
   scrollTimeout: any = null;
   scrollThreshold: number = 400;
@@ -68,13 +69,27 @@ export class FeaturedComponent implements OnInit, OnDestroy{
   }
 
   loadRecommendedProfiles(count: number): void {
+    this.recommendedProfiles = [];
     for (let i = 0; i < count; i++) {
       this.userService.getRandomRecommendedUser().subscribe(user => {
         if (user) {
-          this.followedPosts.push(user);
+          this.recommendedProfiles.push(user);
         }
       });
     }
+  }
+
+  loadMoreRecommendedProfiles(count: number): void {
+    this.isLoadingPosts = true;
+
+    for (let i = 0; i < count; i++) {
+      this.userService.getRandomRecommendedUser().subscribe(user => {
+        if (user) {
+          this.recommendedProfiles.push(user);
+        }
+      });
+    }
+    this.isLoadingPosts = false;
   }
 
   @HostListener('window:scroll', [])
@@ -88,8 +103,13 @@ export class FeaturedComponent implements OnInit, OnDestroy{
       const fullHeight = document.documentElement.scrollHeight;
 
       if ((fullHeight - scrollPosition) < this.scrollThreshold && !this.isLoadingPosts) {
-        console.log('Attempting to load more posts...')
-        this.loadMorePosts();
+        if (this.followedPosts.length > 0){
+          console.log('Attempting to load more posts...')
+          this.loadMorePosts();
+        } else {
+          console.log('Attempting to load more recommended profiles...');
+          this.loadMoreRecommendedProfiles(3);
+        }
       }
     }, 400);
   }
