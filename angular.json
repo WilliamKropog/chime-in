@@ -23,8 +23,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/icons",
-              "src/index.html"
+              "src/icons"
             ],
             "styles": [
               "node_modules/@ngneat/hot-toast/src/styles/styles.css",
