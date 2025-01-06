@@ -46,6 +46,12 @@ export class PostsService {
     })
   }
 
+  //Post Page get Post by its ID
+
+  getPostById(postId: string): Observable<Post | undefined> {
+    return this.afs.collection<Post>('posts').doc(postId).valueChanges();
+  }
+
   //Following Page Notification Methods.
 
   getUnseenPostsCount(userIds: string[], lastVisit: Date | null): Observable<number> {

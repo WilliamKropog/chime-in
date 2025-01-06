@@ -33,11 +33,20 @@
     width: 20%;
     text-align: center;
     line-height: 60px;
+
   }
 
-  .toolbar a:hover {
+  .toolbar a:not(:last-child):hover {
     transition: 0.4s;
     background: rgb(0, 53, 13);
+}
+
+  .toolbar a:not(:last-child):hover svg {
+    animation: rotate 0.4s linear;
+  }
+
+  .toolbar a:last-child {
+    cursor: default; /* Prevent cursor from changing to pointer */
   }
   
   .Following {
@@ -62,4 +71,13 @@
     justify-content: center;
     font-size: 14px;
     font-weight: bold;
+  }
+
+  @keyframes rotate { 
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }

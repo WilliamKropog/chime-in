@@ -1,29 +1,3 @@
-<div class="news-container">
-  <div class="heading">
-    Welcome to Chime-in Development!
-  </div>
-  <div class="version">
-    <h1>12/5/24</h1>
-    <h1>
-      Dev 1.3.2a: 
-      <br>
-       - New Following Page. We have just started on it, but you can access it while it's in development.
-       It will recommend you a profile everytime you refresh or visit it.
-      <br>
-       - Notification system notifies you in real-time whenever users you follow 
-       upload new posts!
-       <br>
-       - Fixed bug where recommended profiles would not appear if you didn't follow
-       anyone. 
-       <br>
-       - Fixed bug where some profile pictures wouldn't appear if the user was not
-       logged-in.
-    </h1>
-    • In progress: Adding user functionalities in side-nav.
-  </div>
-</div>
-
-
 <div *ngIf="mostRecentPosts.length > 0" style="margin-top: 120px;">
   <app-home-posts [posts]="mostRecentPosts"></app-home-posts>
 </div>

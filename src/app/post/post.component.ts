@@ -4,6 +4,7 @@ import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { Subscription } from 'rxjs';
 import { CommentEditorService } from 'src/services/commenteditor.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -25,6 +26,7 @@ export class PostComponent implements OnInit, OnDestroy{
     private postsService: PostsService, 
     private authService: AuthenticationService,
     private commentEditorService: CommentEditorService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +57,12 @@ export class PostComponent implements OnInit, OnDestroy{
     this.editorSubscription?.unsubscribe();
     this.commentsSubscription?.unsubscribe();
     this.topCommentSubscription?.unsubscribe();
+  }
+
+  visitPost(): void {
+    if (this.post?.postId) {
+      this.router.navigate(['/post', this.post.postId]);
+    }
   }
 
   likePost() {

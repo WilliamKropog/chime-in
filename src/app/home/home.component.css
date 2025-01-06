@@ -1,39 +1,3 @@
-  .news-container {
-    background-color: rgb(10, 26, 14);
-    border-radius: 10px;
-    color: white;
-    width: 25%;
-    position: absolute;
-    margin-left: 72.5%;
-    padding-bottom: 6px;
-  }
-  
-  .version {
-    font-size: 24px;
-    line-height: normal;
-    margin-bottom: 60px;
-    margin-top: 20px;
-    margin-left: 10px;
-    text-align: left;
-  }
-
-  .version h1 {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  .heading {
-    font-size: 56px;
-    font-weight: bold;
-    line-height: normal;
-    text-align: center;
-  }
-
-  .heading h1 {
-    padding-top: 24px;
-    font-size: 24px;
-  }
-
   .loading-posts {
     display: flex;
     justify-content: center;

@@ -26,9 +26,8 @@ export class ProfileComponent implements OnInit{
   isLoadingPosts: boolean = false;
   scrollTimeout: any = null;
   scrollThreshHold: number = 200;
-  currentUserId: string = ''; //ID of User who's profile page is being viewed.
-  loggedInUserId: string = ''; //ID of User who is currently logged in.
-  profileUserId: string = ''; //Will be deleted as it is not needed.
+  currentUserId: string = ''; 
+  loggedInUserId: string = ''; 
   userPhotoUrl: string = 'assets/images/png-transparent-default-avatar.png';
 
   //User Subscription:

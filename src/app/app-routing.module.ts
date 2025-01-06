@@ -5,8 +5,8 @@ import { FeaturedComponent } from './featured/featured.component';
 import { FYPComponent } from './fyp/fyp.component';
 import { CollectiveComponent } from './collective/collective.component';
 import { RegisterComponent } from './register/register.component';
-import { AppComponent } from './app.component';
 import { ProfileComponent } from './profile/profile.component';
+import { PostPageComponent } from './post-page/post-page.component';
 
 const routes: Routes = [
   { 
@@ -36,6 +36,9 @@ const routes: Routes = [
   },
   {
     path: 'profile/:username', component: ProfileComponent
+  },
+  {
+    path: 'post/:postId', component: PostPageComponent
   },
   {
     path: '**', redirectTo: '', pathMatch: 'full'

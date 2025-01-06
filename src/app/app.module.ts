@@ -23,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
+import { NewsColumnComponent } from './news-column/news-column.component';
 import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HotToastModule } from '@ngneat/hot-toast';
@@ -34,6 +35,7 @@ import { getStorage } from 'firebase/storage';
 import { provideAuth } from '@angular/fire/auth';
 import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
+import { PostPageComponent } from './post-page/post-page.component';
 import { HomePostsComponent } from './home-posts/home-posts.component';
 import { ProfilePostsComponent } from './profile-posts/profile-posts.component';
 import { FollowingPostsComponent } from './following-posts/following-posts.component';
@@ -56,10 +58,12 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     CommentListComponent,
     RegisterComponent,
     HomeComponent,
+    NewsColumnComponent,
     PostEditorComponent,
     ProfileEditorComponent,
     ProfileComponent,
     PostComponent,
+    PostPageComponent,
     HomePostsComponent,
     ProfilePostsComponent,
     FollowingPostsComponent,

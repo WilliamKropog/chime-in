@@ -5,5 +5,6 @@
 <ng-container *ngIf="authService.currentUser$ | async as user; else loginButton">
     <app-side-nav *ngIf="!isRegisterRoute"></app-side-nav>
 </ng-container>
+<app-news-column></app-news-column>
 <router-outlet></router-outlet>
 

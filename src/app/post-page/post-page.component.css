@@ -1,0 +1,9 @@
+.post-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    margin-top: 120px;
+    transform: scale(1.1);
+    top: 0;
+}
