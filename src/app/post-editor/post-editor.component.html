@@ -1,14 +1,31 @@
 <div class="modal-overlay">
     <div class="modal">
-        <div class="modal-content" *ngIf="user$ | async as user">
-            <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
-            <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="500"
-                (input)="updateCharacterCount()" placeholder="Type your Chime-in here."></textarea>
-            <div class="character-count">
-                {{ characterCount }} / 500
+        <div class="modal-content" *ngIf="user$ | async">
+            <img [src]="profileImageUrl" alt="Profile Picture" class="profile-image">
+
+            <div *ngIf="!selectedImageUrl; else imagePreview">
+                <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="500"
+                    (input)="updateCharacterCount()" placeholder="Type your Chime-in here."></textarea>
+                <div class="character-count">
+                    {{ characterCount }} / 500
+                </div>
             </div>
+            <ng-template #imagePreview>
+                <div class="preview-image">
+                    <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="100"
+                    (input)="updateCharacterCount()" placeholder="Title your photo here." 
+                    style=
+                        "height: 20px; 
+                        width: 70%;
+                        font-size: 16px;
+                        margin: 10px 0 10px 60px;"></textarea>
+                    <img [src]="selectedImageUrl" alt="Selected Image">
+                </div>
+            </ng-template>
+
             <div class="button-row">
-                <button mat-mini-fab>
+                <button mat-mini-fab (click)="fileInput.click()">
+                    <input type="file" #fileInput (change)="uploadImage($event)" accept=".png, .jpg, .jpeg, .gif" style="display: none;">
                     <mat-icon>image</mat-icon>
                 </button>
                 <button mat-mini-fab>

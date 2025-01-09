@@ -26,6 +26,7 @@
 
 .item4 {
     grid-area: body;
+    cursor: pointer;
 }
 
 .item5 {
@@ -89,7 +90,6 @@
 
 .post-content img {
     width: 60px;
-    height: 60px;
     margin-right: auto;
     border-radius: 100%;
     margin-top: 20px;

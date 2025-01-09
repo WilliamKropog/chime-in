@@ -1,6 +1,7 @@
 <div class="post" *ngIf="post">
     <div class="post-content">
-        <img [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+        <img [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"
+            style="height: 60px;">
         <div class="item6">• {{ post.createdAt | relativeTime}}</div>
         <div class="item3">{{ post.views }} views</div>
 
@@ -8,9 +9,23 @@
             <h1>{{ post.displayName }}</h1>
         </a>
 
-        <div class="item4 body" (click)="visitPost()">
+        <div class="item4 body" *ngIf="!post.imageUrl; else imagePost" (click)="visitPost()">
             {{ post.body }}
         </div>
+
+        <ng-template #imagePost>
+            <div class="item4 body" (click)="visitPost()">
+                    {{ post.body }}
+                <img [src]="post.imageUrl" alt="Post Image" 
+                    style=
+                    "display: block;
+                    width: 100%; 
+                    object-fit: cover;
+                    border-radius: 10px;
+                    margin: 10px auto;">
+            </div>
+        </ng-template>
+
         <div class="item5">
             <button mat-mini-fab (click)="likePost()" [ngClass]="{'liked': isLiked}"
             style="margin-left: 40px;">

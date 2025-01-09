@@ -30,6 +30,7 @@ export interface Post {
     commentCount: number;
     likes?: Array<string>;
     views: number;
+    imageUrl?: string | ArrayBuffer | null | undefined;
 }
 
 export interface Comment {
