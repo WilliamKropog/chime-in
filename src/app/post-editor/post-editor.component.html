@@ -23,9 +23,27 @@
                 </div>
             </ng-template>
 
+            <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
+            </div>
+
             <div class="button-row">
-                <button mat-mini-fab (click)="fileInput.click()">
-                    <input type="file" #fileInput (change)="uploadImage($event)" accept=".png, .jpg, .jpeg, .gif" style="display: none;">
+                <button 
+                    mat-mini-fab
+                    [ngClass]="{'active-button': activeMode === 'text'}"
+                    (click)="switchToTextMode()">
+                    <mat-icon>text_fields</mat-icon>
+                </button>
+                <button 
+                    mat-mini-fab 
+                    [ngClass]="{'active-button': activeMode === 'image'}"
+                    (click)="fileInput.click()">
+                    <input 
+                        type="file" 
+                        #fileInput 
+                        (change)="uploadImage($event)" 
+                        accept=".png, .jpg, .jpeg, .gif" 
+                        style="display: none;">
                     <mat-icon>image</mat-icon>
                 </button>
                 <button mat-mini-fab>

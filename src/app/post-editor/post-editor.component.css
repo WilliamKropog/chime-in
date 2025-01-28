@@ -84,6 +84,11 @@
   margin-left: 20px;
 }
 
+.button-row button.active-button {
+  background-color: white;
+  color: green;
+}
+
 .post-button {
   position: absolute;
   bottom: 0;
