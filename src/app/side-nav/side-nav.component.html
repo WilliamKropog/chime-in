@@ -2,7 +2,7 @@
   <ul>
     <li>
       <div *ngIf="user$ | async as user">
-        <a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">
+        <a [routerLink]="['/profile', user.displayName]" routerLinkActive="active" ariaCurrentWhenActive="page">
           <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
         </a>
       </div>
