@@ -1,6 +1,12 @@
-<div *ngIf="recommendedUsers.length > 0">
-    <app-recommended-profile *ngFor="let user of recommendedUsers" [user]="user"></app-recommended-profile>
-</div>
-<div *ngIf="recommendedUsers.length === 0">
+@if (recommendedUsers.length > 0) {
+  <div>
+    @for (user of recommendedUsers; track user) {
+      <app-recommended-profile [user]="user"></app-recommended-profile>
+    }
+  </div>
+}
+@if (recommendedUsers.length === 0) {
+  <div>
     No recommendations available.
-</div>
+  </div>
+}

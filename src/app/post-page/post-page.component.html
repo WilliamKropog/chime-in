@@ -1,3 +1,5 @@
 <div class="post-page-container">
-    <app-post *ngIf="post" [post]="post"></app-post>
+  @if (post) {
+    <app-post [post]="post"></app-post>
+  }
 </div>

@@ -1,7 +1,13 @@
-<div *ngIf="mostRecentPosts.length > 0" style="margin-top: 120px;">
-  <app-home-posts [posts]="mostRecentPosts"></app-home-posts>
-</div>
-<div class="loading-spinner" *ngIf="isLoadingPosts"></div>
-<div class="loading-posts" *ngIf="isLoadingPosts">
-  Loading Posts...
-</div>
+@if (mostRecentPosts.length > 0) {
+  <div style="margin-top: 120px;">
+    <app-home-posts [posts]="mostRecentPosts"></app-home-posts>
+  </div>
+}
+@if (isLoadingPosts) {
+  <div class="loading-spinner"></div>
+}
+@if (isLoadingPosts) {
+  <div class="loading-posts">
+    Loading Posts...
+  </div>
+}

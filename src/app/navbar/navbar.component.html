@@ -5,7 +5,7 @@
         src="assets/images/2CentsLogo2.png"
         alt="2Cents Logo"
         style="height: 50px; width: 50px;"
-      />
+        />
       <span>2Cents</span>
     </div>
   </a>
@@ -14,9 +14,11 @@
     <div class="Following">
       <mat-icon class="icon gold">grade</mat-icon>
       Following
-      <div *ngIf="unseenPostsCount > 0" class="FollowingNotification">
-        {{ unseenPostsCount }}
-      </div>
+      @if (unseenPostsCount > 0) {
+        <div class="FollowingNotification">
+          {{ unseenPostsCount }}
+        </div>
+      }
     </div>
   </a>
 

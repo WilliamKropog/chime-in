@@ -4,28 +4,32 @@
       <div class="logo-container">
         <div class="coin"></div>
         <img
-        src="assets/images/2CentsLogo2.png"
-        alt="2Cents logo"
-        class="logo-img"
-      >
+          src="assets/images/2CentsLogo2.png"
+          alt="2Cents logo"
+          class="logo-img"
+          >
       </div>
     </li>
     <li>
       Login
     </li>
-  <p style="margin-top: 60px;">Email:</p>
+    <p style="margin-top: 60px;">Email:</p>
     <li style="margin-top: 0px;">
       <form [formGroup] = "loginForm" >
         <mat-form-field>
           <input
             matInput placeholder="Enter email"
             formControlName="email">
-          <mat-error *ngIf="email?.errors?.['required']">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="email?.errors?.['email']">
-            Incorrect email format
-          </mat-error>
+          @if (email?.errors?.['required']) {
+            <mat-error>
+              Email is required
+            </mat-error>
+          }
+          @if (email?.errors?.['email']) {
+            <mat-error>
+              Incorrect email format
+            </mat-error>
+          }
         </mat-form-field>
       </form>
     </li>
@@ -33,19 +37,21 @@
     <li style="margin-top: 0px;">
       <form [formGroup]= "loginForm">
         <mat-form-field>
-          <input 
+          <input
             matInput placeholder="Password"
             formControlName="password"
             type="password">
-          <mat-error *ngIf="password?.errors?.['required']">
-            Password is required
-          </mat-error>
+          @if (password?.errors?.['required']) {
+            <mat-error>
+              Password is required
+            </mat-error>
+          }
         </mat-form-field>
       </form>
     </li>
     <li>
       <button (click)="submit()"
-        mat-raised-button color="primary" 
+        mat-raised-button color="primary"
         type="submit"
         style="
           width: 200px;
@@ -53,7 +59,7 @@
           background-color: green;
           font-size: 18px;
           ">
-            LOGIN
+        LOGIN
       </button>
     </li>
     <p style="font-size: 18px;

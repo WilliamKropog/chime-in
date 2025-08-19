@@ -1,28 +1,34 @@
 <div class="comment-list">
-    <div class="scrollable-comments" [ngClass]="{ 'open': isCommentSectionOpen }">
-<!--Top Comment-->
-        <div *ngIf="topComment">
-            <div class="topCommentText">
-                Top Comment:
-            </div>
-            <app-comment [comment]="topComment" [postId]="post!.postId"></app-comment>
+  <div class="scrollable-comments" [ngClass]="{ 'open': isCommentSectionOpen }">
+    <!--Top Comment-->
+    @if (topComment) {
+      <div>
+        <div class="topCommentText">
+          Top Comment:
         </div>
-<!--Comment Section-->
-        <div *ngIf="isCommentSectionOpen" style="margin-top: 20px;">
-            <app-comment 
-                *ngFor="let comment of comments; trackBy: trackByCommentId" 
-                [comment]="comment" 
-                [postId]="post!.postId">
-            </app-comment>
-        </div>
-    </div>
-<!--View / Hide all comments button-->
-<!--
-Note: CSS for this class is not implenting itself correctly.
-Doing forced styling in the mean time.
--->
-    <div class="viewAllCommentsButton" *ngIf="comments.length > 0">
-        <button mat-button (click)="toggleCommentSection()"
+        <app-comment [comment]="topComment" [postId]="post!.postId"></app-comment>
+      </div>
+    }
+    <!--Comment Section-->
+    @if (isCommentSectionOpen) {
+      <div style="margin-top: 20px;">
+        @for (comment of comments; track trackByCommentId($index, comment)) {
+          <app-comment
+            [comment]="comment"
+            [postId]="post!.postId">
+          </app-comment>
+        }
+      </div>
+    }
+  </div>
+  <!--View / Hide all comments button-->
+  <!--
+  Note: CSS for this class is not implenting itself correctly.
+  Doing forced styling in the mean time.
+  -->
+  @if (comments.length > 0) {
+    <div class="viewAllCommentsButton">
+      <button mat-button (click)="toggleCommentSection()"
         style="
         color: white; 
         font-size: 12px;
@@ -36,7 +42,8 @@ Doing forced styling in the mean time.
         display: flex; 
         justify-content: center;
         z-index: 0;">
-            {{ isCommentSectionOpen ? ('Hide All ' + post?.commentCount + ' Comments') : ('View All ' + post?.commentCount + ' Comments') }}
-        </button>
+        {{ isCommentSectionOpen ? ('Hide All ' + post?.commentCount + ' Comments') : ('View All ' + post?.commentCount + ' Comments') }}
+      </button>
     </div>
+  }
 </div>

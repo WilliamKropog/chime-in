@@ -1,96 +1,106 @@
 <div class="register-background">
-<div>
-  <img
-    src="assets/images/2CentsLogo2.png"
-    alt="2Cents logo"
+  <div>
+    <img
+      src="assets/images/2CentsLogo2.png"
+      alt="2Cents logo"
     style="
       height: 500px;
       width: 500px;
       margin-top: 10%;
       margin-left: 15%;
       border-radius: 20%;"
-  >
+      >
 
-  <div class="register">
-    <ul>
-      <li>
-        <img
-          src="assets/images/2CentsLogo2.png"
-          alt="2Cents logo"
-          style="height: 100px; width: 100px; border-radius: 20px;"
-        >
-      </li>
-      <li>
-        Join 2Cents today
-      </li>
+    <div class="register">
+      <ul>
+        <li>
+          <img
+            src="assets/images/2CentsLogo2.png"
+            alt="2Cents logo"
+            style="height: 100px; width: 100px; border-radius: 20px;"
+            >
+        </li>
+        <li>
+          Join 2Cents today
+        </li>
         <p style="margin-top: 40px;">Username:</p>
-      <li>
-        <form [formGroup] = "registerForm" (ngSubmit)="register()">
-          <mat-form-field>
-            <input
-              matInput placeholder="Enter username"
-              formControlName="username"/>
-            <mat-error *ngIf="username?.errors?.['required']">
-              Username is required
-            </mat-error>
-          </mat-form-field>
-        </form>
-      </li>
+        <li>
+          <form [formGroup] = "registerForm" (ngSubmit)="register()">
+            <mat-form-field>
+              <input
+                matInput placeholder="Enter username"
+                formControlName="username"/>
+              @if (username?.errors?.['required']) {
+                <mat-error>
+                  Username is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </form>
+        </li>
         <p>Email:</p>
-      <li>
-        <form [formGroup] = "registerForm" >
-          <mat-form-field>
-            <input
-              matInput placeholder="Enter email"
-              formControlName="email"/>
-            <mat-error *ngIf="email?.errors?.['required']">
-              Email is required
-            </mat-error>
-            <mat-error *ngIf="email?.errors?.['email']">
-              Incorrect email format
-            </mat-error>
-          </mat-form-field>
-        </form>
-      </li>
+        <li>
+          <form [formGroup] = "registerForm" >
+            <mat-form-field>
+              <input
+                matInput placeholder="Enter email"
+                formControlName="email"/>
+              @if (email?.errors?.['required']) {
+                <mat-error>
+                  Email is required
+                </mat-error>
+              }
+              @if (email?.errors?.['email']) {
+                <mat-error>
+                  Incorrect email format
+                </mat-error>
+              }
+            </mat-form-field>
+          </form>
+        </li>
         <p>Password:</p>
-      <li>
-        <form [formGroup] = "registerForm" >
-          <mat-form-field>
-            <input
-              type="password"
-              matInput placeholder="Enter password"
-              formControlName="password"/>
-            <mat-error *ngIf="password?.errors?.['required']">
-              Password is required
-            </mat-error>
-          </mat-form-field>
-        </form>
-      </li>
+        <li>
+          <form [formGroup] = "registerForm" >
+            <mat-form-field>
+              <input
+                type="password"
+                matInput placeholder="Enter password"
+                formControlName="password"/>
+              @if (password?.errors?.['required']) {
+                <mat-error>
+                  Password is required
+                </mat-error>
+              }
+            </mat-form-field>
+          </form>
+        </li>
         <p>Confirm password:</p>
-      <li>
-        <form [formGroup] = "registerForm" >
-          <mat-form-field>
-            <input
-              type="password"
-              matInput placeholder="Confirm Password"
-              formControlName="confirmPassword"/>
-            <mat-error *ngIf="registerForm.hasError('notSame', 'confirmPassword')">
-              Passwords do not match
-            </mat-error>
-          </mat-form-field>
-        </form>
-      </li>
-      <li>
+        <li>
+          <form [formGroup] = "registerForm" >
+            <mat-form-field>
+              <input
+                type="password"
+                matInput placeholder="Confirm Password"
+                formControlName="confirmPassword"/>
+              @if (registerForm.hasError('notSame', 'confirmPassword')) {
+                <mat-error>
+                  Passwords do not match
+                </mat-error>
+              }
+            </mat-form-field>
+          </form>
+        </li>
+        <li>
         <button (click)="register()" mat-raised-button color="primary" style="
           height: 40px;
           background-color: green;
           font-size: 18px;
         ">
-          REGISTER
-        </button>
-      </li>
-    </ul>
+            REGISTER
+          </button>
+        </li>
+      </ul>
+    </div>
+    <p class="subtitle">Give everyone your 2Cents!</p>
   </div>
-  <p class="subtitle">Give everyone your 2Cents!</p>
-</div>
 </div>

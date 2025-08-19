@@ -1,72 +1,74 @@
 <div class="modal-overlay">
-    <div class="modal">
-        <div class="modal-content" *ngIf="user$ | async">
-            <img [src]="profileImageUrl" alt="Profile Picture" class="profile-image">
-
-            <div *ngIf="!selectedImageUrl; else imagePreview">
-                <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="500"
-                    (input)="updateCharacterCount()" placeholder="Type your Chime-in here."></textarea>
-                <div class="character-count">
-                    {{ characterCount }} / 500
-                </div>
+  <div class="modal">
+    @if (user$ | async) {
+      <div class="modal-content">
+        <img [src]="profileImageUrl" alt="Profile Picture" class="profile-image">
+        @if (!selectedImageUrl) {
+          <div>
+            <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="500"
+            (input)="updateCharacterCount()" placeholder="Type your Chime-in here."></textarea>
+            <div class="character-count">
+              {{ characterCount }} / 500
             </div>
-            <ng-template #imagePreview>
-                <div class="preview-image">
-                    <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="100"
-                    (input)="updateCharacterCount()" placeholder="Title your photo here." 
-                    style=
-                        "height: 40px; 
-                        width: 70%;
-                        font-size: 16px;
-                        margin: 10px 0 10px 60px;"></textarea>
-                    <img [src]="selectedImageUrl" alt="Selected Image">
-                </div>
-            </ng-template>
-
-            <div *ngIf="errorMessage" class="error-message">
-                {{ errorMessage }}
-            </div>
-
-            <div class="button-row">
-                <button 
-                    mat-mini-fab
-                    [ngClass]="{'active-button': activeMode === 'text'}"
-                    (click)="switchToTextMode()">
-                    <mat-icon>text_fields</mat-icon>
-                </button>
-                <button 
-                    mat-mini-fab 
-                    [ngClass]="{'active-button': activeMode === 'image'}"
-                    (click)="fileInput.click()">
-                    <input 
-                        type="file" 
-                        #fileInput 
-                        (change)="uploadImage($event)" 
-                        accept=".png, .jpg, .jpeg, .gif" 
-                        style="display: none;">
-                    <mat-icon>image</mat-icon>
-                </button>
-                <button mat-mini-fab style="background-color: gray;">
-                    <mat-icon>access_time</mat-icon>
-                </button>
-                <button mat-mini-fab style="background-color: gray;">
-                    <mat-icon>volume_up</mat-icon>
-                </button>
-                <button mat-mini-fab style="background-color: gray;">
-                    <mat-icon>remove_red_eye</mat-icon>
-                </button>
-            </div>
-            <div class="post-button">
-                <button mat-fab extended (click)="chimein();">
-                    <mat-icon>send</mat-icon>
-                    Send
-                </button>
-            </div>
+          </div>
+        } @else {
+          <div class="preview-image">
+            <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="100"
+              (input)="updateCharacterCount()" placeholder="Title your photo here."
+              style=
+              "height: 40px;
+              width: 70%;
+              font-size: 16px;
+            margin: 10px 0 10px 60px;"></textarea>
+            <img [src]="selectedImageUrl" alt="Selected Image">
+          </div>
+        }
+        @if (errorMessage) {
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+        }
+        <div class="button-row">
+          <button
+            mat-mini-fab
+            [ngClass]="{'active-button': activeMode === 'text'}"
+            (click)="switchToTextMode()">
+            <mat-icon>text_fields</mat-icon>
+          </button>
+          <button
+            mat-mini-fab
+            [ngClass]="{'active-button': activeMode === 'image'}"
+            (click)="fileInput.click()">
+            <input
+              type="file"
+              #fileInput
+              (change)="uploadImage($event)"
+              accept=".png, .jpg, .jpeg, .gif"
+              style="display: none;">
+            <mat-icon>image</mat-icon>
+          </button>
+          <button mat-mini-fab style="background-color: gray;">
+            <mat-icon>access_time</mat-icon>
+          </button>
+          <button mat-mini-fab style="background-color: gray;">
+            <mat-icon>volume_up</mat-icon>
+          </button>
+          <button mat-mini-fab style="background-color: gray;">
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>
         </div>
-        <div class="close-button">
-            <button mat-mini-fab (click)="onClose()">
-                <mat-icon>close</mat-icon>
-            </button>
+        <div class="post-button">
+          <button mat-fab extended (click)="chimein();">
+            <mat-icon>send</mat-icon>
+            Send
+          </button>
         </div>
+      </div>
+    }
+    <div class="close-button">
+      <button mat-mini-fab (click)="onClose()">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
+  </div>
 </div>

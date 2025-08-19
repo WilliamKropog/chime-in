@@ -1,25 +1,33 @@
 <div class="heading-container">
   <div class="heading">
-      Following Page 
+    Following Page
   </div>
   <div class="subheading">
-      <h1>
-        Updates and most recent posts of those you follow.
-      </h1>
-      Not following anyone yet? Check out some of our recommended profiles!
+    <h1>
+      Updates and most recent posts of those you follow.
+    </h1>
+    Not following anyone yet? Check out some of our recommended profiles!
   </div>
 </div>
-<div *ngIf="followedPosts.length > 0">
-  <app-following-posts [posts]="followedPosts"></app-following-posts>
-</div>
+@if (followedPosts.length > 0) {
+  <div>
+    <app-following-posts [posts]="followedPosts"></app-following-posts>
+  </div>
+}
 
-<div *ngIf="followedPosts.length === 0 && recommendedProfiles.length > 0">
-  <ng-container *ngFor="let profile of recommendedProfiles">
-    <app-recommended-profile [user]="profile"></app-recommended-profile>
-  </ng-container>
-</div>
+@if (followedPosts.length === 0 && recommendedProfiles.length > 0) {
+  <div>
+    @for (profile of recommendedProfiles; track profile) {
+      <app-recommended-profile [user]="profile"></app-recommended-profile>
+    }
+  </div>
+}
 
-<div class="loading-spinner" *ngIf="isLoadingPosts"></div>
-<div class="loading-posts" *ngIf="isLoadingPosts">
-  Loading Posts...
-</div>
+@if (isLoadingPosts) {
+  <div class="loading-spinner"></div>
+}
+@if (isLoadingPosts) {
+  <div class="loading-posts">
+    Loading Posts...
+  </div>
+}

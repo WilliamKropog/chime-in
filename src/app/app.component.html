@@ -1,10 +1,15 @@
 <app-navbar></app-navbar>
-<ng-template #loginButton>
-    <app-login *ngIf="!isRegisterRoute"></app-login>
-</ng-template>
-<ng-container *ngIf="authService.currentUser$ | async as user; else loginButton">
-    <app-side-nav *ngIf="!isRegisterRoute"></app-side-nav>
-</ng-container>
-<app-news-column *ngIf="!isRegisterRoute"></app-news-column>
+@if (authService.currentUser$ | async; as user) {
+  @if (!isRegisterRoute) {
+    <app-side-nav></app-side-nav>
+  }
+} @else {
+  @if (!isRegisterRoute) {
+    <app-login></app-login>
+  }
+}
+@if (!isRegisterRoute) {
+  <app-news-column></app-news-column>
+}
 <router-outlet></router-outlet>
 
