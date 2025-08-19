@@ -41,12 +41,12 @@
     background: rgb(0, 53, 13);
 }
 
-  .toolbar a:not(:last-child):hover svg {
+  .toolbar a:not(:last-child):hover mat-icon {
     animation: rotate 0.4s linear;
   }
 
   .toolbar a:last-child {
-    cursor: default; /* Prevent cursor from changing to pointer */
+    cursor: default; 
   }
   
   .Following {
@@ -81,3 +81,8 @@
       transform: rotate(360deg);
     }
   }
+
+  .mat-icon {
+    color: limegreen;
+  }
+

@@ -26,3 +26,40 @@
     font-size: 18px;
     margin-left: 20px;
   }
+
+  .logo-container {
+    position: relative;
+    display: flex;
+    width: 150px;
+    height: 150px;
+  }
+
+  .logo-img {
+    position: relative;
+    width: 200px;
+    height: auto;
+    z-index: 2;
+    transform: scale(1.5);
+  }
+
+  .coin {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 175px;
+    height: 175px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #d2691e, #8b4513); 
+    z-index: 1;
+    animation: coin-flip 6s infinite ease-in-out;
+}
+
+@keyframes coin-flip {
+  0%, 85%, 100% {
+    transform: translate(-50%, -50%) rotateY(0deg);
+  }
+  90% {
+    transform: translate(-50%, -50%) rotateY(1800deg);
+  }
+}
