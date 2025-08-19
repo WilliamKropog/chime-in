@@ -6,9 +6,10 @@ import { Subscription } from 'rxjs';
 import { CommentEditorService } from 'src/services/commenteditor.service';
 
 @Component({
-  selector: 'app-recommended-post',
-  templateUrl: './recommended-post.component.html',
-  styleUrl: './recommended-post.component.css'
+    selector: 'app-recommended-post',
+    templateUrl: './recommended-post.component.html',
+    styleUrl: './recommended-post.component.css',
+    standalone: false
 })
 export class RecommendedPostComponent implements OnInit, OnDestroy {
   @Input() post?: Post;

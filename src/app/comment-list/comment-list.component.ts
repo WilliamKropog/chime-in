@@ -3,9 +3,10 @@ import { Comment, Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 
 @Component({
-  selector: 'app-comment-list',
-  templateUrl: './comment-list.component.html',
-  styleUrl: './comment-list.component.css'
+    selector: 'app-comment-list',
+    templateUrl: './comment-list.component.html',
+    styleUrl: './comment-list.component.css',
+    standalone: false
 })
 export class CommentListComponent implements OnInit{
   @Input() post?: Post;

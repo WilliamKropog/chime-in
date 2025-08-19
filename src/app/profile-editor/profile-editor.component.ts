@@ -9,9 +9,10 @@ import { Subscription } from 'rxjs';
 import { user } from '@angular/fire/auth';
 
 @Component({
-  selector: 'app-profile-editor',
-  templateUrl: './profile-editor.component.html',
-  styleUrls: ['./profile-editor.component.css']
+    selector: 'app-profile-editor',
+    templateUrl: './profile-editor.component.html',
+    styleUrls: ['./profile-editor.component.css'],
+    standalone: false
 })
 export class ProfileEditorComponent {
   @Input() isVisible: boolean = false;

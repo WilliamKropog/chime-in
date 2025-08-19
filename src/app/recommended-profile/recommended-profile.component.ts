@@ -5,9 +5,10 @@ import { PostsService } from 'src/services/posts.service';
 import { interval, Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-recommended-profile',
-  templateUrl: './recommended-profile.component.html',
-  styleUrl: './recommended-profile.component.css'
+    selector: 'app-recommended-profile',
+    templateUrl: './recommended-profile.component.html',
+    styleUrl: './recommended-profile.component.css',
+    standalone: false
 })
 export class RecommendedProfileComponent implements OnInit, OnDestroy{
 

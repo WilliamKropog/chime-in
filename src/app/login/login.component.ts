@@ -5,9 +5,10 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { AuthenticationService } from 'src/services/authentication.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    standalone: false
 })
 
 export class LoginComponent implements OnInit {

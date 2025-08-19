@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Post } from 'src/interface';
 
 @Component({
-  selector: 'app-profile-posts',
-  templateUrl: './profile-posts.component.html',
-  styleUrl: './profile-posts.component.css'
+    selector: 'app-profile-posts',
+    templateUrl: './profile-posts.component.html',
+    styleUrl: './profile-posts.component.css',
+    standalone: false
 })
 export class ProfilePostsComponent implements OnInit, OnDestroy{
   @Input() posts: Post[] = [];

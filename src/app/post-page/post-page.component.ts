@@ -4,9 +4,10 @@ import { PostsService } from 'src/services/posts.service';
 import { Post } from 'src/interface';
 
 @Component({
-  selector: 'app-post-page',
-  templateUrl: './post-page.component.html',
-  styleUrl: './post-page.component.css'
+    selector: 'app-post-page',
+    templateUrl: './post-page.component.html',
+    styleUrl: './post-page.component.css',
+    standalone: false
 })
 export class PostPageComponent implements OnInit {
   post: Post | undefined = undefined;

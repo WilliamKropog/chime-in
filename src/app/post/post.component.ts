@@ -7,9 +7,10 @@ import { CommentEditorService } from 'src/services/commenteditor.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-post',
-  templateUrl: './post.component.html',
-  styleUrls: ['./post.component.css']
+    selector: 'app-post',
+    templateUrl: './post.component.html',
+    styleUrls: ['./post.component.css'],
+    standalone: false
 })
 export class PostComponent implements OnInit, OnDestroy{
   @Input() post?: Post;

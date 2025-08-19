@@ -7,9 +7,10 @@ import { getDownloadURL, ref, uploadBytes, FirebaseStorage } from 'firebase/stor
 import { Storage } from '@angular/fire/storage';
 
 @Component({
-  selector: 'app-post-editor',
-  templateUrl: './post-editor.component.html',
-  styleUrls: ['./post-editor.component.css']
+    selector: 'app-post-editor',
+    templateUrl: './post-editor.component.html',
+    styleUrls: ['./post-editor.component.css'],
+    standalone: false
 })
 export class PostEditorComponent {
   @Input() isVisible: boolean = false;

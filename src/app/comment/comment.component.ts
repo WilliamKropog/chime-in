@@ -4,9 +4,10 @@ import { AuthenticationService } from 'src/services/authentication.service';
 import { CommentEditorService } from 'src/services/commenteditor.service';
 
 @Component({
-  selector: 'app-comment',
-  templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.css']
+    selector: 'app-comment',
+    templateUrl: './comment.component.html',
+    styleUrls: ['./comment.component.css'],
+    standalone: false
 })
 export class CommentComponent implements OnInit, OnDestroy{
   @Input() postId!: string;

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-news-column',
-  templateUrl: './news-column.component.html',
-  styleUrl: './news-column.component.css'
+    selector: 'app-news-column',
+    templateUrl: './news-column.component.html',
+    styleUrl: './news-column.component.css',
+    standalone: false
 })
 export class NewsColumnComponent implements OnInit {
 

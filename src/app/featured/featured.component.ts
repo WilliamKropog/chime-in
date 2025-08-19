@@ -5,9 +5,10 @@ import { UserService } from 'src/services/user.service';
 import { take, timestamp } from 'rxjs';
 
 @Component({
-  selector: 'app-featured',
-  templateUrl: './featured.component.html',
-  styleUrls: ['./featured.component.css']
+    selector: 'app-featured',
+    templateUrl: './featured.component.html',
+    styleUrls: ['./featured.component.css'],
+    standalone: false
 })
 export class FeaturedComponent implements OnInit, OnDestroy{
 

@@ -6,9 +6,10 @@ import { CommentEditorService } from 'src/services/commenteditor.service';
 import { PostsService } from 'src/services/posts.service';
 
 @Component({
-  selector: 'app-comment-editor',
-  templateUrl: './comment-editor.component.html',
-  styleUrl: './comment-editor.component.css'
+    selector: 'app-comment-editor',
+    templateUrl: './comment-editor.component.html',
+    styleUrl: './comment-editor.component.css',
+    standalone: false
 })
 export class CommentEditorComponent implements OnDestroy{
   @Input() postId!: string;
