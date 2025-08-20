@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideStorage, getStorage } from '@angular/fire/storage';
+import { provideFunctions, getFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
@@ -26,10 +29,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { PostEditorComponent } from './post-editor/post-editor.component';
 import { ProfileEditorComponent } from './profile-editor/profile-editor.component';
-import { getAuth } from 'firebase/auth';
-import { provideStorage } from '@angular/fire/storage';
-import { getStorage } from 'firebase/storage';
-import { provideAuth } from '@angular/fire/auth';
 import { ProfileComponent } from './profile/profile.component';
 import { PostComponent } from './post/post.component';
 import { PostPageComponent } from './post-page/post-page.component';
@@ -40,6 +39,8 @@ import { NotFollowingPostsComponent } from './not-following-posts/not-following-
 import { RecommendedProfileComponent } from './recommended-profile/recommended-profile.component';
 import { RecommendedPostComponent } from './recommended-post/recommended-post.component';
 import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
+
+console.log('ENV FIREBASE CONFIG', environment.firebase);
 
 @NgModule({
   declarations: [
@@ -85,7 +86,11 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    provideStorage(() => getStorage())],
+    provideStorage(() => getStorage()),
+    provideFunctions(() => {
+      const fns = getFunctions();
+      return fns;
+    })],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

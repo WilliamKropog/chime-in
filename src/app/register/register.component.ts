@@ -1,58 +1,49 @@
 import { Component, AfterViewInit, ElementRef } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Auth, createUserWithEmailAndPassword, updateProfile } from '@angular/fire/auth';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { Validators, NonNullableFormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BackgroundService } from 'src/services/background.service';
 
 @Component({
-    selector: 'app-register',
-    templateUrl: './register.component.html',
-    styleUrls: ['./register.component.css'],
-    standalone: false
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css'],
+  standalone: false
 })
-export class RegisterComponent implements AfterViewInit{
-
-  ngOnInit(): void {
-    this.registerForm.value.email;
-  }
+export class RegisterComponent implements AfterViewInit {
 
   constructor(
-    private auth: AngularFireAuth,
-    private firestore: AngularFirestore,
+    private auth: Auth,
+    private firestore: Firestore,
     private fb: NonNullableFormBuilder,
     private router: Router,
     private backgroundService: BackgroundService,
     private elRef: ElementRef
-  ) { }
+  ) {}
+
+  ngOnInit(): void {
+    this.registerForm.value.email;
+  }
 
   ngAfterViewInit(): void {
     const registerElement = this.elRef.nativeElement.querySelector('.register-background');
     this.backgroundService.initBackgroundChanger(registerElement);
   }
 
-  get email() {
-    return this.registerForm.get('email');
-  }
-
-  get password() {
-    return this.registerForm.get('password');
-  }
-
-  get username() {
-    return this.registerForm.get('username');
-  }
+  get email()     { return this.registerForm.get('email'); }
+  get password()  { return this.registerForm.get('password'); }
+  get username()  { return this.registerForm.get('username'); }
 
   checkPasswords: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
-    let pass = group.get('password')?.value;
-    let confirmPass = group.get('confirmPassword')?.value;
+    const pass = group.get('password')?.value;
+    const confirmPass = group.get('confirmPassword')?.value;
     if (pass !== confirmPass) {
       group.get('confirmPassword')?.setErrors({ notSame: true });
       return { notSame: true };
-    } else {
-      return null;
     }
-  }
+    return null;
+  };
 
   registerForm = this.fb.group({
     username: ['', Validators.required],
@@ -61,35 +52,30 @@ export class RegisterComponent implements AfterViewInit{
     confirmPassword: ['']
   }, { validators: this.checkPasswords });
 
-  register() {
-
+  async register() {
     const { username, email, password } = this.registerForm.value;
 
-    if (!this.registerForm.valid || !email || !password || !username)
-      return;
+    if (!this.registerForm.valid || !email || !password || !username) return;
 
-    this.auth.createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        const user = response.user;
-        return user?.updateProfile({
-          displayName: username,
-        }).then(() => {
-          return this.firestore.collection('users').doc(user?.uid).set({
-            username: username,
-            email: email,
-            bio: '',
-            backgroundImageURL: ''
-          });
-        });
-      })
-      .then(() => {
-        console.log('Registration Successful:', this.auth.currentUser);
-        this.router.navigate(['']);
-      })
-      .catch(error => {
-        console.error('Registration Failed:', error);
-      })
+    try {
+      const cred = await createUserWithEmailAndPassword(this.auth, email, password);
+
+      if (cred.user) {
+        await updateProfile(cred.user, { displayName: username });
+      }
+
+      const uid = cred.user?.uid as string;
+      await setDoc(doc(this.firestore, 'users', uid), {
+        username,
+        email,
+        bio: '',
+        backgroundImageURL: ''
+      });
+
+      console.log('Registration Successful:', this.auth.currentUser);
+      this.router.navigate(['']);
+    } catch (error) {
+      console.error('Registration Failed:', error);
+    }
   }
 }
-
-

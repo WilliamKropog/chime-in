@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from 'src/interface';
 

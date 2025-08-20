@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from 'src/interface';
 import { UserService } from 'src/services/user.service';
-import { take, timestamp } from 'rxjs';
 
 @Component({
     selector: 'app-featured',

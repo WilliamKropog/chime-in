@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 
   async submit() {
     const { email, password } = this.loginForm.value;
-
+  
     if (!this.loginForm.valid || !email || !password) return;
 
     try {

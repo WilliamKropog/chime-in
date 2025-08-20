@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { ImageUploadService } from 'src/services/image-upload.service';
 import { User } from 'firebase/auth';
@@ -6,7 +6,6 @@ import { UserService } from 'src/services/user.service';
 import { concatMap, switchMap, map, of, from } from 'rxjs';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Subscription } from 'rxjs';
-import { user } from '@angular/fire/auth';
 
 @Component({
     selector: 'app-profile-editor',

@@ -3,7 +3,7 @@ import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from '../../interface';
 import { Subscription } from 'rxjs';
-import { getDownloadURL, ref, uploadBytes, FirebaseStorage } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { Storage } from '@angular/fire/storage';
 
 @Component({

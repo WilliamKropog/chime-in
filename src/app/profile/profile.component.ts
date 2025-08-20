@@ -1,8 +1,7 @@
-import { Component, HostListener, OnInit, OnChanges } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HotToastService } from '@ngneat/hot-toast';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
-import { map, of, switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { UserService } from 'src/services/user.service';
 import { Post } from 'src/interface';

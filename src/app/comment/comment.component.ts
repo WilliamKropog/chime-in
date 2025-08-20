@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
-import { Comment, Post } from 'src/interface';
+import { Comment } from 'src/interface';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { CommentEditorService } from 'src/services/commenteditor.service';
 

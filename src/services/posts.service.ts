@@ -1,244 +1,276 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, QuerySnapshot } from '@angular/fire/compat/firestore';
-import { Observable, of, pipe } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-import { Post } from '../interface';
-import { Comment } from '../interface';
-import { AngularFireFunctions } from '@angular/fire/compat/functions';
 
-@Injectable({
-  providedIn: 'root'
-})
+import {
+  Firestore,
+  doc,
+  docData,
+  collection,
+  collectionData,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  getDocs,
+  getDoc,
+  Query,
+  QueryDocumentSnapshot,
+  setDoc
+} from '@angular/fire/firestore';
+
+import {
+  Functions,
+  httpsCallable,
+} from '@angular/fire/functions';
+
+import { Post, Comment } from '../interface';
+
+@Injectable({ providedIn: 'root' })
 export class PostsService {
 
-  private lastVisible: any = null;
+  private lastVisible: QueryDocumentSnapshot | null = null;
 
-  constructor(private afs: AngularFirestore, private fns: AngularFireFunctions) { }
+  constructor(
+    private db: Firestore,
+    private fns: Functions
+  ) {}
 
-  //Post Creation
 
-  savePost(data: Post): Promise<string> {
-    const postRef = this.afs.collection<Post>('posts').doc();
-    data.postId = postRef.ref.id;
-    return postRef.set(data).then(() => {
-      console.log("Post saved with ID:", data.postId);
-      return postRef.ref.id;
-    })
-  }
+  async savePost(data: Post): Promise<string> {
+  const postsCol = collection(this.db, 'posts');
+  const docRef = doc(postsCol);      
+  data.postId = docRef.id;
+  await setDoc(docRef, data as any);   
+  return docRef.id;
+}
 
-  saveComment(postId: string, data: Comment): Promise<string> {
-    const commentRef = this.afs.collection<Post>('posts')
-      .doc(postId)
-      .collection<Comment>('comments')
-      .doc();
+async saveComment(postId: string, data: Comment): Promise<string> {
+  const commentsCol = collection(this.db, `posts/${postId}/comments`);
+  const commentRef = doc(commentsCol);
+  data.commentId = commentRef.id;
+  await setDoc(commentRef, data as any);  
+  await this.incrementCommentCount(postId);
+  return commentRef.id;
+}
 
-    data.commentId = commentRef.ref.id;
-
-    return commentRef.set(data).then(() => {
-      console.log('Comment saved with ID:', data.commentId);
-
-      return this.incrementCommentCount(postId).then(() => {
-        return commentRef.ref.id;
-      });
-    }).catch(error => {
-      console.error('Error saving comment or incrementing comment count:', error);
-      throw error;
-    })
-  }
-
-  //Post Page get Post by its ID
 
   getPostById(postId: string): Observable<Post | undefined> {
-    return this.afs.collection<Post>('posts').doc(postId).valueChanges();
+    const ref = doc(this.db, `posts/${postId}`);
+    return docData(ref, { idField: 'postId' }) as Observable<Post | undefined>;
   }
 
-  //Following Page Notification Methods.
 
   getUnseenPostsCount(userIds: string[], lastVisit: Date | null): Observable<number> {
-    return this.afs.collection<Post>('posts', (ref) => {
-      let query = ref.where('userId', 'in', userIds);
-      if (lastVisit) {
-        query = query.where('createdAt', '>', lastVisit);
-      }
-      return query;
-    })
-    .valueChanges()
-    .pipe(map(posts => posts.length));
+    const base = collection(this.db, 'posts');
+    let q: Query = query(base, where('userId', 'in', userIds));
+    if (lastVisit) q = query(q, where('createdAt', '>', lastVisit));
+    return collectionData(q).pipe(map(posts => posts.length));
   }
 
-  //Home Page initial list of Posts.
 
   getMostRecentPosts(): Observable<Post[]> {
-    return this.afs.collection<Post>('posts', ref => ref.orderBy('createdAt', 'desc').limit(10))
-    .valueChanges()
-    .pipe(
-      debounceTime(1000),
-      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)));
+    const q = query(
+      collection(this.db, 'posts'),
+      orderBy('createdAt', 'desc'),
+      limit(10)
+    );
+    return (collectionData(q, { idField: 'postId' }) as Observable<Post[]>)
+      .pipe(
+        debounceTime(1000),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      );
   }
 
-  //Home Page load more Posts when user scrolls to the bottom of page.
 
   getMorePosts(): Observable<Post[]> {
-    return this.afs.collection<Post>('posts', ref => {
-      let query = ref.orderBy('createdAt', 'desc').limit(10);
-      if (this.lastVisible) {
-        query = query.startAfter(this.lastVisible);
-      }
-      return query;
-    }).get()
-    .pipe(
-      map((querySnapShot: QuerySnapshot<Post>) => {
-        if (querySnapShot.size > 0) {
-          this.lastVisible = querySnapShot.docs[querySnapShot.docs.length - 1];
-        }
-        return querySnapShot.docs.map(doc => doc.data());
-      })
-    )
+    const base = query(collection(this.db, 'posts'), orderBy('createdAt', 'desc'), limit(10));
+    const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
+
+    return new Observable<Post[]>(subscriber => {
+      getDocs(q)
+        .then(snapshot => {
+          if (snapshot.size > 0) {
+            this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          }
+          subscriber.next(snapshot.docs.map(d => d.data() as Post));
+          subscriber.complete();
+        })
+        .catch(err => subscriber.error(err));
+    });
   }
 
-  //Posts for Profile Page
 
   getUserPosts(userId: string): Observable<Post[]> {
-    return this.afs.collection<Post>('posts', ref => 
-      ref.where('userId', '==', userId).orderBy('createdAt', 'desc').limit(10)
-    ).valueChanges().pipe(
-      debounceTime(1000),
-      distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+    const q = query(
+      collection(this.db, 'posts'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc'),
+      limit(10)
     );
+    return (collectionData(q, { idField: 'postId' }) as Observable<Post[]>)
+      .pipe(
+        debounceTime(1000),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      );
   }
 
   getMoreUserPosts(userId: string): Observable<Post[]> {
-    return this.afs.collection<Post>('posts', ref => {
-      let query = ref.where('userId', '==', userId).orderBy('createdAt', 'desc').limit(10);
-      if (this.lastVisible) {
-        query = query.startAfter(this.lastVisible);
-      }
-      return query;
-    }).get().pipe(
-      map((querySnapShot: QuerySnapshot<Post>) => {
-        if (querySnapShot.size > 0) {
-          this.lastVisible = querySnapShot.docs[querySnapShot.docs.length - 1];
-        }
-        return querySnapShot.docs.map(doc => doc.data());
-      })
-    )
+    const base = query(
+      collection(this.db, 'posts'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc'),
+      limit(10)
+    );
+    const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
+
+    return new Observable<Post[]>(subscriber => {
+      getDocs(q)
+        .then(snapshot => {
+          if (snapshot.size > 0) {
+            this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          }
+          subscriber.next(snapshot.docs.map(d => d.data() as Post));
+          subscriber.complete();
+        })
+        .catch(err => subscriber.error(err));
+    });
   }
 
-  //Comments for Posts
 
   getCommentsForPost(postId: string, topCommentId?: string): Observable<Comment[]> {
-    return this.afs.collection<Post>('posts')
-      .doc(postId)
-      .collection<Comment>('comments', ref => ref.orderBy('createdAt', 'asc'))
-      .valueChanges()
+    const q = query(
+      collection(this.db, `posts/${postId}/comments`),
+      orderBy('createdAt', 'asc')
+    );
+
+    return (collectionData(q, { idField: 'commentId' }) as Observable<Comment[]>)
       .pipe(
-        map(comments => {
-          return topCommentId ? comments.filter(comment => comment.commentId !== topCommentId) : comments;
-        }),
+        map(comments => topCommentId ? comments.filter(c => c.commentId !== topCommentId) : comments),
         debounceTime(500),
-        distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
       );
   }
 
   getTopCommentForPost(postId: string): Observable<Comment | undefined> {
-    return this.afs.collection('posts').doc(postId)
-      .collection<Comment>('comments', ref => ref.orderBy('likeCount', 'desc').limit(1))
-      .valueChanges()
-      .pipe(map(comments => comments.length > 0 ? comments[0] : undefined));
+    const q = query(
+      collection(this.db, `posts/${postId}/comments`),
+      orderBy('likeCount', 'desc'),
+      limit(1)
+    );
+    return (new Observable<Comment | undefined>(subscriber => {
+      getDocs(q)
+        .then(snap => {
+          const item = snap.docs.length ? (snap.docs[0].data() as Comment) : undefined;
+          subscriber.next(item);
+          subscriber.complete();
+        })
+        .catch(err => subscriber.error(err));
+    }));
   }
 
-  //Posts for Recommended Profile
 
   getThreeMostRecentPostsByUser(userId: string): Observable<Post[]> {
-    return this.afs.collection<Post>('posts', ref => 
-      ref.where('userId', '==', userId)
-      .orderBy('createdAt', 'desc')
-      .limit(3)
-    )
-    .valueChanges()
-    .pipe(
-      map((posts: Post[]) => posts || [])
+    const q = query(
+      collection(this.db, 'posts'),
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc'),
+      limit(3)
     );
+    return (collectionData(q, { idField: 'postId' }) as Observable<Post[]>)
+      .pipe(map(posts => posts || []));
   }
 
-  //Posts for Featured Page
 
-  getPostsFromUsers(userIds: string[], limit: number): Observable<Post[]> {
-    return this.afs.collection<Post>('posts', ref => 
-      ref.where('userId', 'in', userIds)
-      .orderBy('createdAt', 'desc')
-      .limit(limit)
-    ).get().pipe(
-      map((snapshot) => {
-        if (snapshot.docs.length > 0) {
-          this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        }
-        return snapshot.docs.map((doc) => doc.data());
-      })
+  getPostsFromUsers(userIds: string[], lim: number): Observable<Post[]> {
+    const q = query(
+      collection(this.db, 'posts'),
+      where('userId', 'in', userIds),
+      orderBy('createdAt', 'desc'),
+      limit(lim)
     );
+
+    return new Observable<Post[]>(subscriber => {
+      getDocs(q)
+        .then(snapshot => {
+          if (snapshot.docs.length > 0) {
+            this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          }
+          subscriber.next(snapshot.docs.map(d => d.data() as Post));
+          subscriber.complete();
+        })
+        .catch(err => subscriber.error(err));
+    });
   }
 
-  getMorePostsFromUsers(userIds: string[], limit: number): Observable<Post[]> {
+  getMorePostsFromUsers(userIds: string[], lim: number): Observable<Post[]> {
     if (!this.lastVisible) {
       console.error('No reference for the next page. Load initial posts first');
       return of([]);
     }
 
-    return this.afs.collection<Post>('posts', (ref) => 
-      ref.where('userId', 'in', userIds)
-      .orderBy('createdAt', 'desc')
-      .startAfter(this.lastVisible)
-      .limit(limit)  
-    ).get().pipe(
-      map((snapshot) => {
-        if (snapshot.docs.length > 0) {
-          this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        }
-        return snapshot.docs.map((doc) => doc.data());
-      })
-    )
+    const base = query(
+      collection(this.db, 'posts'),
+      where('userId', 'in', userIds),
+      orderBy('createdAt', 'desc'),
+      limit(lim)
+    );
+    const q = query(base, startAfter(this.lastVisible));
+
+    return new Observable<Post[]>(subscriber => {
+      getDocs(q)
+        .then(snapshot => {
+          if (snapshot.docs.length > 0) {
+            this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          }
+          subscriber.next(snapshot.docs.map(d => d.data() as Post));
+          subscriber.complete();
+        })
+        .catch(err => subscriber.error(err));
+    });
   }
 
-  //Posts Functionalities
 
-  incrementView(postId: string): Promise<void> {
-    const incrementViewFn = this.fns.httpsCallable('incrementPostView');
-    return incrementViewFn({ postId }).toPromise();
+  async incrementView(postId: string): Promise<void> {
+    const fn = httpsCallable(this.fns, 'incrementPostView');
+    await fn({ postId });
   }
 
-  incrementCommentCount(postId: string): Promise<void> {
-    const incrementCommentCountFn = this.fns.httpsCallable('incrementCommentCount');
-    return incrementCommentCountFn({ postId }).toPromise();
+  async incrementCommentCount(postId: string): Promise<void> {
+    const fn = httpsCallable(this.fns, 'incrementCommentCount');
+    await fn({ postId });
   }
 
-  addLike(postId: string | undefined, userId: string): Promise<void> {
-    const addLikeFn = this.fns.httpsCallable('addLike');
-    return addLikeFn({ postId, userId}).toPromise();
+  async addLike(postId: string | undefined, userId: string): Promise<void> {
+    const fn = httpsCallable(this.fns, 'addLike');
+    await fn({ postId, userId });
   }
 
-  removeLike(postId: string | undefined, userId: string): Promise<void> {
-    const removeLikeFn = this.fns.httpsCallable('removeLike');
-    return removeLikeFn({ postId, userId }).toPromise();
+  async removeLike(postId: string | undefined, userId: string): Promise<void> {
+    const fn = httpsCallable(this.fns, 'removeLike');
+    await fn({ postId, userId });
   }
 
-  checkIfUserLiked(postId: string, userId: string): Promise<boolean | undefined> {
-    return this.afs.collection('posts').doc(postId).collection('likes').doc(userId).get().toPromise()
-      .then(doc => doc?.exists);
+  async checkIfUserLiked(postId: string, userId: string): Promise<boolean> {
+    const ref = doc(this.db, `posts/${postId}/likes/${userId}`);
+    const snap = await getDoc(ref);
+    return snap.exists();
   }
 
-  addDislike(postId: string | undefined, userId: string): Promise<void> {
-    const addDislikeFn = this.fns.httpsCallable('addDislike');
-    return addDislikeFn({ postId, userId }).toPromise();
+  async addDislike(postId: string | undefined, userId: string): Promise<void> {
+    const fn = httpsCallable(this.fns, 'addDislike');
+    await fn({ postId, userId });
   }
 
-  removeDislike(postId: string | undefined, userId: string): Promise<void> {
-    const removeDislikeFn = this.fns.httpsCallable('removeDislike');
-    return removeDislikeFn({ postId, userId }).toPromise();
-  }
-  
-  checkIfUserDisliked(postId: string, userId: string): Promise<boolean | undefined> {
-    return this.afs.collection('posts').doc(postId).collection('dislikes').doc(userId).get().toPromise()
-    .then(doc => doc?.exists);
+  async removeDislike(postId: string | undefined, userId: string): Promise<void> {
+    const fn = httpsCallable(this.fns, 'removeDislike');
+    await fn({ postId, userId });
   }
 
+  async checkIfUserDisliked(postId: string, userId: string): Promise<boolean> {
+    const ref = doc(this.db, `posts/${postId}/dislikes/${userId}`);
+    const snap = await getDoc(ref);
+    return snap.exists();
+  }
 }
