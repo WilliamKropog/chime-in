@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
-import { APP_BASE_HREF } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule } from '@angular/fire/compat/auth';
-import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
@@ -75,9 +72,6 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFireStorageModule,
     RouterModule,
     BrowserAnimationsModule,
     MatButtonModule,
@@ -88,9 +82,9 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     HotToastModule.forRoot(),
   ],
   providers: [
-    // {provide: APP_BASE_HREF, useValue: '/src/app'},
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage())],
   bootstrap: [AppComponent]
 })
