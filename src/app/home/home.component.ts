@@ -1,77 +1,89 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, NgZone } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from 'src/interface';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css'],
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  standalone: false
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   mostRecentPosts: Post[] = [];
-  viewedPosts: Set<string> = new Set();  
-  isLoadingPosts: boolean = false;
+  viewedPosts: Set<string> = new Set();
+  isLoadingPosts = false;
   scrollTimeout: any = null;
-  scrollThreshold: number = 200;
+  scrollThreshold = 200;
 
-  constructor(private postsService: PostsService) {}
+  private subs = new Subscription();
+
+  constructor(private postsService: PostsService, private ngZone: NgZone) {}
 
   ngOnInit(): void {
     this.loadInitialPosts();
   }
 
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+    if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
+  }
+
+  private mergeUniqueById(existing: Post[], incoming: Post[]): Post[] {
+    const seen = new Set(existing.map(p => p.postId));
+    const dedupIncoming = incoming.filter(p => !seen.has(p.postId));
+    return [...existing, ...dedupIncoming];
+  }
+
   loadInitialPosts() {
     this.isLoadingPosts = true;
-    this.postsService.getMostRecentPosts().subscribe(posts => {
-      this.mostRecentPosts = posts;
+    const s = this.postsService.getMostRecentPosts().subscribe(posts => {
+      this.mostRecentPosts = this.mergeUniqueById(this.mostRecentPosts, posts);
       this.incrementViewCount(posts);
-      this.isLoadingPosts = false;  
+      this.isLoadingPosts = false;
     });
+    this.subs.add(s);
   }
 
   loadMorePosts() {
     if (this.isLoadingPosts) return;
 
     this.isLoadingPosts = true;
-    this.postsService.getMorePosts().subscribe(posts => {
-      this.mostRecentPosts = [...this.mostRecentPosts, ...posts];
-      this.incrementViewCount(posts);
-      this.isLoadingPosts = false;
+    const s = this.postsService.getMorePosts().subscribe({
+      next: posts => {
+        this.mostRecentPosts = this.mergeUniqueById(this.mostRecentPosts, posts);
+        this.incrementViewCount(posts);
+        this.isLoadingPosts = false;
+      },
+      error: () => (this.isLoadingPosts = false)
     });
+    this.subs.add(s);
   }
-
-  //Loads more Posts if user scrolls to bottom of window.
 
   @HostListener('window:scroll', [])
   onScroll(): void {
-    if (this.scrollTimeout) {
-      clearTimeout(this.scrollTimeout);
-    }
-
+    if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
     this.scrollTimeout = setTimeout(() => {
-      const scrollPosition = window.innerHeight + window.pageYOffset;
-      const fullHeight = document.documentElement.scrollHeight;
-
-      if ((fullHeight - scrollPosition) < this.scrollThreshold && !this.isLoadingPosts) {
-        this.loadMorePosts();
-      }
+      this.ngZone.run(() => {
+        const scrollPosition = window.innerHeight + window.pageYOffset;
+        const fullHeight = document.documentElement.scrollHeight;
+        if ((fullHeight - scrollPosition) < this.scrollThreshold && !this.isLoadingPosts) {
+          this.loadMorePosts();
+        }
+      });
     }, 200);
   }
 
-  //Can optimize the following two functions:
-
   incrementViewCount(posts: Post[]): void {
     posts.forEach(post => {
-      if (!this.viewedPosts.has(post.postId)) {
+      if (post?.postId && !this.viewedPosts.has(post.postId)) {
         this.viewedPosts.add(post.postId);
-        this.incrementPostView(post.postId);  
+        this.incrementPostView(post.postId);
       }
     });
   }
 
   incrementPostView(postId: string): void {
     this.postsService.incrementView(postId);
-    // console.log(`Increment view count for post ${postId}`);
   }
 }

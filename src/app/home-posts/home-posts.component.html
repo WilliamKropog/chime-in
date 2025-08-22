@@ -1,6 +1,6 @@
 @if (posts.length > 0) {
   <div>
-    @for (post of posts; track trackByPostId($index, post)) {
+    @for (post of posts; track post.postId) {
       <app-post [post]="post"></app-post>
     }
   </div>

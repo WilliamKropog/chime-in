@@ -1,4 +1,4 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable, NgZone, EnvironmentInjector, runInInjectionContext, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { map, switchMap, debounceTime } from 'rxjs/operators';
 import { Auth, authState } from '@angular/fire/auth';
@@ -27,6 +27,9 @@ export class UserService {
   private unseenPostsCount$ = new BehaviorSubject<number>(0);
   private unseenPostsSubscription: Subscription | null = null;
 
+  // Injection context helper for AngularFire calls made in callbacks/executors
+  private env = inject(EnvironmentInjector);
+
   constructor(
     private db: Firestore,
     private storage: Storage,
@@ -35,18 +38,25 @@ export class UserService {
     private ngZone: NgZone
   ) {}
 
+  // ---------- Profiles ----------
   getUserProfile(uid: string): Observable<any> {
-    return docData(doc(this.db, `users/${uid}`));
-  }
+  const ref = doc(this.db, `users/${uid}`);
+  return runInInjectionContext(this.env, () => docData(ref));
+}
 
   setUserProfile(uid: string, data: any, options: { merge: boolean }): Promise<void> {
-    return setDoc(doc(this.db, `users/${uid}`), data, options);
+    return runInInjectionContext(this.env, async () => {
+      await setDoc(doc(this.db, `users/${uid}`), data, options);
+    });
   }
 
   updateUserProfile(uid: string, data: any): Promise<void> {
-    return updateDoc(doc(this.db, `users/${uid}`), data);
+    return runInInjectionContext(this.env, async () => {
+      await updateDoc(doc(this.db, `users/${uid}`), data);
+    });
   }
 
+  // ---------- Following notifications ----------
   getLastVisitToFollowingPage(): Date | null {
     const stored = localStorage.getItem('lastVisitToFollowingPage');
     this.lastVisitToFollowingPage = stored ? new Date(stored) : null;
@@ -64,19 +74,16 @@ export class UserService {
   }
 
   startTrackingUnseenPosts(): void {
-    if (this.unseenPostsSubscription) this.unseenPostsSubscription.unsubscribe();
+  if (this.unseenPostsSubscription) this.unseenPostsSubscription.unsubscribe();
 
-    this.unseenPostsSubscription = authState(this.auth).pipe(
-      switchMap(user => user ? this.getFollowedUserIds() : of([])),
-      switchMap(userIds => {
-        const lastVisit = this.getLastVisitToFollowingPage();
-        return this.postsService.getUnseenPostsCount(userIds, lastVisit);
-      }),
-      debounceTime(250)
-    ).subscribe(count => {
-      this.unseenPostsCount$.next(count);
-    });
-  }
+  const user$ = runInInjectionContext(this.env, () => authState(this.auth));
+
+  this.unseenPostsSubscription = user$.pipe(
+    switchMap(user => user ? this.getFollowedUserIds() : of([])),
+    switchMap(userIds => this.postsService.getUnseenPostsCount(userIds, this.getLastVisitToFollowingPage())),
+    debounceTime(250)
+  ).subscribe(count => this.unseenPostsCount$.next(count));
+}
 
   clearUnseenPostsCount(): void {
     this.unseenPostsCount$.next(0);
@@ -88,109 +95,137 @@ export class UserService {
     setTimeout(() => this.ngZone.run(() => this.startTrackingUnseenPosts()), 1000);
   }
 
+  // ---------- Profile lookups ----------
   getUserByUsername(username: string): Observable<any> {
     if (!username || typeof username !== 'string' || username.trim() === '') {
       console.error('Invalid or undefined username passed to Firestore query.');
       return of(null);
     }
-    const q = query(collection(this.db, 'users'), where('username', '==', username));
+
     return new Observable<any>(subscriber => {
-      getDocs(q)
-        .then(snap => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const q = query(
+            collection(this.db, 'users'),
+            where('username', '==', username)
+          );
+          const snap = await getDocs(q);
           const results = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
           subscriber.next(results);
           subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
     });
   }
 
+  // ---------- Recommendations ----------
   getRandomRecommendedUser(): Observable<any> {
     const q = query(collection(this.db, 'users'), where('followerCount', '>=', 1));
     return new Observable<any>(subscriber => {
-      getDocs(q)
-        .then(snap => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const snap = await getDocs(q);
           const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
           const pick = users.length ? users[Math.floor(Math.random() * users.length)] : null;
           subscriber.next(pick);
           subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
     });
   }
 
   getMultipleRandomRecommendedUsers(limitCount: number): Observable<any> {
     const q = query(collection(this.db, 'users'), where('followerCount', '>=', limitCount));
     return new Observable<any>(subscriber => {
-      getDocs(q)
-        .then(snap => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const snap = await getDocs(q);
           const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
           const pick = users.length ? users[Math.floor(Math.random() * users.length)] : null;
           subscriber.next(pick);
           subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
     });
   }
 
+  // ---------- Profile images ----------
   getUserProfileImageUrl(uid: string): Observable<string> {
     const path = `images/profile/${uid}`;
     return new Observable<string>(subscriber => {
-      getDownloadURL(storageRef(this.storage, path))
-        .then(url => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const url = await getDownloadURL(storageRef(this.storage, path));
           subscriber.next(url);
           subscriber.complete();
-        })
-        .catch(error => {
-          console.error('Error fetching profile image URL:', error);
+        } catch (error) {
+          // fall back to local default avatar
           subscriber.next('assets/images/png-transparent-default-avatar.png');
           subscriber.complete();
-        });
+        }
+      });
     });
   }
 
+  // ---------- Logged-in user ----------
   getCurrentUserId(): Observable<string | null> {
-    return authState(this.auth).pipe(map(user => user ? user.uid : null));
+    const user$ = runInInjectionContext(this.env, () => authState(this.auth));
+    return user$.pipe(map(user => user ? user.uid : null));
   }
 
   getFollowedUserIds(): Observable<string[]> {
     return this.getCurrentUserId().pipe(
-      switchMap(uid => uid ? docData(doc(this.db, `users/${uid}`)) : of(null)),
+      switchMap(uid => {
+        if (!uid) return of(null);
+        return runInInjectionContext(this.env, () => {
+          const ref = doc(this.db, `users/${uid}`);
+          return docData(ref);
+        });
+      }),
       map((userData: any) => userData?.following || [])
     );
   }
 
+  // ---------- Follow / Unfollow (transaction) ----------
   async followUser(targetUserId: string, loggedInUserId: string): Promise<void> {
     const targetRef = doc(this.db, `users/${targetUserId}`) as DocumentReference<any>;
     const meRef = doc(this.db, `users/${loggedInUserId}`) as DocumentReference<any>;
 
-    await runTransaction(this.db, async (tx) => {
-      const targetSnap = await tx.get(targetRef);
-      const meSnap = await tx.get(meRef);
-      if (!targetSnap.exists() || !meSnap.exists()) throw new Error('User not found');
+    await runInInjectionContext(this.env, async () => {
+      await runTransaction(this.db, async (tx) => {
+        const targetSnap = await tx.get(targetRef);
+        const meSnap = await tx.get(meRef);
+        if (!targetSnap.exists() || !meSnap.exists()) throw new Error('User not found');
 
-      const target = targetSnap.data() || {};
-      const me = meSnap.data() || {};
+        const target = targetSnap.data() || {};
+        const me = meSnap.data() || {};
 
-      const targetFollowers: string[] = target.followers || [];
-      const targetFollowerCount: number = target.followerCount || 0;
+        const targetFollowers: string[] = target.followers || [];
+        const targetFollowerCount: number = target.followerCount || 0;
 
-      const meFollowing: string[] = me.following || [];
-      const meFollowingCount: number = me.followingCount || 0;
+        const meFollowing: string[] = me.following || [];
+        const meFollowingCount: number = me.followingCount || 0;
 
-      if (!targetFollowers.includes(loggedInUserId)) {
-        tx.update(targetRef, {
-          followers: [...targetFollowers, loggedInUserId],
-          followerCount: targetFollowerCount + 1
-        });
-      }
+        if (!targetFollowers.includes(loggedInUserId)) {
+          tx.update(targetRef, {
+            followers: [...targetFollowers, loggedInUserId],
+            followerCount: targetFollowerCount + 1
+          });
+        }
 
-      if (!meFollowing.includes(targetUserId)) {
-        tx.update(meRef, {
-          following: [...meFollowing, targetUserId],
-          followingCount: meFollowingCount + 1
-        });
-      }
+        if (!meFollowing.includes(targetUserId)) {
+          tx.update(meRef, {
+            following: [...meFollowing, targetUserId],
+            followingCount: meFollowingCount + 1
+          });
+        }
+      });
     });
   }
 
@@ -198,42 +233,48 @@ export class UserService {
     const targetRef = doc(this.db, `users/${targetUserId}`) as DocumentReference<any>;
     const meRef = doc(this.db, `users/${loggedInUserId}`) as DocumentReference<any>;
 
-    await runTransaction(this.db, async (tx) => {
-      const targetSnap = await tx.get(targetRef);
-      const meSnap = await tx.get(meRef);
-      if (!targetSnap.exists() || !meSnap.exists()) throw new Error('User not found');
+    await runInInjectionContext(this.env, async () => {
+      await runTransaction(this.db, async (tx) => {
+        const targetSnap = await tx.get(targetRef);
+        const meSnap = await tx.get(meRef);
+        if (!targetSnap.exists() || !meSnap.exists()) throw new Error('User not found');
 
-      const target = targetSnap.data() || {};
-      const me = meSnap.data() || {};
+        const target = targetSnap.data() || {};
+        const me = meSnap.data() || {};
 
-      const targetFollowers: string[] = target.followers || [];
-      const targetFollowerCount: number = target.followerCount || 0;
+        const targetFollowers: string[] = target.followers || [];
+        const targetFollowerCount: number = target.followerCount || 0;
 
-      const meFollowing: string[] = me.following || [];
-      const meFollowingCount: number = me.followingCount || 0;
+        const meFollowing: string[] = me.following || [];
+        const meFollowingCount: number = me.followingCount || 0;
 
-      if (targetFollowers.includes(loggedInUserId)) {
-        tx.update(targetRef, {
-          followers: targetFollowers.filter(id => id !== loggedInUserId),
-          followerCount: Math.max(0, targetFollowerCount - 1)
-        });
-      }
+        if (targetFollowers.includes(loggedInUserId)) {
+          tx.update(targetRef, {
+            followers: targetFollowers.filter(id => id !== loggedInUserId),
+            followerCount: Math.max(0, targetFollowerCount - 1)
+          });
+        }
 
-      if (meFollowing.includes(targetUserId)) {
-        tx.update(meRef, {
-          following: meFollowing.filter(id => id !== targetUserId),
-          followingCount: Math.max(0, meFollowingCount - 1)
-        });
-      }
+        if (meFollowing.includes(targetUserId)) {
+          tx.update(meRef, {
+            following: meFollowing.filter(id => id !== targetUserId),
+            followingCount: Math.max(0, meFollowingCount - 1)
+          });
+        }
+      });
     });
   }
 
   isFollowing(loggedInUserId: string, targetUserId: string): Observable<boolean> {
-    return docData(doc(this.db, `users/${targetUserId}`)).pipe(
-      map((userData: any) => {
-        const followers: string[] = userData?.followers || [];
-        return followers.includes(loggedInUserId);
-      })
-    );
+    return runInInjectionContext(this.env, () => {
+      const ref = doc(this.db, `users/${targetUserId}`);
+      const src$ = docData(ref);
+      return src$.pipe(
+        map((userData: any) => {
+          const followers: string[] = userData?.followers || [];
+          return followers.includes(loggedInUserId);
+        })
+      );
+    });
   }
 }

@@ -4,7 +4,8 @@ import {
   authState,
   UserInfo,
   updateProfile,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  User
 } from '@angular/fire/auth';
 import { Observable, from, of, concatMap, Subject } from 'rxjs';
 
@@ -13,11 +14,12 @@ import { Observable, from, of, concatMap, Subject } from 'rxjs';
 })
 export class AuthenticationService {
 
-  currentUser$ = authState(this.auth);
+  currentUser$!: Observable<User | null>;
 
   userData: Subject<any> = new Subject<any>();
 
   constructor(private auth: Auth) {
+    this.currentUser$ = authState(this.auth);
     this.currentUser$.subscribe((user) => {
       if (user) {
         this.userData.next(user);

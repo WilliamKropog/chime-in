@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EnvironmentInjector, runInInjectionContext, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
@@ -31,176 +31,231 @@ import { Post, Comment } from '../interface';
 export class PostsService {
 
   private lastVisible: QueryDocumentSnapshot | null = null;
+  private env = inject(EnvironmentInjector);
 
-  constructor(
-    private db: Firestore,
-    private fns: Functions
-  ) {}
+  constructor(private db: Firestore, private fns: Functions) {}
 
-
+  // ---------- Post Creation ----------
   async savePost(data: Post): Promise<string> {
-  const postsCol = collection(this.db, 'posts');
-  const docRef = doc(postsCol);      
-  data.postId = docRef.id;
-  await setDoc(docRef, data as any);   
-  return docRef.id;
-}
+    const postsCol = collection(this.db, 'posts');
+    const docRef = doc(postsCol);
+    data.postId = docRef.id;
 
-async saveComment(postId: string, data: Comment): Promise<string> {
-  const commentsCol = collection(this.db, `posts/${postId}/comments`);
-  const commentRef = doc(commentsCol);
-  data.commentId = commentRef.id;
-  await setDoc(commentRef, data as any);  
-  await this.incrementCommentCount(postId);
-  return commentRef.id;
-}
+    await runInInjectionContext(this.env, async () => {
+      await setDoc(docRef, data as any);
+    });
 
+    return docRef.id;
+  }
 
+  async saveComment(postId: string, data: Comment): Promise<string> {
+    const commentsCol = collection(this.db, `posts/${postId}/comments`);
+    const commentRef = doc(commentsCol);
+    data.commentId = commentRef.id;
+
+    await runInInjectionContext(this.env, async () => {
+      await setDoc(commentRef, data as any);
+    });
+
+    await this.incrementCommentCount(postId);
+    return commentRef.id;
+  }
+
+  // ---------- Post Page: get by ID ----------
   getPostById(postId: string): Observable<Post | undefined> {
-    const ref = doc(this.db, `posts/${postId}`);
-    return docData(ref, { idField: 'postId' }) as Observable<Post | undefined>;
-  }
+  const ref = doc(this.db, `posts/${postId}`);
+  return runInInjectionContext(this.env, () =>
+    docData(ref, { idField: 'postId' }) as Observable<Post | undefined>
+  );
+}
 
-
+  // ---------- Following Page notifications ----------
   getUnseenPostsCount(userIds: string[], lastVisit: Date | null): Observable<number> {
-    const base = collection(this.db, 'posts');
-    let q: Query = query(base, where('userId', 'in', userIds));
-    if (lastVisit) q = query(q, where('createdAt', '>', lastVisit));
-    return collectionData(q).pipe(map(posts => posts.length));
-  }
+    return runInInjectionContext(this.env, () => {
+      const base = collection(this.db, 'posts');
+      let q: Query = query(base, where('userId', 'in', userIds));
 
+      if (lastVisit) {
+        q = query(q, where('createdAt', '>', lastVisit));
+      }
 
-  getMostRecentPosts(): Observable<Post[]> {
-    const q = query(
-      collection(this.db, 'posts'),
-      orderBy('createdAt', 'desc'),
-      limit(10)
-    );
-    return (collectionData(q, { idField: 'postId' }) as Observable<Post[]>)
-      .pipe(
-        debounceTime(1000),
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      return collectionData(q).pipe(
+        map(posts => posts.length)
       );
-  }
-
-
-  getMorePosts(): Observable<Post[]> {
-    const base = query(collection(this.db, 'posts'), orderBy('createdAt', 'desc'), limit(10));
-    const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
-
-    return new Observable<Post[]>(subscriber => {
-      getDocs(q)
-        .then(snapshot => {
-          if (snapshot.size > 0) {
-            this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
-          }
-          subscriber.next(snapshot.docs.map(d => d.data() as Post));
-          subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
     });
   }
 
+  // ---------- Home: initial list ----------
+  getMostRecentPosts(): Observable<Post[]> {
+    return runInInjectionContext(this.env, () => {
+      const q = query(
+        collection(this.db, 'posts'),
+        orderBy('createdAt', 'desc'),
+        limit(10)
+      );
 
+      if (!this.lastVisible) {
+        getDocs(q).then(snap => {
+          if (snap.size > 0) {
+            this.lastVisible = snap.docs[snap.docs.length - 1];
+          }
+        }).catch(console.error);
+      }
+
+      return collectionData(q, { idField: 'postId' }) as Observable<Post[]>;
+    });
+  }
+
+  // ---------- Home: load more (infinite scroll) ----------
+  getMorePosts(): Observable<Post[]> {
+    return new Observable<Post[]>(subscriber => {
+     runInInjectionContext(this.env, async () => {
+        try {
+          const base = query(
+            collection(this.db, 'posts'),
+            orderBy('createdAt', 'desc'),
+            limit(10)
+          );
+          const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
+
+          const snapshot = await getDocs(q);
+          if (snapshot.size > 0) {
+            this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          }
+
+          const posts = snapshot.docs.map(d => {
+            const data = d.data() as Omit<Post, 'postId'>;
+            return { ...data, postId: d.id };
+          });        
+          subscriber.next(posts);
+          subscriber.complete();
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
+    });
+  }
+
+  // ---------- Profile: posts ----------
   getUserPosts(userId: string): Observable<Post[]> {
-    const q = query(
-      collection(this.db, 'posts'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(10)
-    );
-    return (collectionData(q, { idField: 'postId' }) as Observable<Post[]>)
-      .pipe(
+    return runInInjectionContext(this.env, () => {
+      const q = query(
+        collection(this.db, 'posts'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(10)
+      );
+
+      const src$ = collectionData(q, { idField: 'postId' }) as Observable<Post[]>;
+      return src$.pipe(
         debounceTime(1000),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
       );
+    });
   }
 
   getMoreUserPosts(userId: string): Observable<Post[]> {
-    const base = query(
-      collection(this.db, 'posts'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(10)
-    );
-    const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
-
     return new Observable<Post[]>(subscriber => {
-      getDocs(q)
-        .then(snapshot => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const base = query(
+            collection(this.db, 'posts'),
+            where('userId', '==', userId),
+            orderBy('createdAt', 'desc'), 
+            limit(10)
+          );
+
+          const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
+
+          const snapshot = await getDocs(q);
           if (snapshot.size > 0) {
             this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
           }
           subscriber.next(snapshot.docs.map(d => d.data() as Post));
           subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
     });
   }
 
-
+  // ---------- Comments ----------
   getCommentsForPost(postId: string, topCommentId?: string): Observable<Comment[]> {
-    const q = query(
-      collection(this.db, `posts/${postId}/comments`),
-      orderBy('createdAt', 'asc')
-    );
+    return runInInjectionContext(this.env, () => {
+      const q = query(
+        collection(this.db, `posts/${postId}/comments`),
+        orderBy('createdAt', 'asc')
+      );
 
-    return (collectionData(q, { idField: 'commentId' }) as Observable<Comment[]>)
-      .pipe(
+      const src$ = collectionData(q, { idField: 'commentId' }) as Observable<Comment[]>;
+
+      return src$.pipe(
         map(comments => topCommentId ? comments.filter(c => c.commentId !== topCommentId) : comments),
         debounceTime(500),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
       );
+    });
   }
 
   getTopCommentForPost(postId: string): Observable<Comment | undefined> {
-    const q = query(
-      collection(this.db, `posts/${postId}/comments`),
-      orderBy('likeCount', 'desc'),
-      limit(1)
-    );
-    return (new Observable<Comment | undefined>(subscriber => {
-      getDocs(q)
-        .then(snap => {
+    return new Observable<Comment | undefined>(subscriber => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const q = query(
+            collection(this.db, `posts/${postId}/comments`),
+            orderBy('likeCount', 'desc'),
+            limit(1)
+          );
+          const snap = await getDocs(q);
           const item = snap.docs.length ? (snap.docs[0].data() as Comment) : undefined;
           subscriber.next(item);
           subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
-    }));
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
+    });
   }
 
-
+  // ---------- Recommended profile ----------
   getThreeMostRecentPostsByUser(userId: string): Observable<Post[]> {
-    const q = query(
-      collection(this.db, 'posts'),
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-      limit(3)
-    );
-    return (collectionData(q, { idField: 'postId' }) as Observable<Post[]>)
-      .pipe(map(posts => posts || []));
-  }
+  const q = query(
+    collection(this.db, 'posts'),
+    where('userId', '==', userId),
+    orderBy('createdAt', 'desc'),
+    limit(3)
+  );
 
+  const src$ = runInInjectionContext(this.env, () =>
+    collectionData(q, { idField: 'postId' }) as Observable<Post[]>
+  );
+
+  return src$.pipe(map(posts => posts || []));
+}
 
   getPostsFromUsers(userIds: string[], lim: number): Observable<Post[]> {
-    const q = query(
-      collection(this.db, 'posts'),
-      where('userId', 'in', userIds),
-      orderBy('createdAt', 'desc'),
-      limit(lim)
-    );
-
     return new Observable<Post[]>(subscriber => {
-      getDocs(q)
-        .then(snapshot => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const q = query(
+            collection(this.db, 'posts'),
+            where('userId', 'in', userIds),
+            orderBy('createdAt', 'desc'),
+            limit(lim)
+          );
+
+          const snapshot = await getDocs(q);
           if (snapshot.docs.length > 0) {
             this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
           }
+
           subscriber.next(snapshot.docs.map(d => d.data() as Post));
           subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
     });
   }
 
@@ -210,67 +265,86 @@ async saveComment(postId: string, data: Comment): Promise<string> {
       return of([]);
     }
 
-    const base = query(
-      collection(this.db, 'posts'),
-      where('userId', 'in', userIds),
-      orderBy('createdAt', 'desc'),
-      limit(lim)
-    );
-    const q = query(base, startAfter(this.lastVisible));
-
     return new Observable<Post[]>(subscriber => {
-      getDocs(q)
-        .then(snapshot => {
+      runInInjectionContext(this.env, async () => {
+        try {
+          const base = query(
+            collection(this.db, 'posts'),
+            where('userId', 'in', userIds),
+            orderBy('createdAt', 'desc'),
+            limit(lim)
+          );
+          const q = query(base, startAfter(this.lastVisible));
+
+          const snapshot = await getDocs(q);
           if (snapshot.docs.length > 0) {
             this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
           }
           subscriber.next(snapshot.docs.map(d => d.data() as Post));
           subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
+        } catch (err) {
+          subscriber.error(err);
+        }
+      });
     });
   }
 
-
+  // ---------- Cloud Functions / Interactions ----------
   async incrementView(postId: string): Promise<void> {
-    const fn = httpsCallable(this.fns, 'incrementPostView');
-    await fn({ postId });
+    await runInInjectionContext(this.env, async () => {
+      const fn = httpsCallable(this.fns, 'incrementPostView');
+      await fn({ postId });
+    });
   }
 
   async incrementCommentCount(postId: string): Promise<void> {
-    const fn = httpsCallable(this.fns, 'incrementCommentCount');
-    await fn({ postId });
+    await runInInjectionContext(this.env, async () => {
+      const fn = httpsCallable(this.fns, 'incrementCommentCount');
+      await fn({ postId });
+    });
   }
 
   async addLike(postId: string | undefined, userId: string): Promise<void> {
-    const fn = httpsCallable(this.fns, 'addLike');
-    await fn({ postId, userId });
+    await runInInjectionContext(this.env, async () => {
+      const fn = httpsCallable(this.fns, 'addLike');
+      await fn({ postId, userId });
+    });
   }
 
   async removeLike(postId: string | undefined, userId: string): Promise<void> {
-    const fn = httpsCallable(this.fns, 'removeLike');
-    await fn({ postId, userId });
+    await runInInjectionContext(this.env, async () => {
+      const fn = httpsCallable(this.fns, 'removeLike');
+      await fn({ postId, userId });
+    });
   }
 
   async checkIfUserLiked(postId: string, userId: string): Promise<boolean> {
-    const ref = doc(this.db, `posts/${postId}/likes/${userId}`);
-    const snap = await getDoc(ref);
-    return snap.exists();
+    return await runInInjectionContext(this.env, async () => {
+      const ref = doc(this.db, `posts/${postId}/likes/${userId}`);
+      const snap = await getDoc(ref);
+      return snap.exists();
+    });
   }
 
   async addDislike(postId: string | undefined, userId: string): Promise<void> {
-    const fn = httpsCallable(this.fns, 'addDislike');
-    await fn({ postId, userId });
+    await runInInjectionContext(this.env, async () => {
+      const fn = httpsCallable(this.fns, 'addDislike');
+      await fn({ postId, userId });
+    });
   }
 
   async removeDislike(postId: string | undefined, userId: string): Promise<void> {
-    const fn = httpsCallable(this.fns, 'removeDislike');
-    await fn({ postId, userId });
+    await runInInjectionContext(this.env, async () => {
+      const fn = httpsCallable(this.fns, 'removeDislike');
+      await fn({ postId, userId });
+    });
   }
 
   async checkIfUserDisliked(postId: string, userId: string): Promise<boolean> {
-    const ref = doc(this.db, `posts/${postId}/dislikes/${userId}`);
-    const snap = await getDoc(ref);
-    return snap.exists();
+    return await runInInjectionContext(this.env, async () => {
+      const ref = doc(this.db, `posts/${postId}/dislikes/${userId}`);
+      const snap = await getDoc(ref);
+      return snap.exists();
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { Injectable, Renderer2, RendererFactory2, NgZone } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class BackgroundService {
     'assets/images/chimeinbackground6.jpg'
   ];
 
-  constructor( rendererFactory: RendererFactory2) {
+  constructor( private rendererFactory: RendererFactory2, private ngZone: NgZone) {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
 
@@ -24,8 +24,9 @@ export class BackgroundService {
       this.currentIndex = (this.currentIndex + 1) % this.images.length;
     };
 
-    changeBackground();
-    setInterval(changeBackground, 15000);
+    setInterval(() => {
+      this.ngZone.run(() => changeBackground());
+    }, 15000);
   }
 
 }
