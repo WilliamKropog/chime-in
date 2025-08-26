@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { UserService } from 'src/services/user.service';
 import { Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
-import { interval, Subscription } from 'rxjs';
+import { interval, Subscription, take } from 'rxjs';
 
 @Component({
     selector: 'app-recommended-profile',
@@ -37,13 +37,15 @@ export class RecommendedProfileComponent implements OnInit, OnDestroy{
   }
 
   loadRecommendedUser(): void {
-    this.userService.getRandomRecommendedUser().subscribe(user => {
+    this.userService.getRandomRecommendedUser().pipe(take(1)).subscribe(user => {
       if (user) {
         this.recommendedUser = user;
         this.backgroundImageUrl = user.backgroundImageURL || null;
-        this.userService.getUserProfileImageUrl(user.id).subscribe(imageUrl => {
-          this.profileImageUrl = imageUrl;
+
+        this.userService.getUserProfileImageUrl(user.id).pipe(take(1)).subscribe(url => {
+          this.profileImageUrl = url;
         });
+
         this.loadRecentPosts(user.id);
       } else {
         console.error('No recommended user found.');
@@ -52,17 +54,19 @@ export class RecommendedProfileComponent implements OnInit, OnDestroy{
   }
 
   loadRecentPosts(userId: string): void {
-    this.postsService.getThreeMostRecentPostsByUser(userId).subscribe(posts => {
+    this.postsService.getThreeMostRecentPostsByUser(userId).pipe(take(1)).subscribe(posts => {
       this.recentPosts = posts;
     });
   }
 
   nextPost(): void {
+    if (!this.recentPosts.length) return;
     this.currentPostIndex = (this.currentPostIndex + 1) % this.recentPosts.length;
   }
 
   prevPost(): void {
-    this.currentPostIndex = (this.currentPostIndex - 1) % this.recentPosts.length % this.recentPosts.length;
+    if (!this.recentPosts.length) return;
+    this.currentPostIndex = (this.currentPostIndex - 1 + this.recentPosts.length) % this.recentPosts.length;
   }
 
   goToPost(index: number): void {

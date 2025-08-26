@@ -17,7 +17,7 @@
 <button (click)="prevPost()" style="margin-right: 900px;">❮</button>
 
 <div class="rp-user-posts">
-  @for (post of recentPosts; track post; let i = $index) {
+  @for (post of recentPosts; track post.postId; let i = $index) {
     <div class="carousel-slide" [ngClass]="getPostClass(i)">
       <app-recommended-post [post]="post"></app-recommended-post>
     </div>

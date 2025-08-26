@@ -40,8 +40,6 @@ import { RecommendedProfileComponent } from './recommended-profile/recommended-p
 import { RecommendedPostComponent } from './recommended-post/recommended-post.component';
 import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
 
-console.log('ENV FIREBASE CONFIG', environment.firebase);
-
 @NgModule({
   declarations: [
     AppComponent,

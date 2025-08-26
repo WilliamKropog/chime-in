@@ -37,15 +37,15 @@ export class PostsService {
 
   // ---------- Post Creation ----------
   async savePost(data: Post): Promise<string> {
-    const postsCol = collection(this.db, 'posts');
-    const docRef = doc(postsCol);
-    data.postId = docRef.id;
+    return runInInjectionContext(this.env, async () => {
+      const postsCol = collection(this.db, 'posts');
+      const docRef   = doc(postsCol);
+      const postId   = docRef.id;
 
-    await runInInjectionContext(this.env, async () => {
-      await setDoc(docRef, data as any);
+      const payload: Post = { ...data, postId };
+      await setDoc(docRef, payload as any);
+      return postId;
     });
-
-    return docRef.id;
   }
 
   async saveComment(postId: string, data: Comment): Promise<string> {
@@ -71,6 +71,8 @@ export class PostsService {
 
   // ---------- Following Page notifications ----------
   getUnseenPostsCount(userIds: string[], lastVisit: Date | null): Observable<number> {
+    if (!userIds || userIds.length === 0) return of(0);
+
     return runInInjectionContext(this.env, () => {
       const base = collection(this.db, 'posts');
       let q: Query = query(base, where('userId', 'in', userIds));
@@ -220,21 +222,22 @@ export class PostsService {
 
   // ---------- Recommended profile ----------
   getThreeMostRecentPostsByUser(userId: string): Observable<Post[]> {
-  const q = query(
-    collection(this.db, 'posts'),
-    where('userId', '==', userId),
-    orderBy('createdAt', 'desc'),
-    limit(3)
-  );
+    return runInInjectionContext(this.env, () => {
+      const q = query(
+        collection(this.db, 'posts'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(3)
+      );
 
-  const src$ = runInInjectionContext(this.env, () =>
-    collectionData(q, { idField: 'postId' }) as Observable<Post[]>
-  );
-
-  return src$.pipe(map(posts => posts || []));
-}
+      const src$ = collectionData(q, { idField: 'postId' }) as Observable<Post[]>;
+      return src$.pipe(map(posts => posts ?? []));
+    });
+  }
 
   getPostsFromUsers(userIds: string[], lim: number): Observable<Post[]> {
+    if (!userIds || userIds.length === 0) return of([]);
+
     return new Observable<Post[]>(subscriber => {
       runInInjectionContext(this.env, async () => {
         try {
@@ -260,6 +263,7 @@ export class PostsService {
   }
 
   getMorePostsFromUsers(userIds: string[], lim: number): Observable<Post[]> {
+    if (!userIds || userIds.length === 0) return of([]);
     if (!this.lastVisible) {
       console.error('No reference for the next page. Load initial posts first');
       return of([]);

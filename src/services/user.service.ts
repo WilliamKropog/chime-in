@@ -122,13 +122,18 @@ export class UserService {
 
   // ---------- Recommendations ----------
   getRandomRecommendedUser(): Observable<any> {
-    const q = query(collection(this.db, 'users'), where('followerCount', '>=', 1));
     return new Observable<any>(subscriber => {
       runInInjectionContext(this.env, async () => {
         try {
+          const q = query(
+            collection(this.db, 'users'),
+            where('followerCount', '>=', 1)
+          );
           const snap = await getDocs(q);
-          const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+          const users = snap.docs.map(d => ({ ...(d.data() as any), id: d.id }));
           const pick = users.length ? users[Math.floor(Math.random() * users.length)] : null;
+
           subscriber.next(pick);
           subscriber.complete();
         } catch (err) {
