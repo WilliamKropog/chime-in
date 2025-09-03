@@ -1,45 +1,42 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
+import { take } from 'rxjs/operators';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
 import { Post } from '../../interface';
-import { Subscription } from 'rxjs';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { Storage } from '@angular/fire/storage';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
-    selector: 'app-post-editor',
-    templateUrl: './post-editor.component.html',
-    styleUrls: ['./post-editor.component.css'],
-    standalone: false
+  selector: 'app-post-editor',
+  templateUrl: './post-editor.component.html',
+  styleUrls: ['./post-editor.component.css'],
+  standalone: false
 })
-export class PostEditorComponent {
-  @Input() isVisible: boolean = false;
-  @Output() close: EventEmitter<void> = new EventEmitter<void>();
+export class PostEditorComponent implements OnDestroy {
+  @Input() isVisible = false;
+  @Output() close = new EventEmitter<void>();
+  @Output() postCreated = new EventEmitter<Post>();   
 
-  isLoading: boolean = false;
-  postText: string = '';
-  characterCount: number = 0;
+  public user$ = this.authService.currentUser$;
+
+  isLoading = false;
+  postText = '';
+  characterCount = 0;
   selectedImageUrl: string | ArrayBuffer | null | undefined = null;
   selectedFile: File | null = null;
-  profileImageUrl: string = 'assets/images/png-transparent-default-avatar.png';
-  errorMessage: string = '';
+  profileImageUrl = 'assets/images/png-transparent-default-avatar.png';
+  errorMessage = '';
   activeMode: 'text' | 'image' = 'text';
 
-  user$ = this.authService.currentUser$;
-  userSubscription: Subscription | null = null;
+  private env = inject(EnvironmentInjector);
 
   constructor(
     private authService: AuthenticationService,
     private postService: PostsService,
     private storage: Storage
-  ) { }
+  ) {}
 
-  ngOnInit(): void {
-    this.userSubscription = this.authService.currentUser$.subscribe(user => {
-      if(user) {
-        this.profileImageUrl = user.photoURL ?? this.profileImageUrl;
-      }
-    });
+  ngOnDestroy(): void {
   }
 
   switchToTextMode(): void {
@@ -47,66 +44,189 @@ export class PostEditorComponent {
     this.selectedImageUrl = null;
   }
 
-  chimein(): void {
-    this.isLoading = true;
-    this.errorMessage = '';
+  async createPost(): Promise<void> {
+  if (this.isLoading) return;
+  this.isLoading = true;
+  this.errorMessage = '';
 
-    this.userSubscription = this.authService.currentUser$.subscribe(user => {
-      if (!user) {
-        console.error('No user is logged in');
-        this.isLoading = false;
-        return;
-      }
-      
-      const post: Post = {
-        body: this.postText,
-        photoURL: user.photoURL,
-        displayName: user.displayName,
-        userId: user.uid,
-        createdAt: new Date(),
-        views: 0,
-        likeCount: 0,
-        dislikeCount: 0,
-        bookmarkCount: 0,
-        repostCount: 0,
-        commentCount: 0,
-        postId: '',
-        imageUrl: '',
-      };
+  try {
+    // 1) Get the current user once
+    const user = await firstValueFrom(this.authService.currentUser$);
+    if (!user) {
+      this.errorMessage = 'You must be logged in to post.';
+      return;
+    }
 
-      if (this.selectedFile) {
-        const fileRef = ref(this.storage, `posts/${Date.now()}_${user.uid}`);
-        uploadBytes(fileRef, this.selectedFile)
-          .then(result => getDownloadURL(result.ref))
-          .then(imageUrl => {
-            post.imageUrl = imageUrl;
-            return this.postService.savePost(post);
-          })
-          .then(() => {
-            this.onClose();
-          })
-          .catch(error => {
-            console.error('Error uploading image or saving post: ', error);
-            this.errorMessage = 'Failed to upload image or save post. Please try again.';
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      } else {
-        this.postService.savePost(post)
-          .then(() => {
-            this.onClose();
-          })
-          .catch(error => {
-            console.error('Error saving post: ', error);
-            this.errorMessage = 'Failed to save post. Please try again.';
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
-      }
-    });
+    // 2) Build a draft that matches your Post interface
+    const draft: Post = {
+      userId: user.uid,
+      body: (this.postText || '').trim(),
+      createdAt: new Date(),            // service will overwrite with serverTimestamp()
+      photoURL: user.photoURL ?? null,
+      displayName: user.displayName ?? null,
+      postId: '',                       // service will fill
+      likeCount: 0,
+      dislikeCount: 0,
+      bookmarkCount: 0,
+      repostCount: 0,
+      commentCount: 0,
+      views: 0,
+      imageUrl: '',
+    };
+
+    // 3) Optional image upload (kept inside InjectionContext to avoid warnings)
+    if (this.selectedFile) {
+      await runInInjectionContext(this.env, async () => {
+        const fileRef = ref(this.storage, `posts/${user.uid}_${Date.now()}`);
+        await uploadBytes(fileRef, this.selectedFile!);
+        draft.imageUrl = await getDownloadURL(fileRef);
+      });
+    }
+
+    // 4) Persist the post (returns the new postId)
+    const postId = await this.postService.savePost(draft);
+    draft.postId = postId;
+
+    // 5) Reset editor UI
+    this.postText = '';
+    this.characterCount = 0;
+    this.selectedFile = null;
+    this.selectedImageUrl = null;
+
+    // (Optional) you can emit to parent here later:
+    // this.postCreated.emit(draft);
+    // this.close.emit();
+
+  } catch (err) {
+    console.error('createPost failed', err);
+    this.errorMessage = 'Failed to create post. Please try again.';
+  } finally {
+    this.close.emit();
+    this.isLoading = false;
   }
+}
+
+
+// async createPost(): Promise<void> {
+//     this.isLoading = true;
+//     this.errorMessage = '';
+
+//     try {
+//       const user = await this.authService.currentUser$.pipe(take(1)).toPromise();
+//       if (!user) {
+//         this.isLoading = false;
+//         this.errorMessage = 'You must be logged in to post.';
+//         return;
+//       }
+
+//       const base: Post = {
+//         body: this.postText.trim(),
+//         photoURL: user.photoURL,
+//         displayName: user.displayName,
+//         userId: user.uid,
+//         createdAt: new Date(),   
+//         views: 0,
+//         likeCount: 0,
+//         dislikeCount: 0,
+//         bookmarkCount: 0,
+//         repostCount: 0,
+//         commentCount: 0,
+//         postId: '',
+//         imageUrl: '',
+//       };
+
+//       let imageUrl = '';
+//       if (this.selectedFile) {
+//         await runInInjectionContext(this.env, async () => {
+//           const fileRef = ref(this.storage, `posts/${Date.now()}_${user.uid}`);
+//           const result = await uploadBytes(fileRef, this.selectedFile!);
+//           imageUrl = await getDownloadURL(result.ref);
+//         });
+//       }
+
+//       const toSave: Post = { ...base, imageUrl };
+
+//       const postId = await this.postService.savePost(toSave);
+
+//       const newPost: Post = { ...toSave, postId };
+//       this.postCreated.emit(newPost);
+
+//       this.postText = '';
+//       this.selectedFile = null;
+//       this.selectedImageUrl = null;
+//       this.activeMode = 'text';
+//       this.close.emit();
+//     } catch (err) {
+//       console.error('Error creating post:', err);
+//       this.errorMessage = 'Failed to create post. Please try again.';
+//     } finally {
+//       this.isLoading = false;
+//     }
+//   }
+
+  updateCharacterCount(): void {
+    this.characterCount = this.postText.length;
+  }
+
+  updatePostText(value: string): void {
+    this.postText = value;
+    this.updateCharacterCount();
+  }
+
+  // unsubscribeUser(): void {
+  //   if (this.userSubscription) {
+  //     this.userSubscription.unsubscribe();
+  //     this.userSubscription = null;
+  //   }
+  // }
+
+  uploadImage(event: any): void {
+    this.errorMessage = '';
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!this.isValidImage(file)) {
+      this.errorMessage = 'Invalid file type. Please upload a valid image file.';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      this.errorMessage = 'File size exceeds the 5MB limit. Please choose a smaller file.';
+      return;
+    }
+
+    this.activeMode = 'image';
+    this.selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.selectedImageUrl = e.target?.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  isValidImage(file: File): boolean {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+    return allowedTypes.includes(file.type);
+  }
+
+  onClose(): void {
+    this.isVisible = false;
+    this.close.emit();
+    this.resetState();
+  }
+
+  resetState(): void {
+    this.postText = '';
+    this.characterCount = 0;
+    this.selectedImageUrl = null;
+    this.selectedFile = null;
+    this.errorMessage = '';
+    this.isLoading = false;
+  }
+}
+
+//Old versions of methods:
 
   // chimein(): void {
   //   this.isLoading = true;
@@ -148,47 +268,6 @@ export class PostEditorComponent {
   //   })
   // }
 
-  updateCharacterCount(): void {
-    this.characterCount = this.postText.length;
-  }
-
-  updatePostText(value: string): void {
-    this.postText = value;
-    this.updateCharacterCount();
-  }
-
-  unsubscribeUser(): void {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-      this.userSubscription = null;
-    }
-  }
-
-  uploadImage(event: any): void {
-    this.errorMessage = '';
-    const file = event.target.files[0];
-    if (!file) return;
-
-    if (!this.isValidImage(file)) {
-      this.errorMessage = 'Invalid file type. Please upload a valid image file.';
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      this.errorMessage = 'File size exceeds the 5MB limit. Please choose a smaller file.';
-      return;
-    }
-
-    this.activeMode = 'image';
-    this.selectedFile = file;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.selectedImageUrl = e.target?.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
   // uploadImage(event: any): void {
   //   const file = event.target.files[0];
   //   if (file && this.isValidImage(file)) {
@@ -201,24 +280,3 @@ export class PostEditorComponent {
   //     console.error('Invalid file type. Please upload a valid image file.');
   //   }
   // }
-
-  isValidImage(file: File): boolean {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-    return allowedTypes.includes(file.type);
-  }
-
-  onClose(): void {
-    this.isVisible = false;
-    this.close.emit();
-    this.resetState();
-  }
-
-  resetState(): void {
-    this.postText = '';
-    this.characterCount = 0;
-    this.selectedImageUrl = null;
-    this.selectedFile = null;
-    this.errorMessage = '';
-    this.isLoading = false;
-  }
-}

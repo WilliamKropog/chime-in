@@ -37,12 +37,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   loadInitialPosts() {
     this.isLoadingPosts = true;
-    const s = this.postsService.getMostRecentPosts().subscribe(posts => {
-      this.mostRecentPosts = this.mergeUniqueById(this.mostRecentPosts, posts);
+    this.postsService.getMostRecentPosts().subscribe(posts => {
+      this.mostRecentPosts = posts;
       this.incrementViewCount(posts);
       this.isLoadingPosts = false;
     });
-    this.subs.add(s);
   }
 
   loadMorePosts() {

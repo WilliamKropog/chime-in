@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { User } from 'firebase/auth';
 import { concatMap } from 'rxjs';
 import { ImageUploadService } from 'src/services/image-upload.service';
 import { HotToastService } from '@ngneat/hot-toast';
+import { Post } from 'src/interface';
 
 @Component({
     selector: 'app-side-nav',
@@ -14,7 +15,10 @@ import { HotToastService } from '@ngneat/hot-toast';
 })
 export class SideNavComponent implements OnInit {
 
+  @Output() postCreated = new EventEmitter<Post>();
+
   user$ = this.authService.currentUser$;
+  isPostEditorOpen: boolean = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -41,15 +45,17 @@ export class SideNavComponent implements OnInit {
   }
 
   //POST EDITOR BUTTON
-
-  isPostEditorOpen: boolean = false;
-
   openPostEditor(): void {
     this.isPostEditorOpen = true;
   }
 
   closePostEditor(): void {
     this.isPostEditorOpen = false;
+  }
+
+  onPostCreated(newPost: Post) {
+    this.isPostEditorOpen = false;
+    this.postCreated.emit(newPost); // parent listens and prepends
   }
 
   //LOGOUT BUTTON

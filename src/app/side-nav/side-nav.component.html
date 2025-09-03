@@ -91,5 +91,8 @@
 </div>
 
 @if (isPostEditorOpen) {
-  <app-post-editor (close)="closePostEditor()"></app-post-editor>
+  <app-post-editor 
+    (close)="closePostEditor()"
+    (postCreated)="onPostCreated($event)">
+  </app-post-editor>
 }

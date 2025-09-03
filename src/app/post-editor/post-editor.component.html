@@ -2,7 +2,7 @@
   <div class="modal">
     @if (user$ | async) {
       <div class="modal-content">
-        <img [src]="profileImageUrl" alt="Profile Picture" class="profile-image">
+        <img [src]="(user$ | async)?.photoURL || profileImageUrl" alt="Profile Picture" class="profile-image">
         @if (!selectedImageUrl) {
           <div>
             <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="500"
@@ -58,7 +58,7 @@
           </button>
         </div>
         <div class="post-button">
-          <button mat-fab extended (click)="chimein();">
+          <button mat-fab extended (click)="createPost();">
             <mat-icon>send</mat-icon>
             Send
           </button>

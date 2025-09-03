@@ -1,7 +1,6 @@
 import { Injectable, EnvironmentInjector, runInInjectionContext, inject } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
-
 import {
   Firestore,
   doc,
@@ -17,9 +16,9 @@ import {
   getDoc,
   Query,
   QueryDocumentSnapshot,
-  setDoc
+  setDoc,
+  serverTimestamp
 } from '@angular/fire/firestore';
-
 import {
   Functions,
   httpsCallable,
@@ -32,21 +31,49 @@ export class PostsService {
 
   private lastVisible: QueryDocumentSnapshot | null = null;
   private env = inject(EnvironmentInjector);
+  // private postCreatedSubject = new Subject<Post>();
+  // postCreated$ = this.postCreatedSubject.asObservable();
 
   constructor(private db: Firestore, private fns: Functions) {}
 
   // ---------- Post Creation ----------
   async savePost(data: Post): Promise<string> {
     return runInInjectionContext(this.env, async () => {
+      // create a new doc ref with auto-id
       const postsCol = collection(this.db, 'posts');
       const docRef   = doc(postsCol);
       const postId   = docRef.id;
 
-      const payload: Post = { ...data, postId };
+      // build payload; serverTimestamp for canonical ordering, keep client clock too
+      const payload: Post & { clientCreatedAt: number } = {
+        ...data,
+        postId,
+        createdAt: serverTimestamp(),
+        clientCreatedAt: Date.now(),
+      };
+
       await setDoc(docRef, payload as any);
       return postId;
     });
   }
+
+  // async savePost(data: Post): Promise<string> {
+  //   return runInInjectionContext(this.env, async () => {
+  //     const postsCol = collection(this.db, 'posts');
+  //     const docRef   = doc(postsCol);
+  //     const postId   = docRef.id;
+
+  //     const payload: Post & { createdAt: any; } = {
+  //       ...data,
+  //       postId,
+  //       createdAt: serverTimestamp(),
+  //     };
+
+  //     await setDoc(docRef, payload as any);
+  //     this.postCreatedSubject.next({ ...data, postId, createdAt: new Date() });
+  //     return postId;
+  //   });
+  // }
 
   async saveComment(postId: string, data: Comment): Promise<string> {
     const commentsCol = collection(this.db, `posts/${postId}/comments`);
@@ -89,24 +116,16 @@ export class PostsService {
 
   // ---------- Home: initial list ----------
   getMostRecentPosts(): Observable<Post[]> {
-    return runInInjectionContext(this.env, () => {
-      const q = query(
-        collection(this.db, 'posts'),
-        orderBy('createdAt', 'desc'),
-        limit(10)
-      );
-
-      if (!this.lastVisible) {
-        getDocs(q).then(snap => {
-          if (snap.size > 0) {
-            this.lastVisible = snap.docs[snap.docs.length - 1];
-          }
-        }).catch(console.error);
-      }
-
-      return collectionData(q, { idField: 'postId' }) as Observable<Post[]>;
-    });
-  }
+  return runInInjectionContext(this.env, () => {
+    const q = query(
+      collection(this.db, 'posts'),
+      orderBy('createdAt', 'desc'),
+      limit(10)
+    );
+    // idField ensures each item has postId populated
+    return collectionData(q, { idField: 'postId' }) as Observable<Post[]>;
+  });
+}
 
   // ---------- Home: load more (infinite scroll) ----------
   getMorePosts(): Observable<Post[]> {
