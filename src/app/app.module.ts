@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
@@ -85,10 +85,7 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    provideFunctions(() => {
-      const fns = getFunctions();
-      return fns;
-    })],
+    provideFunctions(() => getFunctions(getApp(), 'us-central1'))],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

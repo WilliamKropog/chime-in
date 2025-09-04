@@ -50,21 +50,19 @@ export class PostEditorComponent implements OnDestroy {
   this.errorMessage = '';
 
   try {
-    // 1) Get the current user once
     const user = await firstValueFrom(this.authService.currentUser$);
     if (!user) {
       this.errorMessage = 'You must be logged in to post.';
       return;
     }
 
-    // 2) Build a draft that matches your Post interface
     const draft: Post = {
       userId: user.uid,
       body: (this.postText || '').trim(),
-      createdAt: new Date(),            // service will overwrite with serverTimestamp()
+      createdAt: new Date(),            
       photoURL: user.photoURL ?? null,
       displayName: user.displayName ?? null,
-      postId: '',                       // service will fill
+      postId: '',                       
       likeCount: 0,
       dislikeCount: 0,
       bookmarkCount: 0,
@@ -74,7 +72,6 @@ export class PostEditorComponent implements OnDestroy {
       imageUrl: '',
     };
 
-    // 3) Optional image upload (kept inside InjectionContext to avoid warnings)
     if (this.selectedFile) {
       await runInInjectionContext(this.env, async () => {
         const fileRef = ref(this.storage, `posts/${user.uid}_${Date.now()}`);
@@ -83,19 +80,13 @@ export class PostEditorComponent implements OnDestroy {
       });
     }
 
-    // 4) Persist the post (returns the new postId)
     const postId = await this.postService.savePost(draft);
     draft.postId = postId;
 
-    // 5) Reset editor UI
     this.postText = '';
     this.characterCount = 0;
     this.selectedFile = null;
     this.selectedImageUrl = null;
-
-    // (Optional) you can emit to parent here later:
-    // this.postCreated.emit(draft);
-    // this.close.emit();
 
   } catch (err) {
     console.error('createPost failed', err);
