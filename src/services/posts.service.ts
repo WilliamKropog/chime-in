@@ -39,12 +39,10 @@ export class PostsService {
   // ---------- Post Creation ----------
   async savePost(data: Post): Promise<string> {
     return runInInjectionContext(this.env, async () => {
-      // create a new doc ref with auto-id
       const postsCol = collection(this.db, 'posts');
       const docRef   = doc(postsCol);
       const postId   = docRef.id;
 
-      // build payload; serverTimestamp for canonical ordering, keep client clock too
       const payload: Post & { clientCreatedAt: number } = {
         ...data,
         postId,
@@ -57,43 +55,24 @@ export class PostsService {
     });
   }
 
-  // async savePost(data: Post): Promise<string> {
-  //   return runInInjectionContext(this.env, async () => {
-  //     const postsCol = collection(this.db, 'posts');
-  //     const docRef   = doc(postsCol);
-  //     const postId   = docRef.id;
-
-  //     const payload: Post & { createdAt: any; } = {
-  //       ...data,
-  //       postId,
-  //       createdAt: serverTimestamp(),
-  //     };
-
-  //     await setDoc(docRef, payload as any);
-  //     this.postCreatedSubject.next({ ...data, postId, createdAt: new Date() });
-  //     return postId;
-  //   });
-  // }
-
   async saveComment(postId: string, data: Comment): Promise<string> {
-    const commentsCol = collection(this.db, `posts/${postId}/comments`);
-    const commentRef = doc(commentsCol);
-    data.commentId = commentRef.id;
+    return runInInjectionContext(this.env, async () => {
+      const commentsCol = collection(this.db, `posts/${postId}/comments`);
+      const commentRef = doc(commentsCol);
+      data.commentId = commentRef.id;
 
-    await runInInjectionContext(this.env, async () => {
       await setDoc(commentRef, data as any);
+      await this.incrementCommentCount(postId);
+      return commentRef.id;
     });
-
-    await this.incrementCommentCount(postId);
-    return commentRef.id;
   }
 
   // ---------- Post Page: get by ID ----------
   getPostById(postId: string): Observable<Post | undefined> {
-  const ref = doc(this.db, `posts/${postId}`);
-  return runInInjectionContext(this.env, () =>
-    docData(ref, { idField: 'postId' }) as Observable<Post | undefined>
-  );
+  return runInInjectionContext(this.env, () => {
+    const ref = doc(this.db, `posts/${postId}`);
+     return docData(ref, { idField: 'postId' }) as Observable<Post | undefined>
+  });
 }
 
   // ---------- Following Page notifications ----------

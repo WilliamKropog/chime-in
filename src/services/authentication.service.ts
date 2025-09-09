@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EnvironmentInjector, inject, Injectable, runInInjectionContext } from '@angular/core';
 import {
   Auth,
   authState,
@@ -15,8 +15,8 @@ import { Observable, from, of, concatMap, Subject } from 'rxjs';
 export class AuthenticationService {
 
   currentUser$!: Observable<User | null>;
-
   userData: Subject<any> = new Subject<any>();
+  private env = inject(EnvironmentInjector);
 
   constructor(private auth: Auth) {
     this.currentUser$ = authState(this.auth);
@@ -32,7 +32,9 @@ export class AuthenticationService {
   }
 
   async login(email: string, password: string) {
-    return await signInWithEmailAndPassword(this.auth, email, password);
+    return runInInjectionContext(this.env, async () => {
+      return await signInWithEmailAndPassword(this.auth, email, password);
+    });
   }
 
   logout() {

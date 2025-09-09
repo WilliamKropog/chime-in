@@ -1,15 +1,10 @@
 <div class="register-background">
   <div>
-    <img
-      src="assets/images/2CentsLogo2.png"
-      alt="2Cents logo"
-    style="
-      height: 500px;
-      width: 500px;
-      margin-top: 10%;
-      margin-left: 15%;
-      border-radius: 20%;"
-      >
+    <div class="recommended-profile">
+    @for (profile of recommendedProfiles; track profile) {
+      <app-recommended-profile [user]="profile"></app-recommended-profile>
+    }
+    </div>
 
     <div class="register">
       <ul>
@@ -101,6 +96,5 @@
         </li>
       </ul>
     </div>
-    <p class="subtitle">Give everyone your 2Cents!</p>
   </div>
 </div>
