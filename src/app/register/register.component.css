@@ -1,12 +1,42 @@
 .register-background {
+  position: relative;
+  min-height: 100vh;
   width: 100%;
-  height: 100%;
+  overflow: hidden;
 } 
+
+.bubble-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  contain: layout paint;
+  width: 100%;
+}
+
+.bubble {
+  position: absolute;
+  background-color: rgb(213, 139, 11);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation-name: riseIn;
+  animation-duration: var(--dur, 2s);
+  animation-delay: var(--delay, 0s);
+  animation-fill-mode: both; 
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); 
+  will-change: transform, opacity; 
+}
+
+@keyframes riseIn {
+  from { transform: translateY(120vh); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
 
 .recommended-profile {
   position: absolute;
   margin-right: auto;
   top: 25%;
+  z-index: 1;
 }
 
 .subtitle {
@@ -29,12 +59,15 @@
   width: 500px;
   background-color: rgb(10, 26, 14);
   display: flex;
-  float: right;
+  margin-left: 1100px;
+  bottom: 2.5%;
   justify-content: center;
+  position: absolute;
   margin-top: 100px;
   margin-right: 150px;
   color: white;
   border-radius: 20px;
+  z-index: 1;
 }
 
 .register ul {

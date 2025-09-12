@@ -1,5 +1,16 @@
 <div class="register-background">
-  <div>
+  <div class="bubble-field" #bubbleField>
+    @for (b of bubbles; track b.id) {
+      <div class="bubble" 
+        [style.width.px]="b.size"
+        [style.height.px]="b.size"
+        [style.left.px]="b.left"
+        [style.top.px]="b.top"
+        [style.--delay]="b.delay + 's'"
+        [style.--dur]="b.duration + 's'">
+      </div>
+    }
+    
     <div class="recommended-profile">
     @for (profile of recommendedProfiles; track profile) {
       <app-recommended-profile [user]="profile"></app-recommended-profile>
