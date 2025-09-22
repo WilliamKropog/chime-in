@@ -31,10 +31,19 @@ export class PostsService {
 
   private lastVisible: QueryDocumentSnapshot | null = null;
   private env = inject(EnvironmentInjector);
-  // private postCreatedSubject = new Subject<Post>();
-  // postCreated$ = this.postCreatedSubject.asObservable();
+
+  private openEditorSubject = new Subject<string | null>();
+  openEditor$ = this.openEditorSubject.asObservable();
 
   constructor(private db: Firestore, private fns: Functions) {}
+
+  openEditor(postId: string): void {
+    this.openEditorSubject.next(postId);
+  }
+
+  closeEditor(): void {
+    this.openEditorSubject.next(null);
+  }
 
   // ---------- Post Creation ----------
   async savePost(data: Post): Promise<string> {

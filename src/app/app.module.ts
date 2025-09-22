@@ -39,6 +39,7 @@ import { NotFollowingPostsComponent } from './not-following-posts/not-following-
 import { RecommendedProfileComponent } from './recommended-profile/recommended-profile.component';
 import { RecommendedPostComponent } from './recommended-post/recommended-post.component';
 import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
+import { PostMenuComponent } from './post-menu/post-menu.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { RelativeTimePipe } from 'src/pipes/relative-time.pipe';
     FormsModule,
     ReactiveFormsModule,
     HotToastModule.forRoot(),
+    PostMenuComponent,
   ],
   providers: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),

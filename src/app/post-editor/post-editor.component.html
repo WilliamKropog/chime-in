@@ -6,7 +6,7 @@
         @if (!selectedImageUrl) {
           <div>
             <textarea matInput [ngModel]="postText" (ngModelChange)="updatePostText($event)" maxlength="500"
-            (input)="updateCharacterCount()" placeholder="Type your Chime-in here."></textarea>
+            (input)="updateCharacterCount()" placeholder="Give your 2Cents here."></textarea>
             <div class="character-count">
               {{ characterCount }} / 500
             </div>
@@ -19,7 +19,7 @@
               "height: 40px;
               width: 70%;
               font-size: 16px;
-            margin: 10px 0 10px 60px;"></textarea>
+              margin: 10px 0 10px 60px;"></textarea>
             <img [src]="selectedImageUrl" alt="Selected Image">
           </div>
         }

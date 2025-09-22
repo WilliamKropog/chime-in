@@ -75,10 +75,20 @@
     grid-area: header;
 }
 
+.item8 {
+    grid-area: options;
+    margin-top: 30px;
+}
+
+.item8 button {
+    background-color: rgb(10, 26, 14);
+    z-index: 0;
+}
+
 .post-content {
     display: grid;
     grid-template-areas:
-        'pfp username timestamp header views views'
+        'pfp username timestamp header views options'
         'body body body body body body'
         'footer footer footer footer footer footer';
     gap: 20px;
@@ -126,4 +136,21 @@
 .comment-editor.open {
     overflow: hidden;
     transition: 0.3s ease-out;
+}
+
+.menu-anchor {
+    position: relative;
+    display: inline-block;
+}
+
+.post-menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 20;
+}
+
+.post-menu.open {
+    overflow: hidden;
+    transition: 0.15s ease-out;
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Comment, Post } from 'src/interface';
 import { AuthenticationService } from 'src/services/authentication.service';

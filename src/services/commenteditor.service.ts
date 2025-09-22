@@ -9,7 +9,6 @@ export class CommentEditorService {
   private openEditorSubject = new Subject<string | null>();
   openEditor$ = this.openEditorSubject.asObservable();
 
-  // Helper to ensure AngularFire calls run inside DI context
   private env = inject(EnvironmentInjector);
 
   constructor(

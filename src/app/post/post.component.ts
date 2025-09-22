@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { Post, Comment } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
@@ -14,11 +14,13 @@ import { Router } from '@angular/router';
 })
 export class PostComponent implements OnInit, OnDestroy{
   @Input() post?: Post;
+  @ViewChild('menuAnchor') private menuAnchorRef?: ElementRef<HTMLElement>;
   commentsList: Comment[] = [];
   topComment?: Comment;
   isLiked?: boolean = false; 
   isDisliked?: boolean = false;
   isCommentEditorOpen: boolean = false;
+  isPostMenuOpen: boolean = false;
   private editorSubscription?: Subscription;
   private topCommentSubscription?: Subscription;
   private commentsSubscription?: Subscription;
@@ -157,5 +159,25 @@ export class PostComponent implements OnInit, OnDestroy{
       this.commentEditorService.openEditor(this.post?.postId!);
     }
   }
+
+  openPostMenu(): void {
+    if (this.isPostMenuOpen) {
+      this.isPostMenuOpen = false;
+    } else {
+      this.isPostMenuOpen = true;
+    }
+  }
+
+  @HostListener('document:click', ['$event']) onDocumentClick(event: MouseEvent): void {
+    if (!this.isPostMenuOpen) return;
+    const anchor = this.menuAnchorRef?.nativeElement;
+    if (anchor && !anchor.contains(event.target as Node)) {
+      this.isPostMenuOpen = false; 
+    }
+  }
+
+  @HostListener('document:keydown.escape') onEscape(): void {
+    if (this.isPostMenuOpen) this.isPostMenuOpen = false;
+  } 
 
 }
