@@ -11,10 +11,15 @@
             <mat-icon>more_vert</mat-icon>
           </button>
 
+          <!--Fix issue below. Link UID-->
          @if (isPostMenuOpen) {
-           <div class="post-menu open">
-             <app-post-menu [postId]="post.postId"></app-post-menu>
-           </div>
+          <div class="post-menu open">
+            <app-post-menu
+              [postId]="post.postId"
+              [postOwnerId]="post.userId"
+              [currentUser]="(currentUser$ | async)!">
+            </app-post-menu>
+          </div>
          }
         </div>
       </div>

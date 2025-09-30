@@ -5,6 +5,8 @@ import { AuthenticationService } from 'src/services/authentication.service';
 import { Subscription } from 'rxjs';
 import { CommentEditorService } from 'src/services/commenteditor.service';
 import { Router } from '@angular/router';
+import { Observable, map } from 'rxjs';
+import type { User } from 'src/interface';
 
 @Component({
     selector: 'app-post',
@@ -13,6 +15,9 @@ import { Router } from '@angular/router';
     standalone: false
 })
 export class PostComponent implements OnInit, OnDestroy{
+
+  public currentUser$!: Observable<Pick<User, 'uid'|'isAdmin'|'isMod'>>;
+
   @Input() post?: Post;
   @ViewChild('menuAnchor') private menuAnchorRef?: ElementRef<HTMLElement>;
   commentsList: Comment[] = [];
@@ -35,6 +40,14 @@ export class PostComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.checkIfLiked();
     this.checkIfDisliked();
+
+    this.currentUser$ = this.authService.currentUser$.pipe(
+      map(u => ({
+        uid: u?.uid ?? '',
+        isAdmin: !!(u as Partial<User>)?.isAdmin,
+        isMod:   !!(u as Partial<User>)?.isMod,
+      }))
+    );
 
     this.editorSubscription = this.commentEditorService.openEditor$.subscribe(openPostId => {
       if (openPostId !== this.post?.postId) {
@@ -67,6 +80,12 @@ export class PostComponent implements OnInit, OnDestroy{
       this.router.navigate(['/post', this.post.postId]);
     }
   }
+
+  get currentUserId(): string {
+    return this.authService.loggedInUserId;
+  }
+
+  //Cloud functions
 
   likePost() {
     const userId = this.authService.loggedInUserId;

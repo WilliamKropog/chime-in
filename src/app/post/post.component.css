@@ -147,7 +147,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    z-index: 20;
+    z-index: 0;
 }
 
 .post-menu.open {

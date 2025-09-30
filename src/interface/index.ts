@@ -14,6 +14,8 @@ export interface User {
     username?: string;
     createdAt: any;
     backgroundImageURL?: string | null;
+    isAdmin?: boolean;
+    isMod?: boolean;
 }
 
 export interface Post {
