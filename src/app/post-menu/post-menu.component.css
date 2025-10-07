@@ -1,15 +1,19 @@
 .post-menu-container {
     display: inline-block;
+    /* background: #2b2b2b; */
     z-index: -1;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .menu-list {
-
+    display: flex;
+    flex-direction: column;
 }
 
 .menu-list button {
     width: 200px;
     color: white;
-    background-color: green;
+    background-color: gray;
     border-radius: 0px;
 }
