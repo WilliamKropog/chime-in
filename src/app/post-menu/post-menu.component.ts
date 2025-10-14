@@ -4,6 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
+import { UserService } from 'src/services/user.service';
+import { map, Observable, shareReplay } from 'rxjs';
 
 @Component({
   selector: 'app-post-menu',
@@ -18,6 +20,39 @@ export class PostMenuComponent {
   @Input() post?: Post;
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
+  constructor(private userService: UserService) {}
+
+  ownerIsMod$!: Observable<boolean>;
+
+  ngOnChanges(): void {
+    this.ownerIsMod$ = this.userService.user$(this.postOwnerId).pipe(
+      map(u => !!u?.isMod),
+      shareReplay(1)
+    )
+  }
+
+  async onPromoteToMod(): Promise<void> {
+    if (!this.isAdmin) return;
+    try {
+      await this.userService.promoteToMod(this.postOwnerId);
+      console.log("User successfully promoted to mod.");
+      this.close.emit();
+    } catch (e) {
+      console.error('Promote failed', e);
+    }
+  }
+
+  async onDemoteFromMod(): Promise<void> {
+    if (!this.isAdmin) return;
+    try {
+      await this.userService.demoteFromMod(this.postOwnerId);
+      console.log("User successfully demoted from mod.");
+      this.close.emit();
+    } catch (e) {
+      console.error('Demote failed', e);
+    }
+  }
+
   get isOwnPost()  { return this.currentUser?.uid === this.postOwnerId; }
   get isAdmin()    { return !!this.currentUser?.isAdmin; }
   get isMod()      { return !!this.currentUser?.isMod; }
@@ -27,4 +62,5 @@ export class PostMenuComponent {
   get canReport()  { return !this.isOwnPost }
   get canBlock()   { return !this.isOwnPost }
   get canBan()     { return this.isAdmin || this.isMod; }
+  
 }

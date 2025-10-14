@@ -75,7 +75,7 @@
           (click)="openCommentEditor()" [ngClass]="{'commenting': isCommentEditorOpen}">
           <mat-icon>chat_bubble</mat-icon>
         </button>
-        <div>
+        <div style="z-index: -1;">
           {{ post.commentCount }}
         </div>
       </div>

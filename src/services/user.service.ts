@@ -19,6 +19,7 @@ import {
 
 import { Storage, ref as storageRef, getDownloadURL } from '@angular/fire/storage';
 import { PostsService } from './posts.service';
+import { User } from 'src/interface';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -27,7 +28,6 @@ export class UserService {
   private unseenPostsCount$ = new BehaviorSubject<number>(0);
   private unseenPostsSubscription: Subscription | null = null;
 
-  // Injection context helper for AngularFire calls made in callbacks/executors
   private env = inject(EnvironmentInjector);
 
   constructor(
@@ -39,10 +39,15 @@ export class UserService {
   ) {}
 
   // ---------- Profiles ----------
+  user$(uid: string): Observable<User | undefined> {
+    const ref = doc(this.db, 'users', uid);
+    return docData(ref) as Observable<User | undefined>; 
+  }
+
   getUserProfile(uid: string): Observable<any> {
-  const ref = doc(this.db, `users/${uid}`);
-  return runInInjectionContext(this.env, () => docData(ref));
-}
+    const ref = doc(this.db, `users/${uid}`);
+    return runInInjectionContext(this.env, () => docData(ref));
+  }
 
   setUserProfile(uid: string, data: any, options: { merge: boolean }): Promise<void> {
     return runInInjectionContext(this.env, async () => {
@@ -195,6 +200,17 @@ export class UserService {
       }),
       map((userData: any) => userData?.following || [])
     );
+  }
+
+  // ---------- User Permissions -------------
+  promoteToMod(targetUid: string) { return this.setModerator(targetUid, true); }
+  demoteFromMod(targetUid: string) { return this.setModerator(targetUid, false); }
+
+  async setModerator(targetUid: string, value: boolean): Promise<void> {
+    return runInInjectionContext(this.env, async () => {
+      const ref = doc(this.db, `users/${targetUid}`);
+      await updateDoc(ref, { isMod: value });
+    });
   }
 
   // ---------- Follow / Unfollow (transaction) ----------

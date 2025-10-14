@@ -2,11 +2,12 @@ import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, HostListene
 import { Post, Comment } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
-import { Subscription } from 'rxjs';
+import { of, shareReplay, Subscription, switchMap } from 'rxjs';
 import { CommentEditorService } from 'src/services/commenteditor.service';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import type { User } from 'src/interface';
+import { UserService } from 'src/services/user.service';
 
 @Component({
     selector: 'app-post',
@@ -32,6 +33,7 @@ export class PostComponent implements OnInit, OnDestroy{
 
   constructor(
     private postsService: PostsService, 
+    private userService: UserService,
     private authService: AuthenticationService,
     private commentEditorService: CommentEditorService,
     private router: Router,
@@ -41,13 +43,17 @@ export class PostComponent implements OnInit, OnDestroy{
     this.checkIfLiked();
     this.checkIfDisliked();
 
-    this.currentUser$ = this.authService.currentUser$.pipe(
-      map(u => ({
-        uid: u?.uid ?? '',
-        isAdmin: !!(u as Partial<User>)?.isAdmin,
-        isMod:   !!(u as Partial<User>)?.isMod,
-      }))
-    );
+    const uid = this.authService.loggedInUserId;
+    this.currentUser$ = uid
+      ? this.userService.user$(uid).pipe(
+        map(p => ({
+          uid,
+          isAdmin: !!p?.isAdmin,
+          isMod:   !!p?.isMod,
+        })),
+        shareReplay(1)
+      )
+    : of({ uid: '', isAdmin: false, isMod: false });
 
     this.editorSubscription = this.commentEditorService.openEditor$.subscribe(openPostId => {
       if (openPostId !== this.post?.postId) {
