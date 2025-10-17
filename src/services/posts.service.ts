@@ -17,7 +17,9 @@ import {
   Query,
   QueryDocumentSnapshot,
   setDoc,
-  serverTimestamp
+  serverTimestamp,
+  writeBatch,
+  deleteDoc
 } from '@angular/fire/firestore';
 import {
   Functions,
@@ -73,6 +75,32 @@ export class PostsService {
       await setDoc(commentRef, data as any);
       await this.incrementCommentCount(postId);
       return commentRef.id;
+    });
+  }
+  //----------- Post Delete -------
+  async deletePost(postId: string): Promise<void> {
+    if (!postId) return;
+
+    await runInInjectionContext(this.env, async () => {
+      const postRef = doc(this.db, `posts/${postId}`);
+
+      const deleteSubcollection = async (sub: string) => {
+        const PAGE = 300;
+        while (true) {
+          const snap = await getDocs(query(collection(this.db, `posts/${postId}/${sub}`), limit(PAGE)));
+          if (snap.empty) break;
+          const batch = writeBatch(this.db);
+          snap.docs.forEach(d => batch.delete(d.ref));
+          await batch.commit();
+          if (snap.size < PAGE) break;
+        }
+      };
+ 
+      await deleteSubcollection('likes');
+      await deleteSubcollection('dislikes');
+      await deleteSubcollection('comments');
+
+      await deleteDoc(postRef);
     });
   }
 

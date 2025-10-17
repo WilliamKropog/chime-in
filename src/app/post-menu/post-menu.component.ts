@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/services/user.service';
 import { map, Observable, shareReplay } from 'rxjs';
+import { PostsService } from 'src/services/posts.service';
 
 @Component({
   selector: 'app-post-menu',
@@ -19,8 +20,9 @@ export class PostMenuComponent {
   @Input() postId!: string;
   @Input() post?: Post;
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
+  @Output() deleted = new EventEmitter<string>();
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private postsService: PostsService) {}
 
   ownerIsMod$!: Observable<boolean>;
 
@@ -51,6 +53,20 @@ export class PostMenuComponent {
     } catch (e) {
       console.error('Demote failed', e);
     }
+  }
+
+  async onDeleteOwnPost(): Promise<void> {
+    if (!this.isOwnPost || !this.postId) return;
+    await this.postsService.deletePost(this.postId);
+    this.deleted.emit(this.postId);
+    this.close.emit();
+  }
+
+  async onBanPost(): Promise<void> {
+    if (!(this.isAdmin || this.isMod) || !this.postId) return;
+    await this.postsService.deletePost(this.postId);
+    this.deleted.emit(this.postId);
+    this.close.emit();
   }
 
   get isOwnPost()  { return this.currentUser?.uid === this.postOwnerId; }

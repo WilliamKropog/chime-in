@@ -1,7 +1,7 @@
 @if (posts.length > 0) {
   <div>
     @for (post of posts; track post.postId) {
-      <app-post [post]="post"></app-post>
+      <app-post [post]="post" (deleted)="onPostDeleted($event)"></app-post>
     }
   </div>
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
 import { Post, Comment } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
@@ -21,6 +21,7 @@ export class PostComponent implements OnInit, OnDestroy{
 
   @Input() post?: Post;
   @ViewChild('menuAnchor') private menuAnchorRef?: ElementRef<HTMLElement>;
+  @Output() deleted = new EventEmitter<string>();
   commentsList: Comment[] = [];
   topComment?: Comment;
   isLiked?: boolean = false; 
@@ -85,6 +86,11 @@ export class PostComponent implements OnInit, OnDestroy{
     if (this.post?.postId) {
       this.router.navigate(['/post', this.post.postId]);
     }
+  }
+
+  onMenuDeleted(postId: string) {
+    this.deleted.emit(postId);
+    this.isPostMenuOpen = false;
   }
 
   get currentUserId(): string {

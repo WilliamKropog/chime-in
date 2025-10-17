@@ -14,14 +14,18 @@
     @if (canBlock) {
       <button mat-stroked-button><mat-icon>block</mat-icon> Block User</button>
     }
-    @if (canBan) {
+    @if (canBan && !isOwnPost) {
       <button mat-stroked-button><mat-icon>gavel</mat-icon> Ban User</button>
     }
-    @if (canBan) {
-      <button mat-stroked-button><mat-icon>app_blocking</mat-icon> Ban Post</button>
+    @if (canBan && !isOwnPost) {
+      <button mat-stroked-button (click)="onBanPost()" style="background-color: green;">
+        <mat-icon>app_blocking</mat-icon> Ban Post
+      </button>
     }
     @if (canDelete) {
-      <button mat-stroked-button><mat-icon>delete</mat-icon> Delete Post</button>
+      <button mat-stroked-button (click)="onDeleteOwnPost()" style="background-color: green;">
+        <mat-icon>delete</mat-icon> Delete Post
+      </button>
     }
     @if (canPromote && !isOwnPost && (ownerIsMod$ | async)) {
       <button mat-stroked-button (click)="onDemoteFromMod()" style="background-color: green;">

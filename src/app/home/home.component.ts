@@ -29,6 +29,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
   }
 
+  onPostDeleted(postId: string) {
+    this.mostRecentPosts = this.mostRecentPosts.filter(p => p.postId !== postId);
+  }
+
   private mergeUniqueById(existing: Post[], incoming: Post[]): Post[] {
     const seen = new Set(existing.map(p => p.postId));
     const dedupIncoming = incoming.filter(p => !seen.has(p.postId));

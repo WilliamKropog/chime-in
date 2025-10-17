@@ -40,8 +40,11 @@ export class UserService {
 
   // ---------- Profiles ----------
   user$(uid: string): Observable<User | undefined> {
-    const ref = doc(this.db, 'users', uid);
+    if (!uid) return of(undefined);
+    return runInInjectionContext(this.env, () => {
+      const ref = doc(this.db, 'users', uid);
     return docData(ref) as Observable<User | undefined>; 
+    });
   }
 
   getUserProfile(uid: string): Observable<any> {

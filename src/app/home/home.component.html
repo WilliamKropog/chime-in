@@ -1,6 +1,9 @@
 @if (mostRecentPosts.length > 0) {
   <div style="margin-top: 120px;">
-    <app-home-posts [posts]="mostRecentPosts"></app-home-posts>
+    <app-home-posts 
+      [posts]="mostRecentPosts" 
+      (deleted)="onPostDeleted($event)">
+    </app-home-posts>
   </div>
 }
 @if (isLoadingPosts) {

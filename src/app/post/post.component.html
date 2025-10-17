@@ -17,7 +17,9 @@
             <app-post-menu
               [postId]="post.postId"
               [postOwnerId]="post.userId"
-              [currentUser]="(currentUser$ | async)!">
+              [currentUser]="(currentUser$ | async)!"
+              (deleted)="onMenuDeleted($event)"
+              (close)="isPostMenuOpen = false">
             </app-post-menu>
           </div>
          }

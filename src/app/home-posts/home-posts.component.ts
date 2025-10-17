@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Post } from 'src/interface';
 
 @Component({
@@ -9,6 +9,7 @@ import { Post } from 'src/interface';
 })
 export class HomePostsComponent implements OnInit, OnDestroy {
   @Input() posts: Post[] = [];
+  @Output() deleted = new EventEmitter<string>();
 
   ngOnInit(): void {
     console.log('HomePostsComponent initialized');
@@ -16,5 +17,9 @@ export class HomePostsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     console.log('HomePostsComponent destroyed');
+  }
+
+  onPostDeleted(postId: string) {
+    this.deleted.emit(postId);
   }
 }
