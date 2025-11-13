@@ -55,7 +55,7 @@ export class SideNavComponent implements OnInit {
 
   onPostCreated(newPost: Post) {
     this.isPostEditorOpen = false;
-    this.postCreated.emit(newPost); // parent listens and prepends
+    this.postCreated.emit(newPost); 
   }
 
   //LOGOUT BUTTON

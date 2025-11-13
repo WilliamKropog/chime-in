@@ -1,36 +1,37 @@
-<div class="post-menu-container">
-  <div class="menu-list" style="z-index: 1;">
-    @if (canEdit) {
-      <button mat-stroked-button><mat-icon>edit</mat-icon> Edit Post</button>
-    }
-    @if (canPromote && !isOwnPost && !(ownerIsMod$ | async)) {
-      <button mat-stroked-button (click)="onPromoteToMod()" style="background-color: green;">
-        <mat-icon>shield</mat-icon> Promote to Mod
-      </button>
-    }
-    @if (canReport) {
-      <button mat-stroked-button><mat-icon>warning</mat-icon> Report</button>
-    }
-    @if (canBlock) {
-      <button mat-stroked-button><mat-icon>block</mat-icon> Block User</button>
-    }
-    @if (canBan && !isOwnPost) {
-      <button mat-stroked-button><mat-icon>gavel</mat-icon> Ban User</button>
-    }
-    @if (canBan && !isOwnPost) {
-      <button mat-stroked-button (click)="onBanPost()" style="background-color: green;">
-        <mat-icon>app_blocking</mat-icon> Ban Post
-      </button>
-    }
-    @if (canDelete) {
-      <button mat-stroked-button (click)="onDeleteOwnPost()" style="background-color: green;">
-        <mat-icon>delete</mat-icon> Delete Post
-      </button>
-    }
-    @if (canPromote && !isOwnPost && (ownerIsMod$ | async)) {
-      <button mat-stroked-button (click)="onDemoteFromMod()" style="background-color: green;">
-        <mat-icon>shield_moon</mat-icon> Demote From Mod
-      </button>
-    }
+<!-- Nothing renders until vm$ emits → no flicker -->
+@if (vm$ | async; as vm) {
+  <div class="post-menu-container">
+    <div class="menu-list" style="z-index: 1;">
+      @if (vm.showEdit)   { <button mat-stroked-button><mat-icon>edit</mat-icon> Edit Post</button> }
+      @if (vm.showReport) { <button mat-stroked-button><mat-icon>warning</mat-icon> Report</button> }
+      @if (vm.showBlock)  { <button mat-stroked-button><mat-icon>block</mat-icon> Block User</button> }
+
+      @if (vm.showBanUser) {
+        <button mat-stroked-button (click)="onBanUser()" style="background-color: green;">
+          <mat-icon>gavel</mat-icon> Ban User
+        </button>
+      }
+      @if (vm.showBanPost) {
+        <button mat-stroked-button (click)="onBanPost()" style="background-color: green;">
+          <mat-icon>app_blocking</mat-icon> Ban Post
+        </button>
+      }
+
+      @if (vm.showDelete)  {
+        <button mat-stroked-button (click)="onDeleteOwnPost()" style="background-color: green;">
+          <mat-icon>delete</mat-icon> Delete Post
+        </button>
+      }
+      @if (vm.showPromote) {
+        <button mat-stroked-button (click)="onPromoteToMod()" style="background-color: green;">
+          <mat-icon>shield</mat-icon> Promote to Mod
+        </button>
+      }
+      @if (vm.showDemote)  {
+        <button mat-stroked-button (click)="onDemoteFromMod()" style="background-color: green;">
+          <mat-icon>shield_moon</mat-icon> Demote From Mod
+        </button>
+      }
+    </div>
   </div>
-</div>
+}

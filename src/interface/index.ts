@@ -33,6 +33,7 @@ export interface Post {
     likes?: Array<string>;
     views: number;
     imageUrl?: string | ArrayBuffer | null | undefined;
+    isHidden?: boolean;
 }
 
 export interface Comment {

@@ -19,7 +19,7 @@ import {
   setDoc,
   serverTimestamp,
   writeBatch,
-  deleteDoc
+  deleteDoc,
 } from '@angular/fire/firestore';
 import {
   Functions,
@@ -59,6 +59,7 @@ export class PostsService {
         postId,
         createdAt: serverTimestamp(),
         clientCreatedAt: Date.now(),
+        isHidden: data.isHidden ?? false,
       };
 
       await setDoc(docRef, payload as any);
@@ -136,9 +137,9 @@ export class PostsService {
     const q = query(
       collection(this.db, 'posts'),
       orderBy('createdAt', 'desc'),
-      limit(10)
+      limit(10),
+      where('isHidden','==',false)
     );
-    // idField ensures each item has postId populated
     return collectionData(q, { idField: 'postId' }) as Observable<Post[]>;
   });
 }
@@ -151,7 +152,9 @@ export class PostsService {
           const base = query(
             collection(this.db, 'posts'),
             orderBy('createdAt', 'desc'),
-            limit(10)
+            limit(10),
+            where('isHidden', '==', false),
+            where('isHidden', '==', null)
           );
           const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
 

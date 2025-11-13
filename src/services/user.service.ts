@@ -15,6 +15,8 @@ import {
   getDocs,
   runTransaction,
   DocumentReference,
+  limit,
+  writeBatch,
 } from '@angular/fire/firestore';
 
 import { Storage, ref as storageRef, getDownloadURL } from '@angular/fire/storage';
@@ -213,6 +215,39 @@ export class UserService {
     return runInInjectionContext(this.env, async () => {
       const ref = doc(this.db, `users/${targetUid}`);
       await updateDoc(ref, { isMod: value });
+    });
+  }
+
+  // ---------- Banning User -------------
+  private async hideAllPostsByUser(targetUid: string, hidden: boolean): Promise<void> {
+    const PAGE = 300;
+    while (true) {
+      const qref = query(
+        collection(this.db, 'posts'),
+        where('userId','==', targetUid),
+        where('isHidden','==', !hidden ? true : false),
+        limit(PAGE)
+      );
+      const snap = await getDocs(qref);
+      if (snap.empty) break;
+      const batch = writeBatch(this.db);
+      snap.docs.forEach(d => batch.update(d.ref, { isHidden: hidden }));
+      await batch.commit();
+      if (snap.size < PAGE) break;
+    }
+  }
+
+  async banUser(targetUid: string): Promise<void> {
+    return runInInjectionContext(this.env, async () => {
+      await updateDoc(doc(this.db, `users/${targetUid}`), { isBanned: true });
+      await this.hideAllPostsByUser(targetUid, true);
+    });
+  }
+
+  async unbanUser(targetUid: string): Promise<void> {
+    return runInInjectionContext(this.env, async () => {
+      await updateDoc(doc(this.db, `users/${targetUid}`), { isBanned: false });
+      await this.hideAllPostsByUser(targetUid, false);
     });
   }
 

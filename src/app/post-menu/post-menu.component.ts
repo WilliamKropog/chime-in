@@ -5,8 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { UserService } from 'src/services/user.service';
-import { map, Observable, shareReplay } from 'rxjs';
+import { combineLatest, from, map, Observable, shareReplay } from 'rxjs';
 import { PostsService } from 'src/services/posts.service';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-post-menu',
@@ -22,37 +23,81 @@ export class PostMenuComponent {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
   @Output() deleted = new EventEmitter<string>();
 
-  constructor(private userService: UserService, private postsService: PostsService) {}
+    vm$!: Observable<{
+      showEdit: boolean;
+      showReport: boolean;
+      showBlock: boolean;
+      showBanUser: boolean;
+      showBanPost: boolean;
+      showDelete: boolean;
+      showPromote: boolean;
+      showDemote: boolean;
+    }>;
+
+  constructor(
+    private userService: UserService, 
+    private postsService: PostsService,
+    private toast: HotToastService
+  ) {}
 
   ownerIsMod$!: Observable<boolean>;
+  ownerIsAdmin$!: Observable<boolean>;
 
   ngOnChanges(): void {
-    this.ownerIsMod$ = this.userService.user$(this.postOwnerId).pipe(
-      map(u => !!u?.isMod),
+    this.ownerIsMod$ = this.userService.user$(this.postOwnerId).pipe(map(u => !!u?.isMod));
+    this.ownerIsAdmin$ = this.userService.user$(this.postOwnerId).pipe(map(u => !!u?.isAdmin));
+
+    this.vm$ = combineLatest([this.ownerIsAdmin$, this.ownerIsMod$]).pipe(
+      map(([ownerIsAdmin, ownerIsMod]) => {
+        const isOwnPost = this.currentUser?.uid === this.postOwnerId;
+        const isAdmin   = !!this.currentUser?.isAdmin;
+        const isMod     = !!this.currentUser?.isMod;
+        const canBan    = isAdmin || isMod;
+
+        return {
+          showEdit:    isOwnPost,
+          showReport:  !isOwnPost,
+          showBlock:   !isOwnPost,
+          showBanUser: canBan && !isOwnPost && !ownerIsAdmin && (isAdmin || !ownerIsMod),
+          showBanPost: canBan && !isOwnPost && !ownerIsAdmin && (isAdmin || !ownerIsMod),
+          showDelete:  isOwnPost,
+          showPromote: isAdmin && !isOwnPost && !ownerIsMod,
+          showDemote:  isAdmin && !isOwnPost && ownerIsMod,
+        };
+      }),
       shareReplay(1)
-    )
+    );
   }
 
-  async onPromoteToMod(): Promise<void> {
-    if (!this.isAdmin) return;
-    try {
-      await this.userService.promoteToMod(this.postOwnerId);
-      console.log("User successfully promoted to mod.");
-      this.close.emit();
-    } catch (e) {
-      console.error('Promote failed', e);
-    }
+  onPromoteToMod(): void {
+  if (!this.isAdmin) return;
+  from(this.userService.promoteToMod(this.postOwnerId))
+    .pipe(this.toast.observe({
+      loading: 'Promoting user to mod...',
+      success: 'User promoted!',
+      error: 'Error promoting user.'
+    }))
+    .subscribe({ next: () => this.close.emit() });
   }
 
-  async onDemoteFromMod(): Promise<void> {
+  onDemoteFromMod(): void {
     if (!this.isAdmin) return;
-    try {
-      await this.userService.demoteFromMod(this.postOwnerId);
-      console.log("User successfully demoted from mod.");
-      this.close.emit();
-    } catch (e) {
-      console.error('Demote failed', e);
-    }
+    from(this.userService.demoteFromMod(this.postOwnerId))
+      .pipe(this.toast.observe({
+        loading: 'Demoting user from mod...',
+        success: 'User demoted!',
+        error: 'Error demoting user.'
+    }))
+    .subscribe({ next: () => this.close.emit() });
+  }
+
+  onBanUser(): void {
+    from(this.userService.banUser(this.postOwnerId))
+      .pipe(this.toast.observe({ 
+        loading: 'Banning user...', 
+        success: 'User banned.', 
+        error: 'Ban failed.' }))
+      .subscribe({ next: () => this.close.emit() });
   }
 
   async onDeleteOwnPost(): Promise<void> {
