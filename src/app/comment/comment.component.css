@@ -59,9 +59,7 @@
   .comment-buttons {
     grid-area: buttons;
     display: flex;
-    position: absolute;
     margin-top: 35px;
-    justify-content: right;
   }
 
   .comment-buttons button{
@@ -79,9 +77,7 @@
     color: green;
   }
 
-
   .comment-buttons div {
-    margin-right: 6px;
     font-size: 16px;
     padding-top: 10px;
   }

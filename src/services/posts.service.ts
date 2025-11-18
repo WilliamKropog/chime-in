@@ -154,7 +154,7 @@ export class PostsService {
             orderBy('createdAt', 'desc'),
             limit(10),
             where('isHidden', '==', false),
-            where('isHidden', '==', null)
+            // where('isHidden', '==', null)
           );
           const q = this.lastVisible ? query(base, startAfter(this.lastVisible)) : base;
 

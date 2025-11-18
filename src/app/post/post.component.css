@@ -1,5 +1,5 @@
 .post {
-    width: 600px;
+    width: 625px;
     background-color: rgb(10, 26, 14);
     border-radius: 20px;
     height: auto;
@@ -88,9 +88,9 @@
 .post-content {
     display: grid;
     grid-template-areas:
-        'pfp username timestamp header views options'
-        'body body body body body body'
-        'footer footer footer footer footer footer';
+        'pfp username timestamp header header  views options'
+        'body body body body body body  body'
+        'footer footer footer footer footer footer footer';
     gap: 20px;
     width: 100%;
     justify-content: left;
