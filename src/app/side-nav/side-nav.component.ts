@@ -6,6 +6,8 @@ import { concatMap } from 'rxjs';
 import { ImageUploadService } from 'src/services/image-upload.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Post } from 'src/interface';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     selector: 'app-side-nav',
