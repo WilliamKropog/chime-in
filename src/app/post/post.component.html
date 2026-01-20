@@ -1,13 +1,23 @@
 @if (post) {
-  <div class="post" >
+  <div
+    class="post"
+    role="link"
+    tabindex="0"
+    aria-label="Open post"
+    (click)="onPostCardClick($event)"
+    (keydown)="onPostCardKeydown($event)"
+  >
     <div class="post-content">
-      <img [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"
-        style="height: 60px;">
+      <img
+        [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"
+        alt="Profile Picture"
+        (click)="stopEvent($event)"
+      >
       <div class="item6">• {{ post.createdAt | relativeTime}}</div>
       <div class="item3">{{ post.views }} views</div>
       <div class="item8">
         <div class="menu-anchor" #menuAnchor>
-          <button mat-mini-fab (click)="openPostMenu()">
+          <button mat-mini-fab (click)="stopEvent($event); openPostMenu()">
             <mat-icon>more_vert</mat-icon>
           </button>
 
@@ -26,15 +36,15 @@
         </div>
       </div>
 
-      <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
+      <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;" (click)="stopEvent($event)">
         <h1>{{ post.displayName }}</h1>
       </a>
       @if (!post.imageUrl) {
-        <div class="item4 body" (click)="visitPost()">
+        <div class="item4 body">
           {{ post.body }}
         </div>
       } @else {
-        <div class="item4 body" (click)="visitPost()">
+        <div class="item4 body">
           {{ post.body }}
           <img [src]="post.imageUrl" alt="Post Image"
             style=
@@ -47,37 +57,39 @@
         </div>
       }
       <div class="item5">
-        <button mat-mini-fab (click)="likePost()" [ngClass]="{'liked': isLiked}"
-          style="margin-left: 40px;">
+        <button mat-mini-fab (click)="stopEvent($event); likePost()" [ngClass]="{'liked': isLiked}">
           <mat-icon>thumb_up</mat-icon>
         </button>
         <div style="color: lightgreen;">
           {{ post.likeCount }}
         </div>
-        <button mat-mini-fab (click)="dislikePost()" [ngClass]="{'disliked': isDisliked}">
+        <button mat-mini-fab (click)="stopEvent($event); dislikePost()" [ngClass]="{'disliked': isDisliked}">
           <mat-icon>thumb_down</mat-icon>
         </button>
         <div style="color: lightcoral;">
           {{ post.dislikeCount }}
         </div>
-        <button mat-mini-fab style="background-color: gray;">
+        <button mat-mini-fab style="background-color: gray;" (click)="stopEvent($event)">
           <mat-icon>bookmark</mat-icon>
         </button>
         <div style="color: lightgoldenrodyellow">
           {{ post.bookmarkCount }}
         </div>
-        <button mat-mini-fab style="background-color: gray;">
+        <button mat-mini-fab style="background-color: gray;" (click)="stopEvent($event)">
           <mat-icon>repeat</mat-icon>
         </button>
         <div style="color: lightblue">
           {{ post.repostCount }}
         </div>
-        <button mat-mini-fab
-          style="width: 100px; border-radius: 10px; margin-left: 200px;"
-          (click)="openCommentEditor()" [ngClass]="{'commenting': isCommentEditorOpen}">
+        <button
+          class="comment-button"
+          mat-mini-fab
+          (click)="stopEvent($event); openCommentEditor()"
+          [ngClass]="{'commenting': isCommentEditorOpen}"
+        >
           <mat-icon>chat_bubble</mat-icon>
         </button>
-        <div style="z-index: -1;">
+        <div class="comment-count">
           {{ post.commentCount }}
         </div>
       </div>

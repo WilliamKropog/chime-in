@@ -91,7 +91,6 @@ export class ProfileComponent implements OnInit{
     this.isLoadingPosts = true;
     this.postsService.getUserPosts(userId).subscribe((posts) => {
       this.userPosts = posts;
-      this.incrementViewCount(posts);
       this.isLoadingPosts = false;
     });
   }
@@ -125,25 +124,11 @@ export class ProfileComponent implements OnInit{
     this.isLoadingPosts = true;
     this.postsService.getMoreUserPosts(this.currentUserId).subscribe((posts) => {
       this.userPosts = [...this.userPosts, ...posts];
-      this.incrementViewCount(posts);
       this.isLoadingPosts = false;
     });
   }
 
-  incrementViewCount(posts: Post[]): void {
-    posts.forEach(post => {
-      if (!this.viewedPosts.has(post.postId)) {
-        this.viewedPosts.add(post.postId);
-        this.incrementPostView(post.postId);
-      }
-    })
-  }
-
-  incrementPostView(postId: string): void {
-    this.postsService.incrementView(postId).then(() => {
-      console.log(`Incremented view count for post ${postId}`);
-    })
-  }
+  // Views are counted on the post page (open), not when a profile feed renders.
 
   //Following Functions:
   checkFollowingStatus(): void {

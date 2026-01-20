@@ -4,9 +4,10 @@
     display: grid;
     justify-content: left;
     position: relative;
-    grid-template-areas: 
-        'pfp username username timestamp timestamp header header buttons'
-        'body body body body body body body buttons';
+    grid-template-columns: 70px 1fr auto;
+    grid-template-areas:
+        'pfp username timestamp'
+        'pfp body buttons';
     gap: 10px;
     width: 100%;
     height: auto;
@@ -17,10 +18,8 @@
     width: 50px;
     height: 50px;
     border-radius: 100%;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-left: 25px;
-    position: absolute;
+    margin: 16px 0 0 14px;
+    position: static;
     object-fit: cover;
     object-position: center;
     outline-style: solid;
@@ -32,34 +31,41 @@
     grid-area: username;
     font-size: 18px;
     color: white;
-    text-align: center;
+    text-align: left;
     margin-top: 18px;
-    margin-left: 18px;
+    margin-left: 0;
   }
 
   .time-stamp {
     grid-area: timestamp;
     font-size: 12px;
-    width: 150px;
     color: gray;
     display: flex;
-    position: absolute;
-    text-align: left;
+    position: static;
+    justify-content: flex-end;
+    align-items: center;
     margin-top: 20px;
+    padding-right: 12px;
   }
 
   .comment-body {
     grid-area: body;
     font-size: 16px;
     color: white;
-    margin-left: 100px;
-    width: 360px;
+    margin-left: 0;
+    width: auto;
+    max-width: 100%;
+    padding-right: 12px;
+    word-break: break-word;
   } 
 
   .comment-buttons {
     grid-area: buttons;
     display: flex;
-    margin-top: 35px;
+    margin-top: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .comment-buttons button{

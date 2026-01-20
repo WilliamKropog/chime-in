@@ -16,13 +16,14 @@
 }
 
 .scrollable-comments {
-    overflow-y: hidden;
-    overflow-x: hidden;
+    /* Don’t clip comment content in the default (collapsed) view */
+    overflow: visible;
     height: auto;
 }
 
 .scrollable-comments.open {
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     max-height: 500px;
 }
 

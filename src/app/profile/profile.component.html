@@ -1,97 +1,77 @@
 @if (user$ | async; as user) {
-  <div class="profile-page">
-    <div class="profile-page-body">
-      <!--Profile Page Header-->
-      <div class="background-image">
-        @if (!hasBackgroundImage) {
-          <div style=
-            "background-color: rgb(10, 26, 14);
-            width: 100%;
-            height: 100%;">
-          </div>
-        }
+  <div class="page profile-page">
+    <div class="profile-header card">
+      <div class="profile-banner">
         @if (hasBackgroundImage) {
-          <img [src]="user?.backgroundImageURL" alt="User Background" style=
-            "width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;">
-        }
-      </div>
-      <div class="profile-image">
-        <img [src]= "userPhotoUrl ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
-      </div>
-      <!--Edit Profile Button-->
-      @if (loggedInUserId === currentUserId) {
-        <button mat-mini-fab (click)="openProfileEditor()">
-          Edit Profile
-          <mat-icon>edit</mat-icon>
-        </button>
-      }
-      @if (loggedInUserId !== currentUserId && !isFollowing) {
-        <button mat-mini-fab (click)="follow()">
-          &nbsp;Follow
-          <mat-icon>person_add</mat-icon>
-        </button>
-      }
-      @if (loggedInUserId !== currentUserId && isFollowing) {
-        <button
-          mat-mini-fab (click)="unfollow()"
-          [ngClass]="{'followed': isFollowing}">
-          &nbsp;Unfollow
-          <mat-icon>person_remove</mat-icon>
-        </button>
-      }
-      <!--Profile Stats-->
-      <div class="profile-stats">
-        <h1>
-          <b>&#64;{{ user?.username }}</b>
-        </h1>
-        <p>
-          <b>Following: {{ user?.followingCount ?? 0 }} Followers: {{ user?.followerCount ?? 0}}</b>
-        </p>
-      </div>
-      <!--Profile Bio-->
-      <div class="profile-bio">
-        <h1><b>Bio:</b></h1>
-        @if (hasBio) {
-          <p>{{ user?.bio }}</p>
+          <img class="profile-banner__img" [src]="user?.backgroundImageURL" alt="User Background">
         } @else {
-          <p>No bio yet.</p>
+          <div class="profile-banner__empty" aria-hidden="true"></div>
         }
       </div>
-      <!--Profile Navigation Bar-->
-      <!--To-do: First and Last child hover styling-->
-      <div class="profile-navbar" role="banner">
-        <div>
-          Posts
-        </div>
-        <div>
-          Likes
-        </div>
-        <div>
-          Replies
-        </div>
-        <div>
-          Reposts
-        </div>
-        <div>
-          Highlights
+
+      <div class="profile-header__row">
+        <img class="profile-avatar" [src]="userPhotoUrl" alt="Profile Picture"/>
+
+        <div class="profile-actions">
+          @if (loggedInUserId === currentUserId) {
+            <button class="profile-action" mat-mini-fab (click)="openProfileEditor()">
+              Edit Profile
+              <mat-icon>edit</mat-icon>
+            </button>
+          }
+          @if (loggedInUserId !== currentUserId && !isFollowing) {
+            <button class="profile-action" mat-mini-fab (click)="follow()">
+              Follow
+              <mat-icon>person_add</mat-icon>
+            </button>
+          }
+          @if (loggedInUserId !== currentUserId && isFollowing) {
+            <button
+              class="profile-action"
+              mat-mini-fab
+              (click)="unfollow()"
+              [ngClass]="{'followed': isFollowing}"
+            >
+              Unfollow
+              <mat-icon>person_remove</mat-icon>
+            </button>
+          }
         </div>
       </div>
-      <!--User's Posts-->
-      <div class="user-posts">
-        <app-profile-posts [posts]="userPosts"></app-profile-posts>
+
+      <div class="profile-stats">
+        <h1><b>&#64;{{ user?.username }}</b></h1>
+        <p><b>Following: {{ user?.followingCount ?? 0 }} · Followers: {{ user?.followerCount ?? 0}}</b></p>
       </div>
-      @if (isLoadingPosts) {
-        <div class="loading-spinner"></div>
-      }
-      @if (isLoadingPosts) {
-        <div class="loading-posts">
-          Loading Posts...
-        </div>
+    </div>
+
+    <div class="profile-bio card">
+      <h2><b>Bio</b></h2>
+      @if (hasBio) {
+        <p>{{ user?.bio }}</p>
+      } @else {
+        <p class="muted">No bio yet.</p>
       }
     </div>
+
+    <div class="profile-navbar card" role="navigation" aria-label="Profile sections">
+      <button type="button">Posts</button>
+      <button type="button" disabled>Likes</button>
+      <button type="button" disabled>Replies</button>
+      <button type="button" disabled>Reposts</button>
+      <button type="button" disabled>Highlights</button>
+    </div>
+
+    <div class="user-posts">
+      <app-profile-posts [posts]="userPosts"></app-profile-posts>
+    </div>
+
+    @if (isLoadingPosts) {
+      <div class="loading-spinner"></div>
+      <div class="loading-posts">
+        Loading Posts...
+      </div>
+    }
   </div>
 }
 

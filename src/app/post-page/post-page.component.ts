@@ -11,19 +11,28 @@ import { Post } from 'src/interface';
 })
 export class PostPageComponent implements OnInit {
   post: Post | undefined = undefined;
+  isLoading = true;
+  notFound = false;
 
   constructor(private route: ActivatedRoute, private postsService: PostsService) {}
 
   ngOnInit(): void {
     const postId = this.route.snapshot.paramMap.get('postId');
     if (postId) {
+      // A "view" should be counted on opening the post page (not on feed load).
+      this.postsService.incrementView(postId);
       this.loadPost(postId);
+    } else {
+      this.isLoading = false;
+      this.notFound = true;
     }
   }
 
   loadPost(postId: string): void {
     this.postsService.getPostById(postId).subscribe((post) => {
       this.post = post;
+      this.isLoading = false;
+      this.notFound = !post;
     });
   }
 

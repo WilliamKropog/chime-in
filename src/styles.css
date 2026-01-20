@@ -1,4 +1,116 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global theme + layout helpers for a cleaner demo UI */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  /* Layout */
+  --nav-height: 60px;
+  --sidebar-width: 325px;
+  --page-gutter: 24px;
+
+  /* Colors */
+  --bg: #070b08;
+  --surface: #0a1a0e; /* matches existing dark green vibe */
+  --surface-2: #0f2416;
+  --text: rgba(255, 255, 255, 0.92);
+  --muted: rgba(255, 255, 255, 0.65);
+  --border: rgba(255, 255, 255, 0.12);
+
+  /* Brand */
+  --accent: #10c403;
+  --accent-2: #00d084;
+
+  /* UI */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: radial-gradient(900px 500px at 50% 0%, rgba(16, 196, 3, 0.12), transparent 60%),
+    var(--bg);
+  font-family: Roboto, "Helvetica Neue", system-ui, -apple-system, Segoe UI, sans-serif;
+  padding-top: var(--nav-height);
+}
+
+/* Center column (router outlet) sits between fixed sidebars */
+.app-content {
+  min-height: calc(100vh - var(--nav-height));
+  margin-left: var(--sidebar-width);
+  margin-right: var(--sidebar-width);
+  padding: var(--page-gutter);
+}
+
+/* Simple “page” wrapper for templates that want centered content */
+.page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Generic “card” */
+.card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 80%), var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(16, 196, 3, 0.6);
+  box-shadow: 0 0 0 3px rgba(16, 196, 3, 0.16);
+}
+
+/* Links */
+a {
+  color: inherit;
+}
+
+/* Better scrollbars on desktop */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+/* Responsive: hide fixed sidebars + remove gutters on smaller screens */
+@media (max-width: 1100px) {
+  .app-content {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 16px;
+  }
+
+  .sidenav,
+  .news-container {
+    display: none !important;
+  }
+}

@@ -65,7 +65,7 @@ export class RecommendedPostComponent implements OnInit, OnDestroy {
     if (this.isLiked) {
       this.isLiked = false;
       this.post!.likeCount!--;
-      this.postsService.removeLike(this.post.postId, userId)
+      this.postsService.removeLike(this.post.postId)
         .then(() => {
           console.log('Post unliked successfully');
         })
@@ -75,7 +75,7 @@ export class RecommendedPostComponent implements OnInit, OnDestroy {
     } else {
       this.isLiked = true;
       this.post!.likeCount!++;
-      this.postsService.addLike(this.post.postId, userId)
+      this.postsService.addLike(this.post.postId)
         .then(() => {
           console.log('Post liked successfully');
         })
@@ -92,7 +92,7 @@ export class RecommendedPostComponent implements OnInit, OnDestroy {
     if (this.isDisliked) {
       this.isDisliked = false;
       this.post!.dislikeCount!--;
-      this.postsService.removeDislike(this.post.postId, userId)
+      this.postsService.removeDislike(this.post.postId)
       .then(() => {
         console.log('Post undisliked successfully');
       })
@@ -102,7 +102,7 @@ export class RecommendedPostComponent implements OnInit, OnDestroy {
     } else {
       this.isDisliked = true;
       this.post!.dislikeCount!++;
-      this.postsService.addDislike(this.post.postId, userId)
+      this.postsService.addDislike(this.post.postId)
         .then(() => {
           console.log('Post disliked successfully.');
         })

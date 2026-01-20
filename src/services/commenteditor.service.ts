@@ -24,31 +24,31 @@ export class CommentEditorService {
     this.openEditorSubject.next(null);
   }
 
-  async addLikeToComment(postId: string, commentId: string, userId: string): Promise<void> {
+  async addLikeToComment(postId: string, commentId: string): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'addLikeToComment');
-      await fn({ postId, commentId, userId });
+      await fn({ postId, commentId });
     });
   }
 
-  async removeLikeFromComment(postId: string, commentId: string, userId: string): Promise<void> {
+  async removeLikeFromComment(postId: string, commentId: string): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'removeLikeFromComment');
-      await fn({ postId, commentId, userId });
+      await fn({ postId, commentId });
     });
   }
 
-  async addDislikeToComment(postId: string, commentId: string, userId: string): Promise<void> {
+  async addDislikeToComment(postId: string, commentId: string): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'addDislikeToComment');
-      await fn({ postId, commentId, userId });
+      await fn({ postId, commentId });
     });
   }
 
-  async removeDislikeFromComment(postId: string, commentId: string, userId: string): Promise<void> {
+  async removeDislikeFromComment(postId: string, commentId: string): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'removeDislikeFromComment');
-      await fn({ postId, commentId, userId });
+      await fn({ postId, commentId });
     });
   }
 
