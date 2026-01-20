@@ -43,7 +43,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isLoadingPosts = true;
     this.postsService.getMostRecentPosts().subscribe(posts => {
       this.mostRecentPosts = posts;
-      this.incrementViewCount(posts);
       this.isLoadingPosts = false;
     });
   }
@@ -55,7 +54,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     const s = this.postsService.getMorePosts().subscribe({
       next: posts => {
         this.mostRecentPosts = this.mergeUniqueById(this.mostRecentPosts, posts);
-        this.incrementViewCount(posts);
         this.isLoadingPosts = false;
       },
       error: () => (this.isLoadingPosts = false)
@@ -77,16 +75,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, 200);
   }
 
-  incrementViewCount(posts: Post[]): void {
-    posts.forEach(post => {
-      if (post?.postId && !this.viewedPosts.has(post.postId)) {
-        this.viewedPosts.add(post.postId);
-        this.incrementPostView(post.postId);
-      }
-    });
-  }
-
-  incrementPostView(postId: string): void {
-    this.postsService.incrementView(postId);
-  }
+  // Views are counted on the post page (open), not when a feed renders.
 }

@@ -65,11 +65,18 @@ exports.incrementCommentCount = functions.https.onCall(
     });
 
 exports.addLike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId || !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to like posts.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -105,11 +112,18 @@ exports.addLike = functions.https.onCall(async (data, context) => {
 });
 
 exports.removeLike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId || !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to unlike posts.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -143,11 +157,18 @@ exports.removeLike = functions.https.onCall(async (data, context) => {
 });
 
 exports.addDislike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId || !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to dislike posts.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -182,11 +203,18 @@ exports.addDislike = functions.https.onCall(async (data, context) => {
 });
 
 exports.removeDislike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId, !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to remove dislikes.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -220,11 +248,18 @@ exports.removeDislike = functions.https.onCall(async (data, context) => {
 });
 
 exports.addLikeToComment = functions.https.onCall(async (data, context) => {
-  const {postId, commentId, userId} = data;
-  if (!postId || !commentId || !userId) {
+  const {postId, commentId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to like comments.",
+    );
+  }
+  if (!postId || !commentId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid commentId and userId.",
+        "The function must be called with valid postId and commentId.",
     );
   }
 
@@ -266,11 +301,18 @@ exports.addLikeToComment = functions.https.onCall(async (data, context) => {
 
 exports.removeLikeFromComment = functions.https
     .onCall(async (data, context) => {
-      const {postId, commentId, userId} = data;
-      if (!postId || !commentId || !userId) {
+      const {postId, commentId} = data;
+      const userId = context.auth && context.auth.uid;
+      if (!userId) {
+        throw new functions.https.HttpsError(
+            "unauthenticated",
+            "You must be signed in to unlike comments.",
+        );
+      }
+      if (!postId || !commentId) {
         throw new functions.https.HttpsError(
             "invalid-argument",
-            "The function must be called with valid commentId and userId.",
+            "The function must be called with valid postId and commentId.",
         );
       }
 
@@ -309,11 +351,18 @@ exports.removeLikeFromComment = functions.https
     });
 
 exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
-  const {postId, commentId, userId} = data;
-  if (!postId || !commentId || !userId) {
+  const {postId, commentId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to dislike comments.",
+    );
+  }
+  if (!postId || !commentId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid commentId and userId.",
+        "The function must be called with valid postId and commentId.",
     );
   }
 
@@ -355,11 +404,18 @@ exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
 
 exports.removeDislikeFromComment = functions.https
     .onCall(async (data, context) => {
-      const {postId, commentId, userId} = data;
-      if (!postId || !commentId || !userId) {
+      const {postId, commentId} = data;
+      const userId = context.auth && context.auth.uid;
+      if (!userId) {
+        throw new functions.https.HttpsError(
+            "unauthenticated",
+            "You must be signed in to remove comment dislikes.",
+        );
+      }
+      if (!postId || !commentId) {
         throw new functions.https.HttpsError(
             "invalid-argument",
-            "The function must be called with valid commentId and userId.",
+            "The function must be called with valid postId and commentId.",
         );
       }
 

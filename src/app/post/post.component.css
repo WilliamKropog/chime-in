@@ -1,11 +1,22 @@
 .post {
-    width: 625px;
+    width: 100%;
+    max-width: 625px;
+    box-sizing: border-box;
     background-color: rgb(10, 26, 14);
     border-radius: 20px;
     height: auto;
-    margin: auto;
-    margin-bottom: 40px;
+    margin: 0 auto 40px auto;
     padding-bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.post:hover {
+  border-color: rgba(16, 196, 3, 0.22);
+}
+
+.post:focus-visible {
+  outline: 3px solid rgba(16, 196, 3, 0.35);
+  outline-offset: 3px;
 }
 
 .item1 {
@@ -33,12 +44,26 @@
     display: flex;
     margin-top: 10px;
     z-index: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 0 14px 12px 14px;
 }
 
 .item5 button {
     background-color: green;
     transform: scale(0.8);
     margin-left: 6px;
+}
+
+.comment-button {
+  width: 100px;
+  border-radius: 10px;
+  margin-left: auto; /* push to the right when there’s room */
+}
+
+.comment-count {
+  margin-right: 6px;
 }
 
 .item5 button.liked {
@@ -95,6 +120,7 @@
     width: 100%;
     justify-content: left;
     padding-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .post-content img {
@@ -108,6 +134,7 @@
     outline-style: solid;
     outline-color: green;
     outline-width: 2px;
+    height: 60px;
 }
 
 .post-content h1 {
@@ -128,9 +155,25 @@
 .body {
     font-size: 22px;
     line-height: normal;
-    width: 500px;
     color: white;
-    margin-left: 50px;
+    padding: 0 20px 0 20px;
+    word-break: break-word;
+}
+
+/* Keep the card from overflowing the center column on smaller screens */
+@media (max-width: 1400px) {
+  .item5 {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .item5 button {
+    margin-left: 0;
+  }
+
+  .comment-button {
+    margin-left: 0;
+  }
 }
   
 .comment-editor.open {

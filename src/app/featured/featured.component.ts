@@ -51,7 +51,6 @@ export class FeaturedComponent implements OnInit, OnDestroy{
     this.postsService.getPostsFromUsers(this.followedUserIds, this.postLoadLimit)
       .subscribe(posts => {
         this.followedPosts = posts;
-        this.incrementViewCount(posts);
         this.isLoadingPosts = false;
       });
   }
@@ -63,7 +62,6 @@ export class FeaturedComponent implements OnInit, OnDestroy{
     this.postsService.getMorePostsFromUsers(this.followedUserIds, this.postLoadLimit)
       .subscribe(posts => {
         this.followedPosts = [...this.followedPosts, ...posts];
-        this.incrementViewCount(posts);
         this.isLoadingPosts = false;
       });
   }
@@ -114,17 +112,6 @@ export class FeaturedComponent implements OnInit, OnDestroy{
     }, 400);
   }
 
-  incrementViewCount(posts: Post[]): void {
-    posts.forEach(post => {
-      if (!this.viewedPosts.has(post.postId)) {
-        this.viewedPosts.add(post.postId);
-        this.incrementPostView(post.postId);  
-      }
-    });
-  }
-
-  incrementPostView(postId: string): void {
-    this.postsService.incrementView(postId);
-  }
+  // Views are counted on the post page (open), not when a feed renders.
 
 }

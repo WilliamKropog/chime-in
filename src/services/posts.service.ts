@@ -346,17 +346,17 @@ export class PostsService {
     });
   }
 
-  async addLike(postId: string | undefined, userId: string): Promise<void> {
+  async addLike(postId: string | undefined): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'addLike');
-      await fn({ postId, userId });
+      await fn({ postId });
     });
   }
 
-  async removeLike(postId: string | undefined, userId: string): Promise<void> {
+  async removeLike(postId: string | undefined): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'removeLike');
-      await fn({ postId, userId });
+      await fn({ postId });
     });
   }
 
@@ -368,17 +368,17 @@ export class PostsService {
     });
   }
 
-  async addDislike(postId: string | undefined, userId: string): Promise<void> {
+  async addDislike(postId: string | undefined): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'addDislike');
-      await fn({ postId, userId });
+      await fn({ postId });
     });
   }
 
-  async removeDislike(postId: string | undefined, userId: string): Promise<void> {
+  async removeDislike(postId: string | undefined): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'removeDislike');
-      await fn({ postId, userId });
+      await fn({ postId });
     });
   }
 

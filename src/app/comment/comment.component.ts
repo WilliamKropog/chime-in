@@ -54,7 +54,7 @@ export class CommentComponent implements OnInit, OnDestroy{
       this.isLiked = false;
       this.comment!.likeCount!--;
       this.commentEditorService
-      .removeLikeFromComment(this.postId, this.comment.commentId, this.userId)
+      .removeLikeFromComment(this.postId, this.comment.commentId)
       .then(() => {
         console.log('Comment unliked successfully.');
       })
@@ -70,7 +70,7 @@ export class CommentComponent implements OnInit, OnDestroy{
       this.isLiked = true;
       this.comment!.likeCount!++;
       this.commentEditorService
-      .addLikeToComment(this.postId, this.comment.commentId, this.userId)
+      .addLikeToComment(this.postId, this.comment.commentId)
       .then(() => {
         console.log('Comment liked successfully.');
       })
@@ -90,7 +90,7 @@ export class CommentComponent implements OnInit, OnDestroy{
       this.isDisliked = false;
       this.comment!.dislikeCount!--;
       this.commentEditorService
-        .removeDislikeFromComment(this.postId, this.comment.commentId, this.userId)
+        .removeDislikeFromComment(this.postId, this.comment.commentId)
         .then(() => {
           console.log('Comment undisliked successfully.');
         })
@@ -101,7 +101,7 @@ export class CommentComponent implements OnInit, OnDestroy{
       this.isDisliked = true;
       this.comment!.dislikeCount!++;
       this.commentEditorService
-        .addDislikeToComment(this.postId, this.comment.commentId, this.userId)
+        .addDislikeToComment(this.postId, this.comment.commentId)
         .then(() => {
           console.log('Comment disliked successfully.');
         })

@@ -3,50 +3,94 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 60px;
+    height: var(--nav-height);
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-color: #001902;
-    color: white;
+    gap: 16px;
+    padding: 0 18px;
+    background: rgba(0, 25, 2, 0.75);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text);
     font-weight: 600;
-    font-size: 20px;
+    font-size: 16px;
     z-index: 2;
-  }
-
-  .toolbar div:last-child {
-    border-right: none;
-  }
-
-  .toolbar div:first-child {
-    border-left: none;
-  }
-
-  .toolbar img {
-    margin: 0 16px;
   }
 
   .toolbar a {
     text-decoration: none;
-    color: white;
-    border-right: 1px solid #ffffff;
-    width: 20%;
-    text-align: center;
-    line-height: 60px;
-
+    color: inherit;
   }
 
-  .toolbar a:not(:last-child):hover {
-    transition: 0.4s;
-    background: rgb(0, 53, 13);
-}
-
-  .toolbar a:not(:last-child):hover mat-icon {
-    animation: rotate 0.4s linear;
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 12px;
   }
 
-  .toolbar a:last-child {
-    cursor: default; 
+  .brand:hover {
+    background: rgba(16, 196, 3, 0.10);
+  }
+
+  .brand__logo {
+    height: 36px;
+    width: 36px;
+    object-fit: contain;
+  }
+
+  .brand__name {
+    font-size: 18px;
+    letter-spacing: 0.2px;
+  }
+
+  .nav-links {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    transition: background 0.15s ease;
+  }
+
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .nav-link.active {
+    background: rgba(16, 196, 3, 0.14);
+    border: 1px solid rgba(16, 196, 3, 0.22);
+  }
+
+  .search {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+  }
+
+  .search input {
+    width: min(320px, 42vw);
+    border: none;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    outline: none;
+  }
+
+  .search input:focus {
+    box-shadow: none;
   }
   
   .Following {
@@ -59,9 +103,9 @@
 
   .FollowingNotification {
     position: absolute;
-    top: 10px;
-    right: -20px;
-    background-color: red;
+    top: -6px;
+    right: -10px;
+    background-color: #ef4444;
     color: white;
     border-radius: 50%;
     width: 22px;
@@ -83,6 +127,11 @@
   }
 
   .mat-icon {
-    color: limegreen;
+    color: var(--accent);
   }
 
+  @media (max-width: 1100px) {
+    .search {
+      display: none;
+    }
+  }

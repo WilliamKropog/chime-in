@@ -1,45 +1,45 @@
 <div class="toolbar" role="banner">
-  <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
-    <div style="display: flex; align-items: center; left: 0;">
-      <img
-        src="assets/images/2CentsLogo2.png"
-        alt="2Cents Logo"
-        style="height: 50px; width: 50px;"
-        />
-      <span>2Cents</span>
-    </div>
+  <a class="brand" routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <img
+      class="brand__logo"
+      src="assets/images/2CentsLogo2.png"
+      alt="2Cents Logo"
+    />
+    <span class="brand__name">2Cents</span>
   </a>
 
-  <a routerLink="/featured" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="onFollowingClick()">
-    <div class="Following">
-      <mat-icon class="icon gold">grade</mat-icon>
-      Following
-      @if (unseenPostsCount > 0) {
-        <div class="FollowingNotification">
-          {{ unseenPostsCount }}
-        </div>
-      }
-    </div>
-  </a>
+  <div class="nav-links">
+    <a
+      class="nav-link"
+      routerLink="/featured"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      (click)="onFollowingClick()"
+    >
+      <span class="Following">
+        <mat-icon class="icon gold">grade</mat-icon>
+        Following
+        @if (unseenPostsCount > 0) {
+          <span class="FollowingNotification">
+            {{ unseenPostsCount }}
+          </span>
+        }
+      </span>
+    </a>
 
-  <a routerLink="/fyp" routerLinkActive="active" ariaCurrentWhenActive="page">
-    <div>
+    <a class="nav-link" routerLink="/fyp" routerLinkActive="active" ariaCurrentWhenActive="page">
       <mat-icon class="icon red">local_fire_department</mat-icon>
       FYP
-    </div>
-  </a>
+    </a>
 
-  <a routerLink="/collective" routerLinkActive="active" ariaCurrentWhenActive="page">
-    <div>
+    <a class="nav-link" routerLink="/collective" routerLinkActive="active" ariaCurrentWhenActive="page">
       <mat-icon class="icon purple">diversity_3</mat-icon>
       Collective
-    </div>
-  </a>
+    </a>
+  </div>
 
-  <a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
-    <div style="display: flex; flex-direction: row; align-items: center; justify-self: center; height: 100%;">
-      <mat-icon class="icon cyan">search</mat-icon>
-      <input type="text" placeholder="Work in progres..." style="height: 20px; width: 250px; margin-left: 10px; padding: 5px; border-radius: 10px; border: 1px solid #ccc;">
-    </div>
-  </a>
+  <div class="search" aria-label="Search (work in progress)">
+    <mat-icon class="icon cyan">search</mat-icon>
+    <input type="text" placeholder="Search (work in progress)..." />
+  </div>
 </div>

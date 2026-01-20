@@ -1,5 +1,13 @@
-<div class="post-page-container">
-  @if (post) {
+<div class="page post-page-container">
+  @if (isLoading) {
+    <div class="post-page-loading card">
+      Loading post...
+    </div>
+  } @else if (post) {
     <app-post [post]="post"></app-post>
+  } @else if (notFound) {
+    <div class="post-page-loading card">
+      Post not found.
+    </div>
   }
 </div>

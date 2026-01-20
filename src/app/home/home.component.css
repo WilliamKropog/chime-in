@@ -1,19 +1,23 @@
+  .home-page {
+    padding-top: 12px;
+  }
+
   .loading-posts {
     display: flex;
     justify-content: center;
     margin: auto;
-    font-size: 32px;
+    font-size: 22px;
+    color: var(--muted);
   }
 
   .loading-spinner {
-    border: 6px solid limegreen;
+    border: 6px solid rgba(255, 255, 255, 0.12);
     border-radius: 50%;
-    border-top: 6px solid darkgreen;
+    border-top: 6px solid var(--accent);
     width: 40px;
     height: 40px;
     animation: spin 2s linear infinite;
     margin: 20px auto;
-    margin-top: 120px;
   }
 
   @keyframes spin {

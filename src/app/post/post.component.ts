@@ -88,6 +88,32 @@ export class PostComponent implements OnInit, OnDestroy{
     }
   }
 
+  stopEvent(event: Event): void {
+    event.stopPropagation();
+  }
+
+  onPostCardClick(event: MouseEvent): void {
+    // Respect modifier keys for “open in new tab” behavior.
+    if (!this.post?.postId) return;
+    if (event.button !== 0) return; // only left click
+
+    if (event.metaKey || event.ctrlKey) {
+      const url = this.router.serializeUrl(this.router.createUrlTree(['/post', this.post.postId]));
+      window.open(url, '_blank', 'noopener');
+      return;
+    }
+
+    this.visitPost();
+  }
+
+  onPostCardKeydown(event: KeyboardEvent): void {
+    if (!this.post?.postId) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault(); // prevent page scroll on Space
+      this.visitPost();
+    }
+  }
+
   onMenuDeleted(postId: string) {
     this.deleted.emit(postId);
     this.isPostMenuOpen = false;
@@ -106,7 +132,7 @@ export class PostComponent implements OnInit, OnDestroy{
     if (this.isLiked) {
       this.isLiked = false;
       this.post!.likeCount!--;
-      this.postsService.removeLike(this.post.postId, userId)
+      this.postsService.removeLike(this.post.postId)
         .then(() => {
           console.log('Post unliked successfully');
         })
@@ -116,7 +142,7 @@ export class PostComponent implements OnInit, OnDestroy{
     } else {
       this.isLiked = true;
       this.post!.likeCount!++;
-      this.postsService.addLike(this.post.postId, userId)
+      this.postsService.addLike(this.post.postId)
         .then(() => {
           console.log('Post liked successfully');
         })
@@ -133,7 +159,7 @@ export class PostComponent implements OnInit, OnDestroy{
     if (this.isDisliked) {
       this.isDisliked = false;
       this.post!.dislikeCount!--;
-      this.postsService.removeDislike(this.post.postId, userId)
+      this.postsService.removeDislike(this.post.postId)
       .then(() => {
         console.log('Post undisliked successfully');
       })
@@ -143,7 +169,7 @@ export class PostComponent implements OnInit, OnDestroy{
     } else {
       this.isDisliked = true;
       this.post!.dislikeCount!++;
-      this.postsService.addDislike(this.post.postId, userId)
+      this.postsService.addDislike(this.post.postId)
         .then(() => {
           console.log('Post disliked successfully.');
         })

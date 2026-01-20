@@ -1,0 +1,511 @@
+[debug] [2026-01-20T17:50:22.363Z] ----------------------------------------------------------------------
+[debug] [2026-01-20T17:50:22.366Z] Command:       /opt/homebrew/Cellar/node/24.4.1/bin/node /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/.bin/firebase emulators:start --only functions
+[debug] [2026-01-20T17:50:22.366Z] CLI Version:   15.3.1
+[debug] [2026-01-20T17:50:22.366Z] Platform:      darwin
+[debug] [2026-01-20T17:50:22.366Z] Node Version:  v24.4.1
+[debug] [2026-01-20T17:50:22.366Z] Time:          Tue Jan 20 2026 10:50:22 GMT-0700 (Mountain Standard Time)
+[debug] [2026-01-20T17:50:22.366Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-20T17:50:22.367Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2026-01-20T17:50:23.152Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] Failed to authenticate, have you run firebase login?
+[warn] ⚠  emulators: You are not currently authenticated so some features may not work correctly. Please run firebase login to authenticate the CLI. 
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2026-01-20T17:50:24.125Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-01-20T17:50:24.125Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-01-20T17:50:24.127Z] Write emulator hub locator at /var/folders/z0/p24y57dn3215g7p3r1f_2fnc0000gr/T/hub-chime-in-ded1f.json
+[debug] [2026-01-20T17:50:24.130Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2026-01-20T17:50:24.130Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2026-01-20T17:50:25.083Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-01-20T17:50:25.083Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-01-20T17:50:25.083Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-01-20T17:50:25.083Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2026-01-20T17:50:25.090Z] No OAuth tokens found
+[debug] [2026-01-20T17:50:25.093Z] No OAuth tokens found
+[debug] [2026-01-20T17:50:25.094Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-20T17:50:25.094Z] Failed to get Admin SDK config for chime-in-ded1f, falling back to cache Failed to get Admin SDK for Firebase project chime-in-ded1f. Please make sure the project exists and your account has permission to access it. {"name":"FirebaseError","children":[],"exit":2,"message":"Failed to get Admin SDK for Firebase project chime-in-ded1f. Please make sure the project exists and your account has permission to access it.","original":{"name":"FirebaseError","children":[],"exit":1,"message":"Failed to authenticate, have you run \u001b[1mfirebase login\u001b[22m?","original":{},"status":500},"status":500}
+[warn] ⚠  functions: Unable to fetch project Admin SDK configuration, Admin SDK behavior in Cloud Functions emulator may be incorrect. {"metadata":{"emulator":{"name":"functions"},"message":"Unable to fetch project Admin SDK configuration, Admin SDK behavior in Cloud Functions emulator may be incorrect."}}
+[info] i  ui: downloading ui-v1.15.0.zip... {"metadata":{"emulator":{"name":"ui"},"message":"downloading ui-v1.15.0.zip..."}}
+[debug] [2026-01-20T17:50:25.116Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip 
+[debug] [2026-01-20T17:50:25.248Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip 200
+[debug] [2026-01-20T17:50:25.248Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip [stream]
+[debug] [2026-01-20T17:50:25.534Z] Data is 3538469
+[debug] [2026-01-20T17:50:25.534Z] [unzip] Entry: client/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2026-01-20T17:50:25.534Z] [unzip] Processing entry: client/
+[debug] [2026-01-20T17:50:25.534Z] [unzip] mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/
+[debug] [2026-01-20T17:50:25.534Z] [unzip] Entry: client/favicon-16x16.png (compressed_size=293 bytes, uncompressed_size=293 bytes)
+[debug] [2026-01-20T17:50:25.534Z] [unzip] Processing entry: client/favicon-16x16.png
+[debug] [2026-01-20T17:50:25.534Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.535Z] [unzip] Writing file: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/favicon-16x16.png
+[debug] [2026-01-20T17:50:25.535Z] [unzip] Entry: client/safari-pinned-tab.svg (compressed_size=1433 bytes, uncompressed_size=2611 bytes)
+[debug] [2026-01-20T17:50:25.535Z] [unzip] Processing entry: client/safari-pinned-tab.svg
+[debug] [2026-01-20T17:50:25.535Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.535Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/safari-pinned-tab.svg
+[debug] [2026-01-20T17:50:25.537Z] [unzip] Entry: client/favicon.ico (compressed_size=2933 bytes, uncompressed_size=13294 bytes)
+[debug] [2026-01-20T17:50:25.537Z] [unzip] Processing entry: client/favicon.ico
+[debug] [2026-01-20T17:50:25.537Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.537Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/favicon.ico
+[debug] [2026-01-20T17:50:25.538Z] [unzip] Entry: client/index.html (compressed_size=1364 bytes, uncompressed_size=3071 bytes)
+[debug] [2026-01-20T17:50:25.538Z] [unzip] Processing entry: client/index.html
+[debug] [2026-01-20T17:50:25.538Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.538Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/index.html
+[debug] [2026-01-20T17:50:25.538Z] [unzip] Entry: client/android-chrome-192x192.png (compressed_size=2684 bytes, uncompressed_size=2684 bytes)
+[debug] [2026-01-20T17:50:25.538Z] [unzip] Processing entry: client/android-chrome-192x192.png
+[debug] [2026-01-20T17:50:25.538Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.538Z] [unzip] Writing file: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/android-chrome-192x192.png
+[debug] [2026-01-20T17:50:25.539Z] [unzip] Entry: client/apple-touch-icon.png (compressed_size=2123 bytes, uncompressed_size=2152 bytes)
+[debug] [2026-01-20T17:50:25.539Z] [unzip] Processing entry: client/apple-touch-icon.png
+[debug] [2026-01-20T17:50:25.539Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.539Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/apple-touch-icon.png
+[debug] [2026-01-20T17:50:25.539Z] [unzip] Entry: client/android-chrome-512x512.png (compressed_size=5369 bytes, uncompressed_size=5411 bytes)
+[debug] [2026-01-20T17:50:25.539Z] [unzip] Processing entry: client/android-chrome-512x512.png
+[debug] [2026-01-20T17:50:25.539Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.539Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/android-chrome-512x512.png
+[debug] [2026-01-20T17:50:25.540Z] [unzip] Entry: client/manifest.json (compressed_size=245 bytes, uncompressed_size=551 bytes)
+[debug] [2026-01-20T17:50:25.540Z] [unzip] Processing entry: client/manifest.json
+[debug] [2026-01-20T17:50:25.540Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.540Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/manifest.json
+[debug] [2026-01-20T17:50:25.540Z] [unzip] Entry: client/robots.txt (compressed_size=26 bytes, uncompressed_size=26 bytes)
+[debug] [2026-01-20T17:50:25.540Z] [unzip] Processing entry: client/robots.txt
+[debug] [2026-01-20T17:50:25.540Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.540Z] [unzip] Writing file: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/robots.txt
+[debug] [2026-01-20T17:50:25.540Z] [unzip] Entry: client/mstile-150x150.png (compressed_size=2034 bytes, uncompressed_size=2034 bytes)
+[debug] [2026-01-20T17:50:25.540Z] [unzip] Processing entry: client/mstile-150x150.png
+[debug] [2026-01-20T17:50:25.540Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.541Z] [unzip] Writing file: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/mstile-150x150.png
+[debug] [2026-01-20T17:50:25.541Z] [unzip] Entry: client/assets/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2026-01-20T17:50:25.541Z] [unzip] Processing entry: client/assets/
+[debug] [2026-01-20T17:50:25.541Z] [unzip] mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/
+[debug] [2026-01-20T17:50:25.541Z] [unzip] Entry: client/assets/index-BX-A56oj.js (compressed_size=582089 bytes, uncompressed_size=2092775 bytes)
+[debug] [2026-01-20T17:50:25.541Z] [unzip] Processing entry: client/assets/index-BX-A56oj.js
+[debug] [2026-01-20T17:50:25.541Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets
+[debug] [2026-01-20T17:50:25.541Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-BX-A56oj.js
+[debug] [2026-01-20T17:50:25.546Z] [unzip] Entry: client/assets/index-CjB9C900.css (compressed_size=35979 bytes, uncompressed_size=298654 bytes)
+[debug] [2026-01-20T17:50:25.546Z] [unzip] Processing entry: client/assets/index-CjB9C900.css
+[debug] [2026-01-20T17:50:25.546Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets
+[debug] [2026-01-20T17:50:25.546Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-CjB9C900.css
+[debug] [2026-01-20T17:50:25.547Z] [unzip] Entry: client/assets/index-BX-A56oj.js.map (compressed_size=2362482 bytes, uncompressed_size=10036679 bytes)
+[debug] [2026-01-20T17:50:25.547Z] [unzip] Processing entry: client/assets/index-BX-A56oj.js.map
+[debug] [2026-01-20T17:50:25.547Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets
+[debug] [2026-01-20T17:50:25.547Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-BX-A56oj.js.map
+[debug] [2026-01-20T17:50:25.568Z] [unzip] Entry: client/assets/extensions/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2026-01-20T17:50:25.568Z] [unzip] Processing entry: client/assets/extensions/
+[debug] [2026-01-20T17:50:25.568Z] [unzip] mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions/
+[debug] [2026-01-20T17:50:25.568Z] [unzip] Entry: client/assets/extensions/default-extension.png (compressed_size=1646 bytes, uncompressed_size=1657 bytes)
+[debug] [2026-01-20T17:50:25.568Z] [unzip] Processing entry: client/assets/extensions/default-extension.png
+[debug] [2026-01-20T17:50:25.568Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions
+[debug] [2026-01-20T17:50:25.568Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions/default-extension.png
+[debug] [2026-01-20T17:50:25.569Z] [unzip] Entry: client/assets/img/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2026-01-20T17:50:25.569Z] [unzip] Processing entry: client/assets/img/
+[debug] [2026-01-20T17:50:25.569Z] [unzip] mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/img/
+[debug] [2026-01-20T17:50:25.569Z] [unzip] Entry: client/assets/img/database.png (compressed_size=29449 bytes, uncompressed_size=29988 bytes)
+[debug] [2026-01-20T17:50:25.569Z] [unzip] Processing entry: client/assets/img/database.png
+[debug] [2026-01-20T17:50:25.569Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/img
+[debug] [2026-01-20T17:50:25.569Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/img/database.png
+[debug] [2026-01-20T17:50:25.570Z] [unzip] Entry: client/assets/provider-icons/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2026-01-20T17:50:25.570Z] [unzip] Processing entry: client/assets/provider-icons/
+[debug] [2026-01-20T17:50:25.570Z] [unzip] mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/
+[debug] [2026-01-20T17:50:25.570Z] [unzip] Entry: client/assets/provider-icons/auth_service_saml.svg (compressed_size=575 bytes, uncompressed_size=1226 bytes)
+[debug] [2026-01-20T17:50:25.570Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_saml.svg
+[debug] [2026-01-20T17:50:25.570Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.570Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_saml.svg
+[debug] [2026-01-20T17:50:25.570Z] [unzip] Entry: client/assets/provider-icons/auth_service_phone.svg (compressed_size=261 bytes, uncompressed_size=414 bytes)
+[debug] [2026-01-20T17:50:25.570Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_phone.svg
+[debug] [2026-01-20T17:50:25.570Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.570Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_phone.svg
+[debug] [2026-01-20T17:50:25.571Z] [unzip] Entry: client/assets/provider-icons/auth_service_facebook.svg (compressed_size=289 bytes, uncompressed_size=457 bytes)
+[debug] [2026-01-20T17:50:25.571Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_facebook.svg
+[debug] [2026-01-20T17:50:25.571Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.571Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_facebook.svg
+[debug] [2026-01-20T17:50:25.571Z] [unzip] Entry: client/assets/provider-icons/auth_service_game_center.svg (compressed_size=991 bytes, uncompressed_size=3921 bytes)
+[debug] [2026-01-20T17:50:25.571Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_game_center.svg
+[debug] [2026-01-20T17:50:25.572Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.572Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_game_center.svg
+[debug] [2026-01-20T17:50:25.572Z] [unzip] Entry: client/assets/provider-icons/auth_service_apple.svg (compressed_size=230 bytes, uncompressed_size=334 bytes)
+[debug] [2026-01-20T17:50:25.572Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_apple.svg
+[debug] [2026-01-20T17:50:25.572Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.572Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_apple.svg
+[debug] [2026-01-20T17:50:25.572Z] [unzip] Entry: client/assets/provider-icons/auth_service_github.svg (compressed_size=466 bytes, uncompressed_size=838 bytes)
+[debug] [2026-01-20T17:50:25.572Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_github.svg
+[debug] [2026-01-20T17:50:25.572Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.572Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_github.svg
+[debug] [2026-01-20T17:50:25.573Z] [unzip] Entry: client/assets/provider-icons/auth_service_mslive.svg (compressed_size=203 bytes, uncompressed_size=378 bytes)
+[debug] [2026-01-20T17:50:25.573Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_mslive.svg
+[debug] [2026-01-20T17:50:25.573Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.573Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_mslive.svg
+[debug] [2026-01-20T17:50:25.573Z] [unzip] Entry: client/assets/provider-icons/auth_service_yahoo.svg (compressed_size=577 bytes, uncompressed_size=1182 bytes)
+[debug] [2026-01-20T17:50:25.573Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_yahoo.svg
+[debug] [2026-01-20T17:50:25.574Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.574Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_yahoo.svg
+[debug] [2026-01-20T17:50:25.574Z] [unzip] Entry: client/assets/provider-icons/auth_service_twitter.svg (compressed_size=444 bytes, uncompressed_size=751 bytes)
+[debug] [2026-01-20T17:50:25.574Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_twitter.svg
+[debug] [2026-01-20T17:50:25.574Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.574Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_twitter.svg
+[debug] [2026-01-20T17:50:25.575Z] [unzip] Entry: client/assets/provider-icons/auth_service_play_games.svg (compressed_size=565 bytes, uncompressed_size=1173 bytes)
+[debug] [2026-01-20T17:50:25.575Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_play_games.svg
+[debug] [2026-01-20T17:50:25.575Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.575Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_play_games.svg
+[debug] [2026-01-20T17:50:25.575Z] [unzip] Entry: client/assets/provider-icons/auth_service_email.svg (compressed_size=228 bytes, uncompressed_size=326 bytes)
+[debug] [2026-01-20T17:50:25.575Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_email.svg
+[debug] [2026-01-20T17:50:25.575Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.575Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_email.svg
+[debug] [2026-01-20T17:50:25.575Z] [unzip] Entry: client/assets/provider-icons/auth_service_google.svg (compressed_size=409 bytes, uncompressed_size=720 bytes)
+[debug] [2026-01-20T17:50:25.576Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_google.svg
+[debug] [2026-01-20T17:50:25.576Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.576Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_google.svg
+[debug] [2026-01-20T17:50:25.576Z] [unzip] Entry: client/assets/provider-icons/auth_service_oidc.svg (compressed_size=414 bytes, uncompressed_size=858 bytes)
+[debug] [2026-01-20T17:50:25.576Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_oidc.svg
+[debug] [2026-01-20T17:50:25.576Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2026-01-20T17:50:25.576Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_oidc.svg
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Entry: client/browserconfig.xml (compressed_size=491 bytes, uncompressed_size=822 bytes)
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Processing entry: client/browserconfig.xml
+[debug] [2026-01-20T17:50:25.577Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.577Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/browserconfig.xml
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Entry: client/favicon-32x32.png (compressed_size=475 bytes, uncompressed_size=475 bytes)
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Processing entry: client/favicon-32x32.png
+[debug] [2026-01-20T17:50:25.577Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Writing file: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/client/favicon-32x32.png
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Entry: server/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Processing entry: server/
+[debug] [2026-01-20T17:50:25.577Z] [unzip] mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/server/
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Entry: server/server.mjs.map (compressed_size=217845 bytes, uncompressed_size=944978 bytes)
+[debug] [2026-01-20T17:50:25.577Z] [unzip] Processing entry: server/server.mjs.map
+[debug] [2026-01-20T17:50:25.577Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/server
+[debug] [2026-01-20T17:50:25.577Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/server/server.mjs.map
+[debug] [2026-01-20T17:50:25.579Z] [unzip] Entry: server/server.mjs (compressed_size=276407 bytes, uncompressed_size=933701 bytes)
+[debug] [2026-01-20T17:50:25.579Z] [unzip] Processing entry: server/server.mjs
+[debug] [2026-01-20T17:50:25.579Z] [unzip] else mkdir: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/server
+[debug] [2026-01-20T17:50:25.579Z] [unzip] deflating: /Users/drduhe/.cache/firebase/emulators/ui-v1.15.0/server/server.mjs
+[info] i  functions: Watching "/Users/drduhe/Github/chime-in/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/drduhe/Github/chime-in/functions\" for Cloud Functions..."}}
+[debug] [2026-01-20T17:50:25.586Z] Validating nodejs source
+[warn] ⚠  functions: Couldn't find firebase-functions package in your source code. Have you run 'npm install'? 
+[debug] [2026-01-20T17:50:25.587Z] getFunctionsSDKVersion encountered error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"code":"MODULE_NOT_FOUND","requireStack":["/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"]}
+[debug] [2026-01-20T17:50:25.587Z] checkFunctionsSDKVersion encountered error: Invalid Version:  {}
+[debug] [2026-01-20T17:50:25.588Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2026-01-20T17:50:25.588Z] Building nodejs source
+[debug] [2026-01-20T17:50:25.588Z] Failed to find version of module node: reached end of search path /Users/drduhe/Github/chime-in/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "24". Using node@24 from host. 
+[debug] [2026-01-20T17:50:25.588Z] Could not parse firebase-functions version '' into semver.
+[debug] [2026-01-20T17:50:25.589Z] Could not find functions.yaml. Must use http discovery
+[error] ⬢  functions: Failed to load function definition from source: Error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: Error: Cannot find module 'firebase-functions'\nRequire stack:\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"}}
+[debug] [2026-01-20T17:50:25.594Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2026-01-20T18:04:01.602Z] File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers"}}
+[debug] [2026-01-20T18:04:02.604Z] Validating nodejs source
+[warn] ⚠  functions: Couldn't find firebase-functions package in your source code. Have you run 'npm install'? 
+[debug] [2026-01-20T18:04:02.605Z] getFunctionsSDKVersion encountered error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"code":"MODULE_NOT_FOUND","requireStack":["/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"]}
+[debug] [2026-01-20T18:04:02.605Z] checkFunctionsSDKVersion encountered error: Invalid Version:  {}
+[debug] [2026-01-20T18:04:02.606Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2026-01-20T18:04:02.606Z] Building nodejs source
+[debug] [2026-01-20T18:04:02.606Z] Failed to find version of module node: reached end of search path /Users/drduhe/Github/chime-in/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "24". Using node@24 from host. 
+[debug] [2026-01-20T18:04:02.607Z] Could not parse firebase-functions version '' into semver.
+[debug] [2026-01-20T18:04:02.607Z] Could not find functions.yaml. Must use http discovery
+[error] ⬢  functions: Failed to load function definition from source: Error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: Error: Cannot find module 'firebase-functions'\nRequire stack:\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"}}
+[debug] [2026-01-20T18:04:11.808Z] File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers"}}
+[debug] [2026-01-20T18:04:12.809Z] Validating nodejs source
+[warn] ⚠  functions: Couldn't find firebase-functions package in your source code. Have you run 'npm install'? 
+[debug] [2026-01-20T18:04:12.809Z] getFunctionsSDKVersion encountered error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"code":"MODULE_NOT_FOUND","requireStack":["/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"]}
+[debug] [2026-01-20T18:04:12.810Z] checkFunctionsSDKVersion encountered error: Invalid Version:  {}
+[debug] [2026-01-20T18:04:12.810Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2026-01-20T18:04:12.810Z] Building nodejs source
+[debug] [2026-01-20T18:04:12.810Z] Failed to find version of module node: reached end of search path /Users/drduhe/Github/chime-in/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "24". Using node@24 from host. 
+[debug] [2026-01-20T18:04:12.810Z] Could not parse firebase-functions version '' into semver.
+[debug] [2026-01-20T18:04:12.810Z] Could not find functions.yaml. Must use http discovery
+[error] ⬢  functions: Failed to load function definition from source: Error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: Error: Cannot find module 'firebase-functions'\nRequire stack:\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"}}
+[debug] [2026-01-20T18:04:18.570Z] File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers"}}
+[debug] [2026-01-20T18:04:19.572Z] Validating nodejs source
+[warn] ⚠  functions: Couldn't find firebase-functions package in your source code. Have you run 'npm install'? 
+[debug] [2026-01-20T18:04:19.573Z] getFunctionsSDKVersion encountered error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"code":"MODULE_NOT_FOUND","requireStack":["/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"]}
+[debug] [2026-01-20T18:04:19.573Z] checkFunctionsSDKVersion encountered error: Invalid Version:  {}
+[debug] [2026-01-20T18:04:19.574Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2026-01-20T18:04:19.574Z] Building nodejs source
+[debug] [2026-01-20T18:04:19.574Z] Failed to find version of module node: reached end of search path /Users/drduhe/Github/chime-in/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "24". Using node@24 from host. 
+[debug] [2026-01-20T18:04:19.575Z] Could not parse firebase-functions version '' into semver.
+[debug] [2026-01-20T18:04:19.575Z] Could not find functions.yaml. Must use http discovery
+[error] ⬢  functions: Failed to load function definition from source: Error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: Error: Cannot find module 'firebase-functions'\nRequire stack:\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"}}
+[debug] [2026-01-20T18:04:47.837Z] File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/drduhe/Github/chime-in/functions/index.js changed, reloading triggers"}}
+[debug] [2026-01-20T18:04:48.838Z] Validating nodejs source
+[warn] ⚠  functions: Couldn't find firebase-functions package in your source code. Have you run 'npm install'? 
+[debug] [2026-01-20T18:04:48.838Z] getFunctionsSDKVersion encountered error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"code":"MODULE_NOT_FOUND","requireStack":["/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/versioning.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js","/Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"]}
+[debug] [2026-01-20T18:04:48.838Z] checkFunctionsSDKVersion encountered error: Invalid Version:  {}
+[debug] [2026-01-20T18:04:48.838Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true
+}
+[debug] [2026-01-20T18:04:48.839Z] Building nodejs source
+[debug] [2026-01-20T18:04:48.839Z] Failed to find version of module node: reached end of search path /Users/drduhe/Github/chime-in/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "18" doesn't match your global version "24". Using node@24 from host. 
+[debug] [2026-01-20T18:04:48.839Z] Could not parse firebase-functions version '' into semver.
+[debug] [2026-01-20T18:04:48.839Z] Could not find functions.yaml. Must use http discovery
+[error] ⬢  functions: Failed to load function definition from source: Error: Cannot find module 'firebase-functions'
+Require stack:
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js
+- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: Error: Cannot find module 'firebase-functions'\nRequire stack:\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/node/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/runtimes/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/deploy/functions/prepare.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulatorShared.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/functionsEmulator.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/emulator/controller.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/emulators-start.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/commands/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/index.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/cli.js\n- /Users/drduhe/.npm/_npx/7750544ccf494d8b/node_modules/firebase-tools/lib/bin/firebase.js"}}
