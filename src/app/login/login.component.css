@@ -5,10 +5,11 @@
     height: 120vh;
     width: 325px;
     display: flex;
-    background-color: rgb(10, 26, 14);
-    color: white;
+    background-color: var(--surface);
+    color: var(--text);
     font-weight: 400;
     font-size: 36px;
+    border-right: 1px solid var(--border);
   }
 
   .login ul {

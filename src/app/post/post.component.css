@@ -2,7 +2,7 @@
     width: 100%;
     max-width: 625px;
     box-sizing: border-box;
-    background-color: rgb(10, 26, 14);
+    background-color: var(--surface);
     border-radius: 20px;
     height: auto;
     margin: 0 auto 40px auto;
@@ -11,11 +11,11 @@
 }
 
 .post:hover {
-  border-color: rgba(16, 196, 3, 0.22);
+  border-color: rgba(var(--accent-rgb), 0.22);
 }
 
 .post:focus-visible {
-  outline: 3px solid rgba(16, 196, 3, 0.35);
+  outline: 3px solid rgba(var(--accent-rgb), 0.35);
   outline-offset: 3px;
 }
 
@@ -29,7 +29,7 @@
 
 .item3 {
     grid-area: views;
-    color: white;
+    color: var(--text);
     margin-top: 40px;
     font-size: 18px;
 }
@@ -51,9 +51,48 @@
 }
 
 .item5 button {
-    background-color: green;
+    background: rgba(var(--accent-rgb), 0.14);
+    border: 1px solid rgba(var(--accent-rgb), 0.32);
+    color: var(--text);
     transform: scale(0.8);
     margin-left: 6px;
+}
+
+.item5 button:hover {
+    background: rgba(var(--accent-rgb), 0.20);
+    border-color: rgba(var(--accent-rgb), 0.45);
+}
+
+.item5 button.action-button {
+    background: rgba(var(--accent-rgb), 0.14);
+    border: 1px solid rgba(var(--accent-rgb), 0.32);
+    color: var(--text);
+}
+
+.item5 button.vote-button {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.item5 button.vote-button.up {
+    background: rgba(var(--upvote-rgb), 0.06);
+    border-color: rgba(var(--upvote-rgb), 0.22);
+    color: rgba(var(--upvote-rgb), 0.85);
+}
+
+.item5 button.vote-button.down {
+    background: rgba(var(--downvote-rgb), 0.05);
+    border-color: rgba(var(--downvote-rgb), 0.22);
+    color: rgba(var(--downvote-rgb), 0.85);
+}
+
+.item5 button.vote-button.up:hover {
+    background: rgba(var(--upvote-rgb), 0.10);
+}
+
+.item5 button.vote-button.down:hover {
+    background: rgba(var(--downvote-rgb), 0.09);
 }
 
 .comment-button {
@@ -67,30 +106,47 @@
 }
 
 .item5 button.liked {
-    background-color: white;
-    color: green;
+    background: rgba(var(--upvote-rgb), 0.22);
+    border-color: rgba(var(--upvote-rgb), 0.55);
+    color: var(--upvote);
 }
 
 .item5 button.disliked {
-    background-color: white;
-    color: green;
+    background: rgba(var(--downvote-rgb), 0.20);
+    border-color: rgba(var(--downvote-rgb), 0.55);
+    color: var(--downvote);
 }
 
 .item5 button.commenting {
-    background-color: white;
-    color: green;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--accent);
+}
+
+.vote-count {
+  font-size: 18px;
+  padding-top: 10px;
+  padding-left: 6px;
+  color: var(--text);
+}
+
+.vote-count.up {
+  color: var(--upvote);
+}
+
+.vote-count.down {
+  color: var(--downvote);
 }
 
 .item5 div{
     font-size: 18px;
     padding-top: 10px;
     padding-left: 6px;
-    color: white;
+    color: var(--text);
 }
 
 .item6 {
     grid-area: timestamp;
-    color: gray;
+    color: var(--muted);
     margin-top: 45px;
     font-size: 12px;
     width: 150px;
@@ -106,7 +162,7 @@
 }
 
 .item8 button {
-    background-color: rgb(10, 26, 14);
+    background-color: transparent;
     z-index: 0;
 }
 
@@ -132,14 +188,14 @@
     object-fit: cover;
     object-position: center;
     outline-style: solid;
-    outline-color: green;
+    outline-color: var(--accent);
     outline-width: 2px;
     height: 60px;
 }
 
 .post-content h1 {
     font-size: 22px;
-    color: white;
+    color: var(--text);
     text-align: left;
     justify-content: center;
     grid-column-start: 2;
@@ -148,14 +204,14 @@
 
 .post-content p {
     font-size: 14px;
-    color: white;
+    color: var(--text);
     display: flex;
 }
 
 .body {
     font-size: 22px;
     line-height: normal;
-    color: white;
+    color: var(--text);
     padding: 0 20px 0 20px;
     word-break: break-word;
 }

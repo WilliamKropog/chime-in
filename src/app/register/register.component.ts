@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, OnDestroy, ViewEncapsulation, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, updateProfile } from '@angular/fire/auth';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 import { Validators, NonNullableFormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
@@ -32,7 +32,7 @@ export class RegisterComponent implements AfterViewInit {
     private fb: NonNullableFormBuilder,
     private router: Router,
     private userService: UserService,
-    private host: ElementRef<HTMLElement>,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +42,8 @@ export class RegisterComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.generateBubbles(30);
+    // Avoid NG0100 in dev mode by stabilizing bindings after updating `bubbles` in AfterViewInit.
+    this.cdr.detectChanges();
   }
 
   private generateBubbles(count: number): void {
@@ -65,7 +67,7 @@ export class RegisterComponent implements AfterViewInit {
       next.push({ id: i, size, left, top, delay, duration });
     } 
     this.bubbles = next;
-}
+  }
 
 
   loadRecommendedProfiles(count: number): void {
@@ -117,7 +119,13 @@ export class RegisterComponent implements AfterViewInit {
         username,
         email,
         bio: '',
-        backgroundImageURL: ''
+        backgroundImageURL: '',
+        followers: [],
+        following: [],
+        followerCount: 0,
+        followingCount: 0,
+        isBanned: false,
+        isMod: false,
       });
 
       console.log('Registration Successful:', this.auth.currentUser);

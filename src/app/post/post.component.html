@@ -57,32 +57,32 @@
         </div>
       }
       <div class="item5">
-        <button mat-mini-fab (click)="stopEvent($event); likePost()" [ngClass]="{'liked': isLiked}">
+        <button mat-mini-fab class="vote-button up" (click)="stopEvent($event); likePost()" [ngClass]="{'liked': isLiked}">
           <mat-icon>thumb_up</mat-icon>
         </button>
-        <div style="color: lightgreen;">
+        <div class="vote-count up">
           {{ post.likeCount }}
         </div>
-        <button mat-mini-fab (click)="stopEvent($event); dislikePost()" [ngClass]="{'disliked': isDisliked}">
+        <button mat-mini-fab class="vote-button down" (click)="stopEvent($event); dislikePost()" [ngClass]="{'disliked': isDisliked}">
           <mat-icon>thumb_down</mat-icon>
         </button>
-        <div style="color: lightcoral;">
+        <div class="vote-count down">
           {{ post.dislikeCount }}
         </div>
-        <button mat-mini-fab style="background-color: gray;" (click)="stopEvent($event)">
+        <button mat-mini-fab class="action-button" (click)="stopEvent($event)">
           <mat-icon>bookmark</mat-icon>
         </button>
         <div style="color: lightgoldenrodyellow">
           {{ post.bookmarkCount }}
         </div>
-        <button mat-mini-fab style="background-color: gray;" (click)="stopEvent($event)">
+        <button mat-mini-fab class="action-button" (click)="stopEvent($event)">
           <mat-icon>repeat</mat-icon>
         </button>
         <div style="color: lightblue">
           {{ post.repostCount }}
         </div>
         <button
-          class="comment-button"
+          class="comment-button action-button"
           mat-mini-fab
           (click)="stopEvent($event); openCommentEditor()"
           [ngClass]="{'commenting': isCommentEditorOpen}"

@@ -7,28 +7,28 @@
       @if (vm.showBlock)  { <button mat-stroked-button><mat-icon>block</mat-icon> Block User</button> }
 
       @if (vm.showBanUser) {
-        <button mat-stroked-button (click)="onBanUser()" style="background-color: green;">
+        <button mat-stroked-button (click)="onBanUser()">
           <mat-icon>gavel</mat-icon> Ban User
         </button>
       }
       @if (vm.showBanPost) {
-        <button mat-stroked-button (click)="onBanPost()" style="background-color: green;">
+        <button mat-stroked-button (click)="onBanPost()">
           <mat-icon>app_blocking</mat-icon> Ban Post
         </button>
       }
 
       @if (vm.showDelete)  {
-        <button mat-stroked-button (click)="onDeleteOwnPost()" style="background-color: green;">
+        <button mat-stroked-button (click)="onDeleteOwnPost()">
           <mat-icon>delete</mat-icon> Delete Post
         </button>
       }
       @if (vm.showPromote) {
-        <button mat-stroked-button (click)="onPromoteToMod()" style="background-color: green;">
+        <button mat-stroked-button (click)="onPromoteToMod()">
           <mat-icon>shield</mat-icon> Promote to Mod
         </button>
       }
       @if (vm.showDemote)  {
-        <button mat-stroked-button (click)="onDemoteFromMod()" style="background-color: green;">
+        <button mat-stroked-button (click)="onDemoteFromMod()">
           <mat-icon>shield_moon</mat-icon> Demote From Mod
         </button>
       }

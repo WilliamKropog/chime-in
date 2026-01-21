@@ -7,16 +7,26 @@
   --page-gutter: 24px;
 
   /* Colors */
-  --bg: #070b08;
-  --surface: #0a1a0e; /* matches existing dark green vibe */
-  --surface-2: #0f2416;
+  --bg: #0b0f14;
+  --surface: #0f172a;
+  --surface-2: #121f38;
   --text: rgba(255, 255, 255, 0.92);
-  --muted: rgba(255, 255, 255, 0.65);
-  --border: rgba(255, 255, 255, 0.12);
+  --muted: rgba(255, 255, 255, 0.68);
+  --border: rgba(148, 163, 184, 0.18);
+  --danger: #ef4444;
+  --on-accent: #071122;
 
   /* Brand */
-  --accent: #10c403;
-  --accent-2: #00d084;
+  /* Blue-forward accent (less “green” across buttons) */
+  --accent: #3b82f6;
+  --accent-rgb: 59, 130, 246;
+  --accent-2: #22d3ee;
+
+  /* Vote colors */
+  --upvote: #16a34a;
+  --upvote-rgb: 22, 163, 74;
+  --downvote: #dc2626;
+  --downvote-rgb: 220, 38, 38;
 
   /* UI */
   --radius-sm: 10px;
@@ -33,7 +43,7 @@ body {
 body {
   margin: 0;
   color: var(--text);
-  background: radial-gradient(900px 500px at 50% 0%, rgba(16, 196, 3, 0.12), transparent 60%),
+  background: radial-gradient(900px 500px at 50% 0%, rgba(var(--accent-rgb), 0.14), transparent 60%),
     var(--bg);
   font-family: Roboto, "Helvetica Neue", system-ui, -apple-system, Segoe UI, sans-serif;
   padding-top: var(--nav-height);
@@ -82,8 +92,64 @@ textarea::placeholder {
 
 input:focus,
 textarea:focus {
-  border-color: rgba(16, 196, 3, 0.6);
-  box-shadow: 0 0 0 3px rgba(16, 196, 3, 0.16);
+  border-color: rgba(var(--accent-rgb), 0.6);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.16);
+}
+
+/* Angular Material button theming (override prebuilt theme colors) */
+.mat-mdc-raised-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-outlined-button,
+.mat-mdc-button {
+  border-radius: 14px !important;
+}
+
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-fab.mat-primary,
+.mat-mdc-mini-fab.mat-primary {
+  background: rgba(var(--accent-rgb), 0.14) !important;
+  border: 1px solid rgba(var(--accent-rgb), 0.32) !important;
+  color: var(--text) !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-raised-button.mat-primary:hover,
+.mat-mdc-unelevated-button.mat-primary:hover,
+.mat-mdc-fab.mat-primary:hover,
+.mat-mdc-mini-fab.mat-primary:hover {
+  background: rgba(var(--accent-rgb), 0.20) !important;
+  border-color: rgba(var(--accent-rgb), 0.45) !important;
+}
+
+.mat-mdc-raised-button.mat-primary[disabled],
+.mat-mdc-unelevated-button.mat-primary[disabled],
+.mat-mdc-fab.mat-primary[disabled],
+.mat-mdc-mini-fab.mat-primary[disabled] {
+  background: rgba(148, 163, 184, 0.22) !important;
+  color: rgba(255, 255, 255, 0.62) !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-outlined-button.mat-primary {
+  border-color: rgba(var(--accent-rgb), 0.5) !important;
+  color: var(--accent) !important;
+}
+
+.mat-mdc-outlined-button.mat-primary:hover {
+  background: rgba(var(--accent-rgb), 0.10) !important;
+}
+
+.mat-mdc-button.mat-primary,
+.mat-mdc-icon-button.mat-primary {
+  color: var(--accent) !important;
+}
+
+/* Convenience sizing class for auth buttons where templates used inline styles */
+.app-primary-button {
+  width: 200px;
+  height: 40px;
+  font-size: 18px;
 }
 
 /* Links */
@@ -97,7 +163,7 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(148, 163, 184, 0.28);
   border-radius: 999px;
 }
 

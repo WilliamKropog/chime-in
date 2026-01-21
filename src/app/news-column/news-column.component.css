@@ -1,8 +1,8 @@
 .news-container {
-    background-color: rgb(10, 26, 14);
+    background-color: var(--surface);
     display: flex;
     flex-direction: column;
-    color: white;
+    color: var(--text);
     width: 325px;
     height: 100%;
     position: fixed;
@@ -10,6 +10,7 @@
     right: 0;
     top: 0;
     overflow: scroll;
+    border-left: 1px solid var(--border);
   }
 
   .image {
@@ -46,5 +47,5 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: grey;
+    background: rgba(148, 163, 184, 0.28);
   }

@@ -1,5 +1,5 @@
 .comment-editor{
-  border-top: solid 1px white;
+  border-top: solid 1px var(--border);
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 20px;
@@ -18,7 +18,7 @@
   object-fit: cover;
   object-position: center;
   outline-style: solid;
-  outline-color: green;
+  outline-color: var(--accent);
   outline-width: 2px;
 }
 
@@ -36,7 +36,8 @@
 
 .send-button button {
     margin-left: 25px;
-    background-color: green;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--on-accent);
     font-size: 18px;
     transform: scale(1.1);
 }
@@ -48,5 +49,5 @@
   margin-top: 125px;
   text-align: right;
   margin-bottom: 5px;
-  color: white;
+  color: var(--text);
 }

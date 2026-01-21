@@ -1,9 +1,10 @@
 .post-menu-container {
     display: inline-block;
-    background: #2b2b2b;
+    background: var(--surface-2);
     z-index: 1;
     border-radius: 10px;
     overflow: hidden;
+    border: 1px solid var(--border);
 }
 
 .menu-list {
@@ -14,8 +15,12 @@
 
 .menu-list button {
     width: 200px;
-    color: white;
-    background-color: gray;
+    color: var(--text);
+    background-color: transparent;
     border-radius: 0px;
     z-index: 1;
+}
+
+.menu-list button:hover {
+    background: rgba(255, 255, 255, 0.06);
 }

@@ -1,4 +1,5 @@
-const functions = require("firebase-functions");
+// Use the v1 API surface (region(), https.onCall(), etc.) for this codebase.
+const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
 admin.initializeApp();
 

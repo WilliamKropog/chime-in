@@ -11,4 +11,14 @@
       Loading Posts...
     </div>
   }
+  @if (!isLoadingPosts && loadError) {
+    <div class="loading-posts">
+      {{ loadError }}
+    </div>
+  }
+  @if (!isLoadingPosts && !loadError && mostRecentPosts.length === 0) {
+    <div class="loading-posts">
+      No posts yet in your local emulator. Create a post to see the feed populate.
+    </div>
+  }
 </div>
