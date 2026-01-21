@@ -43,7 +43,7 @@
     object-fit: cover;
     object-position: center;
     outline-style: solid;
-    outline-color: green;
+    outline-color: var(--accent);
     outline-width: 2px;
     margin-right: 10px;
     margin-left: 10px;

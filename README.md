@@ -48,12 +48,20 @@ Then open `http://localhost:4200`.
 
 ### (Optional) Run Cloud Functions locally (Firebase emulator)
 
-- **Prereqs**: Node **18** (see `functions/package.json` engines), npm
+- **Prereqs**: Node **20** (see `functions/package.json` engines), npm
 
 ```bash
-cd chime-in/functions
-npm install
-npx firebase-tools emulators:start --only functions
+cd chime-in
+npm run emulators
 ```
 
-Note: the Angular app is currently configured to call the **deployed** Cloud Functions. If you want the UI to hit the local emulator instead, you’ll need to wire up `connectFunctionsEmulator(...)` in `src/app/app.module.ts` for non-production builds.
+Then run the Angular app in another terminal:
+
+```bash
+cd chime-in
+npm start
+```
+
+The app will automatically connect to local Firebase emulators (Auth/Firestore/Functions) when running on `localhost`.
+
+To confirm registration is going to the emulator (not production), open the Emulator UI (`http://localhost:4000`) and check the **Authentication** tab—new users created in the app will appear there.

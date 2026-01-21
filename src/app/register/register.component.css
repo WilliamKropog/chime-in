@@ -55,19 +55,20 @@
 }
   
 .register {
-  height: 800px;
-  width: 500px;
+  width: min(500px, 92vw);
+  max-height: calc(100vh - 120px);
   background-color: rgb(10, 26, 14);
   display: flex;
-  margin-left: 1100px;
-  bottom: 2.5%;
+  margin: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   justify-content: center;
   position: absolute;
-  margin-top: 100px;
-  margin-right: 150px;
   color: white;
   border-radius: 20px;
   z-index: 1;
+  overflow: auto;
 }
 
 .register ul {
@@ -80,4 +81,11 @@
   justify-content: center;
   margin-top: 20px;
   font-size: 28px;
+}
+
+/* On smaller screens, hide the recommended profile carousel to keep the form readable. */
+@media (max-width: 1100px) {
+  .recommended-profile {
+    display: none;
+  }
 }

@@ -8,7 +8,7 @@
     align-items: center;
     gap: 16px;
     padding: 0 18px;
-    background: rgba(0, 25, 2, 0.75);
+    background: rgba(15, 23, 42, 0.75);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text);
@@ -31,7 +31,7 @@
   }
 
   .brand:hover {
-    background: rgba(16, 196, 3, 0.10);
+    background: rgba(var(--accent-rgb), 0.10);
   }
 
   .brand__logo {
@@ -65,8 +65,8 @@
   }
 
   .nav-link.active {
-    background: rgba(16, 196, 3, 0.14);
-    border: 1px solid rgba(16, 196, 3, 0.22);
+    background: rgba(var(--accent-rgb), 0.14);
+    border: 1px solid rgba(var(--accent-rgb), 0.22);
   }
 
   .search {
@@ -105,7 +105,7 @@
     position: absolute;
     top: -6px;
     right: -10px;
-    background-color: #ef4444;
+    background-color: var(--danger);
     color: white;
     border-radius: 50%;
     width: 22px;

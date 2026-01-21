@@ -12,26 +12,26 @@
   }
   
   .modal {
-    background-color: rgb(10, 26, 14);
+    background-color: var(--surface);
     margin: auto;
     width: 800px;
     height: 500px;
     border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
   }
   
   .modal-content {
     display: flex;
     justify-content: center;
     position: relative;
-    color: white;
+    color: var(--text);
   }
 
   .modal-content button {
     margin-top: 10px;
     margin-right: 10px;
     margin-left: auto;
-    background-color: green;
   }
 
   .edit-pfp-and-username {
@@ -57,7 +57,7 @@
     object-fit: cover;
     object-position: center;
     outline-style: solid;
-    outline-color: green;
+    outline-color: var(--accent);
     outline-width: 2px;
   }
 
@@ -81,7 +81,9 @@
   .edit-profile-page div {
     height: 100px;
     width: 450px;
-    background-color: gray;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
   }
 
   .edit-profile-page a {
@@ -108,12 +110,28 @@
   }
 
   .upload-link {
-    color: limegreen;
+    color: var(--accent);
     text-decoration: underline;
     cursor: pointer;
   }
 
   .upload-link:hover {
-    color: green;
+    color: var(--accent-2);
     text-decoration: none;
+  }
+
+  .background-image__placeholder {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(var(--accent-rgb), 0.25);
+    border-radius: 12px;
+  }
+
+  .background-image__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 1px solid rgba(var(--accent-rgb), 0.25);
+    border-radius: 12px;
   }

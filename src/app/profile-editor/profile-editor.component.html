@@ -29,23 +29,10 @@
                 <h2>Background Image:</h2>
                 <div class="background-image">
                   @if (!hasBackgroundImage) {
-                    <div style=
-                      "background-color: rgb(10, 26, 14);
-                      width: 100%;
-                      height: 100%;
-                      outline-style: solid;
-                      outline-color: green;
-                      outline-width: 2px;">
-                    </div>
+                    <div class="background-image__placeholder"></div>
                   }
                   @if (hasBackgroundImage) {
-                    <img [src]="user.backgroundImageURL" alt="User Background" style=
-                      "width: 100%;
-                      height: 100%;
-                      object-fit: cover;
-                      outline-style: solid;
-                      outline-color: green;
-                      outline-width: 2px;">
+                    <img [src]="user.backgroundImageURL" alt="User Background" class="background-image__img">
                   }
                 </div>
                 <input type="file" accept=".jpg, .jpeg, .png" style="display: none" #backgroundInput (change)="uploadBackgroundImage($event, user)">

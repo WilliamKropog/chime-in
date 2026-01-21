@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   mostRecentPosts: Post[] = [];
   viewedPosts: Set<string> = new Set();
   isLoadingPosts = false;
+  loadError: string | null = null;
   scrollTimeout: any = null;
   scrollThreshold = 200;
 
@@ -41,8 +42,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   loadInitialPosts() {
     this.isLoadingPosts = true;
+    this.loadError = null;
     this.postsService.getMostRecentPosts().subscribe(posts => {
       this.mostRecentPosts = posts;
+      this.isLoadingPosts = false;
+    }, err => {
+      console.error('Failed to load posts:', err);
+      this.loadError = 'Failed to load posts. If you are using the Firebase emulators, you may simply have no local data yet.';
       this.isLoadingPosts = false;
     });
   }

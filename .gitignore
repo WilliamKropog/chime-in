@@ -44,3 +44,9 @@ Thumbs.db
 # Firebase service account
 serviceAccountKey.json
 **/serviceAccount*.json
+
+# Firebase emulator import/export data
+.firebase-emulators/
+
+# Firebase emulator logs
+firestore-debug.log

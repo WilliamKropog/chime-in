@@ -12,7 +12,7 @@
 }
 
 .modal {
-  background-color: rgb(10, 26, 14);
+  background-color: var(--surface);
   margin: auto;
   display: flex;
   justify-content: center;
@@ -20,7 +20,8 @@
   width: 700px;
   max-height: 700px;
   border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .modal-content {
@@ -43,7 +44,7 @@
   object-fit: cover;
   object-position: center;
   outline-style: solid;
-  outline-color: green;
+  outline-color: var(--accent);
   outline-width: 2px;
 }
 
@@ -65,7 +66,7 @@
 .preview-image img {
   max-width: 600px;
   max-height: 250px;
-  border: 2px solid #ccc;
+  border: 2px solid var(--border);
   border-radius: 10px;
   object-fit: cover;
   margin: 0 0 60px 60px;
@@ -80,13 +81,16 @@
 }
 
 .button-row button {
-  background-color: green;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text);
   margin-left: 20px;
 }
 
 .button-row button.active-button {
-  background-color: white;
-  color: green;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--on-accent);
+  border-color: transparent;
 }
 
 .post-button {
@@ -97,7 +101,8 @@
 }
 
 .post-button button {
-  background-color: green;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: var(--on-accent);
   transform: scale(0.9);
   font-size: 18px;
 }
@@ -116,7 +121,7 @@
 .character-count {
   text-align: right;
   margin-bottom: 60px;
-  color: white;
+  color: var(--text);
 }
 
 .close-button {
@@ -127,5 +132,7 @@
 }
 
 .close-button button {
-  background-color: green;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
+  color: var(--text);
 }

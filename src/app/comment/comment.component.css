@@ -1,5 +1,5 @@
 .comment-container {
-    border-top: solid 1px white;
+    border-top: solid 1px var(--border);
     padding-bottom: 20px;
     display: grid;
     justify-content: left;
@@ -23,14 +23,14 @@
     object-fit: cover;
     object-position: center;
     outline-style: solid;
-    outline-color: green;
+    outline-color: var(--accent);
     outline-width: 2px;
   }
 
   .comment-name {
     grid-area: username;
     font-size: 18px;
-    color: white;
+    color: var(--text);
     text-align: left;
     margin-top: 18px;
     margin-left: 0;
@@ -39,7 +39,7 @@
   .time-stamp {
     grid-area: timestamp;
     font-size: 12px;
-    color: gray;
+    color: var(--muted);
     display: flex;
     position: static;
     justify-content: flex-end;
@@ -51,7 +51,7 @@
   .comment-body {
     grid-area: body;
     font-size: 16px;
-    color: white;
+    color: var(--text);
     margin-left: 0;
     width: auto;
     max-width: 100%;
@@ -69,21 +69,58 @@
   }
 
   .comment-buttons button{
-    background-color: green;
+    background: rgba(var(--accent-rgb), 0.14);
+    border: 1px solid rgba(var(--accent-rgb), 0.32);
+    color: var(--text);
     transform: scale(0.7);
   }
 
+  .comment-buttons button.action-button {
+    background: rgba(var(--accent-rgb), 0.14);
+    border: 1px solid rgba(var(--accent-rgb), 0.32);
+    color: var(--text);
+  }
+
+  .comment-buttons button.vote-button {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .comment-buttons button.vote-button.up {
+    background: rgba(var(--upvote-rgb), 0.06);
+    border-color: rgba(var(--upvote-rgb), 0.22);
+    color: rgba(var(--upvote-rgb), 0.85);
+  }
+
+  .comment-buttons button.vote-button.down {
+    background: rgba(var(--downvote-rgb), 0.05);
+    border-color: rgba(var(--downvote-rgb), 0.22);
+    color: rgba(var(--downvote-rgb), 0.85);
+  }
+
   .comment-buttons button.liked {
-    background-color: white;
-    color: green;
+    background: rgba(var(--upvote-rgb), 0.22);
+    border-color: rgba(var(--upvote-rgb), 0.55);
+    color: var(--upvote);
   }
 
   .comment-buttons button.disliked {
-    background-color: white;
-    color: green;
+    background: rgba(var(--downvote-rgb), 0.20);
+    border-color: rgba(var(--downvote-rgb), 0.55);
+    color: var(--downvote);
   }
 
-  .comment-buttons div {
+  .comment-buttons .vote-count {
     font-size: 16px;
     padding-top: 10px;
+    color: var(--text);
+  }
+
+  .comment-buttons .vote-count.up {
+    color: var(--upvote);
+  }
+
+  .comment-buttons .vote-count.down {
+    color: var(--downvote);
   }

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
+import { provideFirestore, getFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
 import { provideStorage, getStorage } from '@angular/fire/storage';
 import { provideFunctions, getFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 import { AppComponent } from './app.component';
@@ -84,10 +84,33 @@ import { PostMenuComponent } from './post-menu/post-menu.component';
   ],
   providers: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    provideAuth(() => {
+      const auth = getAuth();
+      // Connect to local emulators only when running locally.
+      if (!environment.production && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+        const { host, port } = environment.emulators.auth;
+        connectAuthEmulator(auth, `http://${host}:${port}`);
+      }
+      return auth;
+    }),
+    provideFirestore(() => {
+      const firestore = getFirestore();
+      if (!environment.production && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+        const { host, port } = environment.emulators.firestore;
+        connectFirestoreEmulator(firestore, host, port);
+      }
+      return firestore;
+    }),
     provideStorage(() => getStorage()),
-    provideFunctions(() => getFunctions(getApp(), 'us-central1'))],
+    provideFunctions(() => {
+      const fns = getFunctions(getApp(), 'us-central1');
+      if (!environment.production && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+        const { host, port } = environment.emulators.functions;
+        connectFunctionsEmulator(fns, host, port);
+      }
+      return fns;
+    }),
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
