@@ -6,17 +6,12 @@
     height: 100%;
     width: 325px;
     display: flex;
-<<<<<<< Updated upstream
     flex-direction: column;
     align-items: center;
     gap: 12px;
     overflow-y: auto;
     background-color: rgb(10, 26, 14);
     color: white;
-=======
-    background-color: var(--surface);
-    color: var(--text);
->>>>>>> Stashed changes
     font-weight: 300;
     font-size: 24px;
     z-index: 1;
@@ -29,27 +24,7 @@
     background-color: green;
   } */
 
-<<<<<<< Updated upstream
   .username {
-=======
-  .sidenav li {
-    width: 220px;
-    padding-top: 10px;
-    display: flex;
-    justify-content: center;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .sidenav li:last-child {
-    border-bottom: none;
-  }
-
-  .sidenav li:first-child {
-    border-bottom: none;
-  }
-
-  .sidenav p {
->>>>>>> Stashed changes
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,7 +67,6 @@
     gap: 8px; 
   }
 
-<<<<<<< Updated upstream
   .nav-btn {
     width: auto;
     justify-content: flex-start; 
@@ -100,27 +74,4 @@
     border-radius: 10px;
     background-color: green;
     color: white;
-=======
-  .pfp-upload button {
-    background-color: var(--accent);
-    margin-top: 60px;
-    height: 35px;
-    width: 35px;
-  }
-
-  .sidenav svg {
-    fill: var(--muted);
-  }
-
-  .sidenav p:hover svg {
-    fill: var(--text);
-  }
-
-  .logout-button {
-    width: 200px;
-    height: 40px;
-    background-color: var(--accent) !important;
-    color: var(--on-accent) !important;
-    font-size: 18px;
->>>>>>> Stashed changes
   }
