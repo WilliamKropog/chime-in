@@ -6,8 +6,11 @@
 } 
 
 .bubble-field {
-  position: absolute;
-  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 0;
   contain: layout paint;
   width: 100%;
@@ -32,12 +35,12 @@
   to { transform: translateY(0); opacity: 1; }
 }
 
-.recommended-profile {
+/* .recommended-profile {
   position: absolute;
   margin-right: auto;
   top: 25%;
   z-index: 1;
-}
+} */
 
 .subtitle {
   margin-left: 175px;
@@ -57,9 +60,8 @@
 .register {
   width: min(500px, 92vw);
   max-height: calc(100vh - 120px);
-  background-color: rgb(10, 26, 14);
+  background-color: var(--surface);
   display: flex;
-  margin: 0;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -67,8 +69,10 @@
   position: absolute;
   color: white;
   border-radius: 20px;
+  border: 1px solid var(--border);
   z-index: 1;
   overflow: auto;
+  padding: 20px;
 }
 
 .register ul {
@@ -79,8 +83,22 @@
   width: 300px;
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 28px;
+}
+
+.register mat-form-field {
+  width: 100%;
+}
+
+.register mat-form-field input[type="text"],
+.register mat-form-field input[type="email"],
+.register mat-form-field input[type="password"] {
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* On smaller screens, hide the recommended profile carousel to keep the form readable. */

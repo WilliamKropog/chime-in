@@ -47,10 +47,9 @@ export class RegisterComponent implements AfterViewInit {
   }
 
   private generateBubbles(count: number): void {
-    const host = this.bubbleField?.nativeElement;
-    if (!host) return;
-
-    const { width, height } = host.getBoundingClientRect();
+    // Use viewport dimensions directly to ensure full screen coverage
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
     const MIN = 48; 
     const MAX = 240; 
