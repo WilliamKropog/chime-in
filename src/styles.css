@@ -45,6 +45,7 @@ body {
   color: var(--text);
   background: radial-gradient(900px 500px at 50% 0%, rgba(var(--accent-rgb), 0.14), transparent 60%),
     var(--bg);
+  background-attachment: fixed;
   font-family: Roboto, "Helvetica Neue", system-ui, -apple-system, Segoe UI, sans-serif;
   padding-top: var(--nav-height);
 }
