@@ -1,44 +1,42 @@
 <div class="sidenav">
-  @if (user$ | async; as user) {
-    <div class="pfp">
-      <a [routerLink]="['/profile', user.displayName]" routerLinkActive="active" ariaCurrentWhenActive="page">
-        <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
+  <div class="sidenav-scroll">
+    @if (user$ | async; as user) {
+      <div class="pfp">
+        <a [routerLink]="['/profile', user.displayName]" routerLinkActive="active" ariaCurrentWhenActive="page">
+          <img [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture"/>
+        </a>
+      </div>
+    }
+    @if (user$ | async; as user) {
+      <a class="username" [routerLink]="['/profile', user.displayName]">
+        {{ user.displayName }}
       </a>
-    </div>
-  }
-  @if (user$ | async; as user) {
-    <a class="username" [routerLink]="['/profile', user.displayName]">
-      {{ user.displayName }}
-    </a>
-  }
+    }
 
-  <div class="nav-actions">
-    <button mat-stroked-button routerLink="/notifications" class="nav-btn">
-      <mat-icon>notifications</mat-icon>
-      <span>Notifications</span>
-    </button>
-    <button mat-stroked-button routerLink="/messages" class="nav-btn">
-      <mat-icon>mail</mat-icon>
-      <span>Messages</span>
-    </button>
-    <button mat-stroked-button routerLink="/bookmarks" class="nav-btn">
-      <mat-icon>bookmark</mat-icon>
-      <span>Bookmarks</span>
-    </button>
-    <button mat-mini-fab (click)="openPostEditor()" class="nav-btn">
-      Post
-    <mat-icon>create</mat-icon>
-  </button>
+    <div class="nav-actions">
+      <button mat-stroked-button routerLink="/notifications" class="nav-btn">
+        <mat-icon>notifications</mat-icon>
+        <span>Notifications</span>
+      </button>
+      <button mat-stroked-button routerLink="/messages" class="nav-btn">
+        <mat-icon>mail</mat-icon>
+        <span>Messages</span>
+      </button>
+      <button mat-stroked-button routerLink="/bookmarks" class="nav-btn">
+        <mat-icon>bookmark</mat-icon>
+        <span>Bookmarks</span>
+      </button>
+      <button mat-stroked-button (click)="openPostEditor()" class="nav-btn">
+        <mat-icon>create</mat-icon>
+        <span>Post</span>
+      </button>
+      <button (click)="logout()" mat-raised-button color="primary" type="submit" class="logout-btn">
+        LOGOUT
+      </button>
+    </div>
   </div>
 
-  <button (click)="logout()" mat-raised-button color="primary" type="submit" style="
-            width: 200px;
-            height: 40px;
-            background-color: green;
-            font-size: 18px;
-            ">
-      LOGOUT
-  </button>
+  
 </div>
 
 @if (isPostEditorOpen) {
