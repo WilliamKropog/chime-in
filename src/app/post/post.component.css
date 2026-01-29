@@ -6,11 +6,14 @@
     border-radius: 20px;
     height: auto;
     margin: 0 auto 40px auto;
-    padding-bottom: 10px;
     border: 1px solid rgba(255, 255, 255, 0.10);
-    overflow-x: hidden; /* clip comment/options when they would float off on narrow screens */
     position: relative;
     z-index: 0;
+}
+
+/* Overflow only on content so PostMenu (sibling) is not clipped */
+.post-inner {
+    overflow-x: hidden;
 }
 
 .post:hover {
@@ -268,10 +271,9 @@
     display: inline-block;
 }
 
+/* Menu is positioned relative to .post so it scrolls with its anchor (left/top bound in template) */
 .post-menu {
     position: absolute;
-    top: 50%;
-    left: 50%;
     z-index: 1;
 }
 

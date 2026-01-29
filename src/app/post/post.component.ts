@@ -4,6 +4,7 @@ import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { of, shareReplay, Subscription, switchMap } from 'rxjs';
 import { CommentEditorService } from 'src/services/commenteditor.service';
+import { PostMenuStateService } from 'src/services/post-menu-state.service';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import type { User } from 'src/interface';
@@ -20,7 +21,9 @@ export class PostComponent implements OnInit, OnDestroy{
   public currentUser$!: Observable<Pick<User, 'uid'|'isAdmin'|'isMod'>>;
 
   @Input() post?: Post;
+  @ViewChild('postRef') private postRef?: ElementRef<HTMLElement>;
   @ViewChild('menuAnchor') private menuAnchorRef?: ElementRef<HTMLElement>;
+  @ViewChild('postMenuRef') private postMenuRef?: ElementRef<HTMLElement>;
   @Output() deleted = new EventEmitter<string>();
   commentsList: Comment[] = [];
   topComment?: Comment;
@@ -28,15 +31,18 @@ export class PostComponent implements OnInit, OnDestroy{
   isDisliked?: boolean = false;
   isCommentEditorOpen: boolean = false;
   isPostMenuOpen: boolean = false;
+  menuPosition: { left: number; top: number } | null = null;
   private editorSubscription?: Subscription;
   private topCommentSubscription?: Subscription;
   private commentsSubscription?: Subscription;
+  private menuStateSubscription?: Subscription;
 
   constructor(
     private postsService: PostsService, 
     private userService: UserService,
     private authService: AuthenticationService,
     private commentEditorService: CommentEditorService,
+    private postMenuStateService: PostMenuStateService,
     private router: Router,
   ) { }
 
@@ -62,6 +68,13 @@ export class PostComponent implements OnInit, OnDestroy{
       }
     });
 
+    this.menuStateSubscription = this.postMenuStateService.menuOpen$.subscribe(openPostId => {
+      if (openPostId !== this.post?.postId) {
+        this.isPostMenuOpen = false;
+        this.menuPosition = null;
+      }
+    });
+
     if (this.post?.postId) {
       this.topCommentSubscription = this.postsService.getTopCommentForPost(this.post.postId)
       .subscribe(topComment => {
@@ -80,6 +93,7 @@ export class PostComponent implements OnInit, OnDestroy{
     this.editorSubscription?.unsubscribe();
     this.commentsSubscription?.unsubscribe();
     this.topCommentSubscription?.unsubscribe();
+    this.menuStateSubscription?.unsubscribe();
   }
 
   visitPost(): void {
@@ -220,21 +234,46 @@ export class PostComponent implements OnInit, OnDestroy{
   openPostMenu(): void {
     if (this.isPostMenuOpen) {
       this.isPostMenuOpen = false;
+      this.menuPosition = null;
+      this.postMenuStateService.closeMenu();
     } else {
+      this.postMenuStateService.openMenu(this.post!.postId!);
+      this.updateMenuPosition();
       this.isPostMenuOpen = true;
     }
+  }
+
+  private updateMenuPosition(): void {
+    const anchor = this.menuAnchorRef?.nativeElement;
+    const post = this.postRef?.nativeElement;
+    if (!anchor || !post) return;
+    const anchorRect = anchor.getBoundingClientRect();
+    const postRect = post.getBoundingClientRect();
+    this.menuPosition = {
+      left: anchorRect.left - postRect.left + anchorRect.width / 2,
+      top: anchorRect.top - postRect.top + anchorRect.height / 2
+    };
   }
 
   @HostListener('document:click', ['$event']) onDocumentClick(event: MouseEvent): void {
     if (!this.isPostMenuOpen) return;
     const anchor = this.menuAnchorRef?.nativeElement;
-    if (anchor && !anchor.contains(event.target as Node)) {
-      this.isPostMenuOpen = false; 
+    const menu = this.postMenuRef?.nativeElement;
+    const inAnchor = anchor?.contains(event.target as Node);
+    const inMenu = menu?.contains(event.target as Node);
+    if (!inAnchor && !inMenu) {
+      this.isPostMenuOpen = false;
+      this.menuPosition = null;
+      this.postMenuStateService.closeMenu();
     }
   }
 
   @HostListener('document:keydown.escape') onEscape(): void {
-    if (this.isPostMenuOpen) this.isPostMenuOpen = false;
+    if (this.isPostMenuOpen) {
+      this.isPostMenuOpen = false;
+      this.menuPosition = null;
+      this.postMenuStateService.closeMenu();
+    }
   } 
 
 }
