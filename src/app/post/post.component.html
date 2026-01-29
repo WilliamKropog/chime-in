@@ -1,44 +1,33 @@
 @if (post) {
   <div
     class="post"
+    #postRef
     role="link"
     tabindex="0"
     aria-label="Open post"
     (click)="onPostCardClick($event)"
     (keydown)="onPostCardKeydown($event)"
   >
-    <div class="post-content">
-      <img
-        [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"
-        alt="Profile Picture"
-        (click)="stopEvent($event)"
-      >
-      <div class="item6">• {{ post.createdAt | relativeTime}}</div>
-      <div class="item3">{{ post.views }} views</div>
-      <div class="item8">
-        <div class="menu-anchor" #menuAnchor>
-          <button mat-mini-fab (click)="stopEvent($event); openPostMenu()">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-
-          <!--Fix issue below. Link UID-->
-         @if (isPostMenuOpen) {
-          <div class="post-menu open">
-            <app-post-menu
-              [postId]="post.postId"
-              [postOwnerId]="post.userId"
-              [currentUser]="(currentUser$ | async)!"
-              (deleted)="onMenuDeleted($event)"
-              (close)="isPostMenuOpen = false">
-            </app-post-menu>
+    <div class="post-inner">
+      <div class="post-content">
+        <img
+          [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"
+          alt="Profile Picture"
+          (click)="stopEvent($event)"
+        >
+        <div class="item6">• {{ post.createdAt | relativeTime}}</div>
+        <div class="item3">{{ post.views }} views</div>
+        <div class="item8">
+          <div class="menu-anchor" #menuAnchor>
+            <button mat-mini-fab (click)="stopEvent($event); openPostMenu()">
+              <mat-icon>more_vert</mat-icon>
+            </button>
           </div>
-         }
         </div>
-      </div>
 
-      <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;" (click)="stopEvent($event)">
-        <h1>{{ post.displayName }}</h1>
-      </a>
+        <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;" (click)="stopEvent($event)">
+          <h1>{{ post.displayName }}</h1>
+        </a>
       @if (!post.imageUrl) {
         <div class="item4 body">
           {{ post.body }}
@@ -98,14 +87,25 @@
         </div>
       </div>
     </div>
-    <div class="comment-section">
-      <app-comment-list [comments]="commentsList" [post]="post"></app-comment-list>
+      <div class="comment-section">
+        <app-comment-list [comments]="commentsList" [post]="post"></app-comment-list>
+      </div>
+      <div class="comment-editor" [ngClass]="{'open': isCommentEditorOpen}">
+        @if (isCommentEditorOpen) {
+          <app-comment-editor [postId]="post.postId"></app-comment-editor>
+        }
+      </div>
     </div>
-    <div class="comment-editor" [ngClass]="{'open': isCommentEditorOpen}">
-      @if (isCommentEditorOpen) {
-        <app-comment-editor [postId]="post.postId"></app-comment-editor>
-      }
-    </div>
-    
+    @if (isPostMenuOpen) {
+      <div class="post-menu open" #postMenuRef [style.left.px]="menuPosition?.left ?? 0" [style.top.px]="menuPosition?.top ?? 0">
+        <app-post-menu
+          [postId]="post.postId"
+          [postOwnerId]="post.userId"
+          [currentUser]="(currentUser$ | async)!"
+          (deleted)="onMenuDeleted($event)"
+          (close)="isPostMenuOpen = false">
+        </app-post-menu>
+      </div>
+    }
   </div>
 }
