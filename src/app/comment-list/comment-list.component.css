@@ -6,19 +6,21 @@
 }
 
 .topCommentText {
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     margin-left: auto;
     position: relative;
-    display: flex; 
+    display: flex;
     justify-content: center;
     text-align: center;
     color: var(--accent);
+    font-size: 14px;
 }
 
 .scrollable-comments {
-    /* Don’t clip comment content in the default (collapsed) view */
-    overflow: visible;
-    height: auto;
+    /* Don’t Collapsed: cap height so the post doesn't become scrollable until "View more" */
+    overflow: hidden;
+    max-height: 220px;
+    transition: max-height 0.25s ease-out;
 }
 
 .scrollable-comments.open {
@@ -36,8 +38,8 @@
   }
 
 .viewAllCommentsButton {
-    margin-top: 10px;
-    display: flex; 
+    margin-top: 8px;
+    display: flex;
     justify-content: center;
     z-index: 0;
 }
