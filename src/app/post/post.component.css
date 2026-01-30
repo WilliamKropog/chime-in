@@ -20,7 +20,11 @@
   border-color: rgba(var(--accent-rgb), 0.22);
 }
 
-.post:focus-visible {
+.post-content {
+  cursor: pointer;
+}
+
+.post-content:focus-visible {
   outline: 3px solid rgba(var(--accent-rgb), 0.35);
   outline-offset: 3px;
 }
@@ -261,6 +265,11 @@
   }
 }
   
+.comment-section {
+    padding-top: 0;
+    margin-top: 0;
+}
+
 .comment-editor.open {
     overflow: hidden;
     transition: 0.3s ease-out;
