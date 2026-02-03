@@ -9,6 +9,11 @@
     margin-top: 20px;
 }
 
+/* Reduce bottom padding on the top comment so the gap below it (plus button margin) matches the gap between comments */
+.top-comment-block ::ng-deep .comment-container {
+    padding-bottom: 0px;
+}
+
 .topCommentText {
     margin-bottom: 6px;
     margin-left: auto;
@@ -34,8 +39,14 @@
     width: 10px;
 }
 
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+}
+
 ::-webkit-scrollbar-thumb {
     background: rgba(148, 163, 184, 0.28);
+    border-radius: 10px;
 } 
 
 .viewAllCommentsButton {
