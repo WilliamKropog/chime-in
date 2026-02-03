@@ -4,10 +4,10 @@
     display: grid;
     justify-content: left;
     position: relative;
-    grid-template-columns: 70px 1fr auto;
+    grid-template-columns: 70px 1fr;
     grid-template-areas:
-        'pfp username timestamp'
-        'pfp body buttons';
+        'pfp header'
+        'pfp content';
     gap: 10px;
     width: 100%;
     height: auto;
@@ -27,45 +27,50 @@
     outline-width: 2px;
   }
 
-  .comment-name {
-    grid-area: username;
-    font-size: 18px;
-    color: var(--text);
-    text-align: left;
+  .comment-header {
+    grid-area: header;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
     margin-top: 18px;
     margin-left: 0;
   }
 
+  .comment-name {
+    font-size: 18px;
+    color: var(--text);
+  }
+
   .time-stamp {
-    grid-area: timestamp;
     font-size: 12px;
     color: var(--muted);
+  }
+
+  .comment-content {
+    grid-area: content;
     display: flex;
-    position: static;
-    justify-content: flex-end;
     align-items: center;
-    margin-top: 20px;
-    padding-right: 12px;
+    gap: 12px;
+    min-height: 0;
   }
 
   .comment-body {
-    grid-area: body;
+    flex: 1;
+    min-width: 0;
     font-size: 16px;
     color: var(--text);
     margin-left: 0;
-    width: auto;
-    max-width: 100%;
     padding-right: 12px;
     word-break: break-word;
-  } 
+  }
 
   .comment-buttons {
-    grid-area: buttons;
+    flex-shrink: 0;
     display: flex;
-    margin-top: 10px;
     align-items: center;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    gap: 2px;
+    margin-right: 12px;
   }
 
   .comment-buttons button{

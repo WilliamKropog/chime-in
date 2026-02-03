@@ -1,8 +1,17 @@
+.comment-list {
+    padding-bottom: 12px;
+}
+
 .button {
     display: flex;
     justify-content: center;
     color: var(--text);
     margin-top: 20px;
+}
+
+/* Reduce bottom padding on the top comment so the gap below it (plus button margin) matches the gap between comments */
+.top-comment-block ::ng-deep .comment-container {
+    padding-bottom: 0px;
 }
 
 .topCommentText {
@@ -16,24 +25,29 @@
 }
 
 .scrollable-comments {
-    /* Don’t clip comment content in the default (collapsed) view */
     overflow: visible;
     height: auto;
-}
+} 
 
 .scrollable-comments.open {
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 500px;
-}
+} 
 
 ::-webkit-scrollbar {
     width: 10px;
 }
 
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+}
+
 ::-webkit-scrollbar-thumb {
     background: rgba(148, 163, 184, 0.28);
-  }
+    border-radius: 10px;
+} 
 
 .viewAllCommentsButton {
     margin-top: 10px;

@@ -1,15 +1,14 @@
 @if (post) {
-  <div
-    class="post"
-    #postRef
-    role="link"
-    tabindex="0"
-    aria-label="Open post"
-    (click)="onPostCardClick($event)"
-    (keydown)="onPostCardKeydown($event)"
-  >
+  <div class="post" #postRef>
     <div class="post-inner">
-      <div class="post-content">
+      <div
+        class="post-content"
+        role="link"
+        tabindex="0"
+        aria-label="Open post"
+        (click)="onPostCardClick($event)"
+        (keydown)="onPostCardKeydown($event)"
+      >
         <img
           [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"
           alt="Profile Picture"

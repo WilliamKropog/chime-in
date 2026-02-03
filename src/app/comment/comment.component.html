@@ -1,18 +1,17 @@
 @if (comment) {
   <div class="comment-container">
     <img [src]="comment.photoURL ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
-    <div class="comment-name">
-      <a [routerLink]="['/profile', comment.displayName]" style="text-decoration: none; color: white;">
+    <div class="comment-header">
+      <a class="comment-name" [routerLink]="['/profile', comment.displayName]" style="text-decoration: none; color: white;">
         {{ comment.displayName }}
       </a>
+      <span class="time-stamp">• {{ comment.createdAt | relativeTime }}</span>
     </div>
-    <div class="time-stamp">
-      • {{ comment.createdAt | relativeTime }}
-    </div>
-    <div class="comment-body">
-      {{ comment.body }}
-    </div>
-    <div class="comment-buttons">
+    <div class="comment-content">
+      <div class="comment-body">
+        {{ comment.body }}
+      </div>
+      <div class="comment-buttons">
       <button mat-mini-fab class="vote-button up" (click)="likeComment()" [ngClass]="{'liked': isLiked}">
         <mat-icon>thumb_up</mat-icon>
       </button>
@@ -28,6 +27,7 @@
       <button mat-mini-fab class="action-button">
         <mat-icon>more_vert</mat-icon>
       </button>
+      </div>
     </div>
   </div>
 }
