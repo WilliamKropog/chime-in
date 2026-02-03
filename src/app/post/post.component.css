@@ -11,11 +11,6 @@
     z-index: 0;
 }
 
-/* Overflow only on content so PostMenu (sibling) is not clipped */
-.post-inner {
-    overflow-x: hidden;
-}
-
 .post:hover {
   border-color: rgba(var(--accent-rgb), 0.22);
 }
@@ -265,11 +260,6 @@
   }
 }
   
-.comment-section {
-    padding-top: 0;
-    margin-top: 0;
-}
-
 .comment-editor.open {
     overflow: hidden;
     transition: 0.3s ease-out;
