@@ -1,3 +1,7 @@
+.comment-list {
+    padding-bottom: 12px;
+}
+
 .button {
     display: flex;
     justify-content: center;
@@ -6,28 +10,25 @@
 }
 
 .topCommentText {
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     margin-left: auto;
     position: relative;
-    display: flex;
+    display: flex; 
     justify-content: center;
     text-align: center;
     color: var(--accent);
-    font-size: 14px;
 }
 
 .scrollable-comments {
-    /* Don’t Collapsed: cap height so the post doesn't become scrollable until "View more" */
-    overflow: hidden;
-    max-height: 220px;
-    transition: max-height 0.25s ease-out;
-}
+    overflow: visible;
+    height: auto;
+} 
 
 .scrollable-comments.open {
     overflow-y: auto;
     overflow-x: hidden;
     max-height: 500px;
-}
+} 
 
 ::-webkit-scrollbar {
     width: 10px;
@@ -35,11 +36,11 @@
 
 ::-webkit-scrollbar-thumb {
     background: rgba(148, 163, 184, 0.28);
-  }
+} 
 
 .viewAllCommentsButton {
-    margin-top: 8px;
-    display: flex;
+    margin-top: 10px;
+    display: flex; 
     justify-content: center;
     z-index: 0;
 }
