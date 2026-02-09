@@ -1,5 +1,4 @@
-// Use the v1 API surface (region(), https.onCall(), etc.) for this codebase.
-const functions = require("firebase-functions/v1");
+const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
@@ -66,18 +65,11 @@ exports.incrementCommentCount = functions.https.onCall(
     });
 
 exports.addLike = functions.https.onCall(async (data, context) => {
-  const {postId} = data;
-  const userId = context.auth && context.auth.uid;
-  if (!userId) {
-    throw new functions.https.HttpsError(
-        "unauthenticated",
-        "You must be signed in to like posts.",
-    );
-  }
-  if (!postId) {
+  const {postId, userId} = data;
+  if (!postId || !userId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with a valid postId.",
+        "The function must be called with valid postId and userId.",
     );
   }
 
@@ -113,18 +105,11 @@ exports.addLike = functions.https.onCall(async (data, context) => {
 });
 
 exports.removeLike = functions.https.onCall(async (data, context) => {
-  const {postId} = data;
-  const userId = context.auth && context.auth.uid;
-  if (!userId) {
-    throw new functions.https.HttpsError(
-        "unauthenticated",
-        "You must be signed in to unlike posts.",
-    );
-  }
-  if (!postId) {
+  const {postId, userId} = data;
+  if (!postId || !userId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with a valid postId.",
+        "The function must be called with valid postId and userId.",
     );
   }
 
@@ -158,18 +143,11 @@ exports.removeLike = functions.https.onCall(async (data, context) => {
 });
 
 exports.addDislike = functions.https.onCall(async (data, context) => {
-  const {postId} = data;
-  const userId = context.auth && context.auth.uid;
-  if (!userId) {
-    throw new functions.https.HttpsError(
-        "unauthenticated",
-        "You must be signed in to dislike posts.",
-    );
-  }
-  if (!postId) {
+  const {postId, userId} = data;
+  if (!postId || !userId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with a valid postId.",
+        "The function must be called with valid postId and userId.",
     );
   }
 
@@ -204,18 +182,11 @@ exports.addDislike = functions.https.onCall(async (data, context) => {
 });
 
 exports.removeDislike = functions.https.onCall(async (data, context) => {
-  const {postId} = data;
-  const userId = context.auth && context.auth.uid;
-  if (!userId) {
-    throw new functions.https.HttpsError(
-        "unauthenticated",
-        "You must be signed in to remove dislikes.",
-    );
-  }
-  if (!postId) {
+  const {postId, userId} = data;
+  if (!postId, !userId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with a valid postId.",
+        "The function must be called with valid postId and userId.",
     );
   }
 
@@ -249,18 +220,11 @@ exports.removeDislike = functions.https.onCall(async (data, context) => {
 });
 
 exports.addLikeToComment = functions.https.onCall(async (data, context) => {
-  const {postId, commentId} = data;
-  const userId = context.auth && context.auth.uid;
-  if (!userId) {
-    throw new functions.https.HttpsError(
-        "unauthenticated",
-        "You must be signed in to like comments.",
-    );
-  }
-  if (!postId || !commentId) {
+  const {postId, commentId, userId} = data;
+  if (!postId || !commentId || !userId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and commentId.",
+        "The function must be called with valid commentId and userId.",
     );
   }
 
@@ -302,18 +266,11 @@ exports.addLikeToComment = functions.https.onCall(async (data, context) => {
 
 exports.removeLikeFromComment = functions.https
     .onCall(async (data, context) => {
-      const {postId, commentId} = data;
-      const userId = context.auth && context.auth.uid;
-      if (!userId) {
-        throw new functions.https.HttpsError(
-            "unauthenticated",
-            "You must be signed in to unlike comments.",
-        );
-      }
-      if (!postId || !commentId) {
+      const {postId, commentId, userId} = data;
+      if (!postId || !commentId || !userId) {
         throw new functions.https.HttpsError(
             "invalid-argument",
-            "The function must be called with valid postId and commentId.",
+            "The function must be called with valid commentId and userId.",
         );
       }
 
@@ -352,18 +309,11 @@ exports.removeLikeFromComment = functions.https
     });
 
 exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
-  const {postId, commentId} = data;
-  const userId = context.auth && context.auth.uid;
-  if (!userId) {
-    throw new functions.https.HttpsError(
-        "unauthenticated",
-        "You must be signed in to dislike comments.",
-    );
-  }
-  if (!postId || !commentId) {
+  const {postId, commentId, userId} = data;
+  if (!postId || !commentId || !userId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and commentId.",
+        "The function must be called with valid commentId and userId.",
     );
   }
 
@@ -405,18 +355,11 @@ exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
 
 exports.removeDislikeFromComment = functions.https
     .onCall(async (data, context) => {
-      const {postId, commentId} = data;
-      const userId = context.auth && context.auth.uid;
-      if (!userId) {
-        throw new functions.https.HttpsError(
-            "unauthenticated",
-            "You must be signed in to remove comment dislikes.",
-        );
-      }
-      if (!postId || !commentId) {
+      const {postId, commentId, userId} = data;
+      if (!postId || !commentId || !userId) {
         throw new functions.https.HttpsError(
             "invalid-argument",
-            "The function must be called with valid postId and commentId.",
+            "The function must be called with valid commentId and userId.",
         );
       }
 
