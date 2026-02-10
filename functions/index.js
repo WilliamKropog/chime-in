@@ -4,6 +4,8 @@ const admin = require("firebase-admin");
 const {FieldValue} = require("firebase-admin/firestore");
 admin.initializeApp();
 
+const VIEW_COOLDOWN_MS = 60 * 1000; // 1 minute per user per post
+
 exports.incrementPostView = functions
     .region("us-central1")
     .https.onCall(async (data, context) => {
@@ -15,11 +17,31 @@ exports.incrementPostView = functions
         );
       }
 
+      const userId = context.auth && context.auth.uid;
+      const anonymousViewerId = !userId && typeof data.anonymousViewerId === "string" && data.anonymousViewerId.trim()
+        ? data.anonymousViewerId.trim()
+        : null;
+      const viewerKey = userId || anonymousViewerId;
+
       const db = admin.firestore();
       const postRef = db.collection("posts").doc(postId);
 
       try {
         await db.runTransaction(async (tx) => {
+          if (viewerKey) {
+            const viewRecordRef = postRef.collection("viewRecords").doc(viewerKey);
+            const viewRecordSnap = await tx.get(viewRecordRef);
+            if (viewRecordSnap.exists) {
+              const lastViewedAt = viewRecordSnap.data().lastViewedAt;
+              if (lastViewedAt && lastViewedAt.toMillis) {
+                const elapsed = Date.now() - lastViewedAt.toMillis();
+                if (elapsed < VIEW_COOLDOWN_MS) {
+                  return;
+                }
+              }
+            }
+          }
+
           const snap = await tx.get(postRef);
           if (!snap.exists) {
             tx.set(postRef, {views: 1}, {merge: true});
@@ -27,6 +49,11 @@ exports.incrementPostView = functions
             tx.update(postRef, {
               views: FieldValue.increment(1),
             });
+          }
+
+          if (viewerKey) {
+            const viewRecordRef = postRef.collection("viewRecords").doc(viewerKey);
+            tx.set(viewRecordRef, {lastViewedAt: FieldValue.serverTimestamp()}, {merge: true});
           }
         });
         return {success: true};
