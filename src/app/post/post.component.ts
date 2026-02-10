@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ElementRef, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
 import { Post, Comment } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
@@ -16,7 +16,7 @@ import { UserService } from 'src/services/user.service';
     styleUrls: ['./post.component.css'],
     standalone: false
 })
-export class PostComponent implements OnInit, OnDestroy{
+export class PostComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public currentUser$!: Observable<Pick<User, 'uid'|'isAdmin'|'isMod'>>;
 
@@ -36,6 +36,7 @@ export class PostComponent implements OnInit, OnDestroy{
   private topCommentSubscription?: Subscription;
   private commentsSubscription?: Subscription;
   private menuStateSubscription?: Subscription;
+  private viewCountObserver: IntersectionObserver | null = null;
 
   constructor(
     private postsService: PostsService, 
@@ -89,7 +90,26 @@ export class PostComponent implements OnInit, OnDestroy{
     }
   }
 
+  ngAfterViewInit(): void {
+    if (!this.post?.postId || !this.postRef?.nativeElement) return;
+
+    this.viewCountObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting) return;
+
+        this.postsService.incrementView(this.post!.postId).catch(() => {});
+        this.viewCountObserver?.disconnect();
+        this.viewCountObserver = null;
+      },
+      { threshold: 0.5 }
+    );
+    this.viewCountObserver.observe(this.postRef.nativeElement);
+  }
+
   ngOnDestroy(): void {
+    this.viewCountObserver?.disconnect();
+    this.viewCountObserver = null;
     this.editorSubscription?.unsubscribe();
     this.commentsSubscription?.unsubscribe();
     this.topCommentSubscription?.unsubscribe();
