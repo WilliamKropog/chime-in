@@ -156,6 +156,7 @@ export class PostComponent implements OnInit, OnDestroy{
     } else {
       this.isLiked = true;
       this.post!.likeCount!++;
+      console.log('Adding like to Post ID:', this.post.postId);
       this.postsService.addLike(this.post.postId)
         .then(() => {
           console.log('Post liked successfully');

@@ -1,5 +1,7 @@
-const functions = require("firebase-functions");
+// Use the v1 API surface (region(), https.onCall(), etc.) for this codebase.
+const functions = require("firebase-functions/v1");
 const admin = require("firebase-admin");
+const {FieldValue} = require("firebase-admin/firestore");
 admin.initializeApp();
 
 exports.incrementPostView = functions
@@ -23,7 +25,7 @@ exports.incrementPostView = functions
             tx.set(postRef, {views: 1}, {merge: true});
           } else {
             tx.update(postRef, {
-              views: admin.firestore.FieldValue.increment(1),
+              views: FieldValue.increment(1),
             });
           }
         });
@@ -52,7 +54,7 @@ exports.incrementCommentCount = functions.https.onCall(
 
       try {
         await postRef.update({
-          commentCount: admin.firestore.FieldValue.increment(1),
+          commentCount: FieldValue.increment(1),
         });
         return {success: true};
       } catch (error) {
@@ -65,11 +67,18 @@ exports.incrementCommentCount = functions.https.onCall(
     });
 
 exports.addLike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId || !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to like posts.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -86,11 +95,11 @@ exports.addLike = functions.https.onCall(async (data, context) => {
     }
 
     await userLikeRef.set({
-      likedAt: admin.firestore.FieldValue.serverTimestamp(),
+      likedAt: FieldValue.serverTimestamp(),
     });
 
     await postRef.update({
-      likeCount: admin.firestore.FieldValue.increment(1),
+      likeCount: FieldValue.increment(1),
     });
 
     return {success: true};
@@ -105,11 +114,18 @@ exports.addLike = functions.https.onCall(async (data, context) => {
 });
 
 exports.removeLike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId || !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to unlike posts.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -128,7 +144,7 @@ exports.removeLike = functions.https.onCall(async (data, context) => {
     await userLikeRef.delete();
 
     await postRef.update({
-      likeCount: admin.firestore.FieldValue.increment(-1),
+      likeCount: FieldValue.increment(-1),
     });
 
     return {success: true};
@@ -143,11 +159,18 @@ exports.removeLike = functions.https.onCall(async (data, context) => {
 });
 
 exports.addDislike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId || !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to dislike posts.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -163,11 +186,11 @@ exports.addDislike = functions.https.onCall(async (data, context) => {
       );
     }
     await userDislikeRef.set({
-      dislikedAt: admin.firestore.FieldValue.serverTimestamp(),
+      dislikedAt: FieldValue.serverTimestamp(),
     });
 
     await postRef.update({
-      dislikeCount: admin.firestore.FieldValue.increment(1),
+      dislikeCount: FieldValue.increment(1),
     });
 
     return {success: true};
@@ -182,11 +205,18 @@ exports.addDislike = functions.https.onCall(async (data, context) => {
 });
 
 exports.removeDislike = functions.https.onCall(async (data, context) => {
-  const {postId, userId} = data;
-  if (!postId, !userId) {
+  const {postId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to remove dislikes.",
+    );
+  }
+  if (!postId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid postId and userId.",
+        "The function must be called with a valid postId.",
     );
   }
 
@@ -205,7 +235,7 @@ exports.removeDislike = functions.https.onCall(async (data, context) => {
     await userDislikeRef.delete();
 
     await postRef.update({
-      dislikeCount: admin.firestore.FieldValue.increment(-1),
+      dislikeCount: FieldValue.increment(-1),
     });
 
     return {success: true};
@@ -220,11 +250,18 @@ exports.removeDislike = functions.https.onCall(async (data, context) => {
 });
 
 exports.addLikeToComment = functions.https.onCall(async (data, context) => {
-  const {postId, commentId, userId} = data;
-  if (!postId || !commentId || !userId) {
+  const {postId, commentId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to like comments.",
+    );
+  }
+  if (!postId || !commentId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid commentId and userId.",
+        "The function must be called with valid postId and commentId.",
     );
   }
 
@@ -246,11 +283,11 @@ exports.addLikeToComment = functions.https.onCall(async (data, context) => {
     }
 
     await userLikeRef.set({
-      likedAt: admin.firestore.FieldValue.serverTimestamp(),
+      likedAt: FieldValue.serverTimestamp(),
     });
 
     await commentRef.update({
-      likeCount: admin.firestore.FieldValue.increment(1),
+      likeCount: FieldValue.increment(1),
     });
 
     return {success: true};
@@ -266,11 +303,18 @@ exports.addLikeToComment = functions.https.onCall(async (data, context) => {
 
 exports.removeLikeFromComment = functions.https
     .onCall(async (data, context) => {
-      const {postId, commentId, userId} = data;
-      if (!postId || !commentId || !userId) {
+      const {postId, commentId} = data;
+      const userId = context.auth && context.auth.uid;
+      if (!userId) {
+        throw new functions.https.HttpsError(
+            "unauthenticated",
+            "You must be signed in to unlike comments.",
+        );
+      }
+      if (!postId || !commentId) {
         throw new functions.https.HttpsError(
             "invalid-argument",
-            "The function must be called with valid commentId and userId.",
+            "The function must be called with valid postId and commentId.",
         );
       }
 
@@ -294,7 +338,7 @@ exports.removeLikeFromComment = functions.https
         await userLikeRef.delete();
 
         await commentRef.update({
-          likeCount: admin.firestore.FieldValue.increment(-1),
+          likeCount: FieldValue.increment(-1),
         });
 
         return {success: true};
@@ -309,11 +353,18 @@ exports.removeLikeFromComment = functions.https
     });
 
 exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
-  const {postId, commentId, userId} = data;
-  if (!postId || !commentId || !userId) {
+  const {postId, commentId} = data;
+  const userId = context.auth && context.auth.uid;
+  if (!userId) {
+    throw new functions.https.HttpsError(
+        "unauthenticated",
+        "You must be signed in to dislike comments.",
+    );
+  }
+  if (!postId || !commentId) {
     throw new functions.https.HttpsError(
         "invalid-argument",
-        "The function must be called with valid commentId and userId.",
+        "The function must be called with valid postId and commentId.",
     );
   }
 
@@ -335,11 +386,11 @@ exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
     }
 
     await userLikeRef.set({
-      likedAt: admin.firestore.FieldValue.serverTimestamp(),
+      likedAt: FieldValue.serverTimestamp(),
     });
 
     await commentRef.update({
-      dislikeCount: admin.firestore.FieldValue.increment(1),
+      dislikeCount: FieldValue.increment(1),
     });
 
     return {success: true};
@@ -355,11 +406,18 @@ exports.addDislikeToComment = functions.https.onCall(async (data, context) => {
 
 exports.removeDislikeFromComment = functions.https
     .onCall(async (data, context) => {
-      const {postId, commentId, userId} = data;
-      if (!postId || !commentId || !userId) {
+      const {postId, commentId} = data;
+      const userId = context.auth && context.auth.uid;
+      if (!userId) {
+        throw new functions.https.HttpsError(
+            "unauthenticated",
+            "You must be signed in to remove comment dislikes.",
+        );
+      }
+      if (!postId || !commentId) {
         throw new functions.https.HttpsError(
             "invalid-argument",
-            "The function must be called with valid commentId and userId.",
+            "The function must be called with valid postId and commentId.",
         );
       }
 
@@ -383,7 +441,7 @@ exports.removeDislikeFromComment = functions.https
         await userLikeRef.delete();
 
         await commentRef.update({
-          dislikeCount: admin.firestore.FieldValue.increment(-1),
+          dislikeCount: FieldValue.increment(-1),
         });
 
         return {success: true};
