@@ -27,6 +27,8 @@ import {
 } from '@angular/fire/functions';
 
 import { Post, Comment } from '../interface';
+import { AuthenticationService } from './authentication.service';
+import { AnonymousViewerIdService } from './anonymous-viewer-id.service';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
@@ -37,7 +39,12 @@ export class PostsService {
   private openEditorSubject = new Subject<string | null>();
   openEditor$ = this.openEditorSubject.asObservable();
 
-  constructor(private db: Firestore, private fns: Functions) {}
+  constructor(
+    private db: Firestore,
+    private fns: Functions,
+    private authService: AuthenticationService,
+    private anonymousViewerIdService: AnonymousViewerIdService,
+  ) {}
 
   openEditor(postId: string): void {
     this.openEditorSubject.next(postId);
@@ -335,7 +342,11 @@ export class PostsService {
   async incrementView(postId: string): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'incrementPostView');
-      await fn({ postId });
+      const uid = this.authService.loggedInUserId;
+      const payload = uid
+        ? { postId }
+        : { postId, anonymousViewerId: this.anonymousViewerIdService.getOrCreateAnonymousViewerId() };
+      await fn(payload);
     });
   }
 
