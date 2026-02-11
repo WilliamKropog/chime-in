@@ -8,6 +8,7 @@
             [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"
             alt="Profile Picture"
             />
+            <div class="post-button">
             <button mat-fab mini style=
               "position: absolute;
               margin-top: 70px;
@@ -20,6 +21,7 @@
               accept=".png, .jpg, .jpeg"
               (change)="uploadImage($event, user)"
               style="display: none;">
+            </div>
               <h2 style="margin-top: 150px;">
                 Username:
                 <br> &#64;{{ user.displayName }}
@@ -48,14 +50,18 @@
                   placeholder="Type your bio here.">
                 </textarea>
                 <h3>{{ characterCount }} / 400</h3>
+                <div class="post-button">
                 <button mat-fab extended (click)="saveProfile(user)">
                   <mat-icon>save</mat-icon>
                   Save
                 </button>
+                </div>
               </div>
+              <div class="post-button close-button">
               <button mat-mini-fab (click)="onClose()">
                 <mat-icon>close</mat-icon>
               </button>
+              </div>
             </div>
           }
         </div>
