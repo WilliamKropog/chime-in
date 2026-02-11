@@ -15,7 +15,7 @@
     background-color: var(--surface);
     margin: auto;
     width: 800px;
-    height: 500px;
+    height: 525px;
     border-radius: 20px;
     border: 1px solid var(--border);
     box-shadow: var(--shadow);
@@ -28,10 +28,25 @@
     color: var(--text);
   }
 
-  .modal-content button {
+  .modal-content .post-button.close-button {
     margin-top: 10px;
     margin-right: 10px;
     margin-left: auto;
+  }
+
+  /* Copied from post-editor.component.css: .post-button button */
+  .post-button button {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--on-accent);
+    transform: scale(0.9);
+    font-size: 18px;
+  }
+
+  /* Copied from post-editor.component.css: .button-row button.active-button (same gradient) */
+  .button-row button.active-button {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--on-accent);
+    border-color: transparent;
   }
 
   .edit-pfp-and-username {
@@ -84,6 +99,18 @@
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--border);
     border-radius: 12px;
+  }
+
+  /* Save button wrapper: no box (don’t inherit .edit-profile-page div) */
+  .edit-profile-page .post-button {
+    height: auto;
+    width: auto;
+    min-height: 0;
+    min-width: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
+    margin-left: 20px;
   }
 
   .edit-profile-page a {
