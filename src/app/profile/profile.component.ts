@@ -52,7 +52,7 @@ export class ProfileComponent implements OnInit{
         this.hasBio = !!this.userData.bio;
 
         if (this.currentUserId) {
-          this.loadUserProfileImage(this.currentUserId);
+          this.userPhotoUrl = this.userData.profileImageURL || 'assets/images/png-transparent-default-avatar.png';
           this.loadUserPosts(this.currentUserId);
         } else {
           console.error('User ID is missing: Profile.ts')
@@ -93,12 +93,6 @@ export class ProfileComponent implements OnInit{
       this.userPosts = posts;
       this.isLoadingPosts = false;
     });
-  }
-
-  loadUserProfileImage(uid: string): void {
-    this.userService.getUserProfileImageUrl(uid).subscribe((url: string) => {
-      this.userPhotoUrl = url;
-    })
   }
 
   //Automatically load more posts when scrolled to the bottom of the page.

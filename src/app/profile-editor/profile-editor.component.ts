@@ -94,7 +94,11 @@ export class ProfileEditorComponent {
           error: 'Error uploading'
         }
       ),
-      concatMap((photoURL) => this.authService.updateProfileData({ photoURL }))
+      concatMap((photoURL) =>
+        from(this.userService.setUserProfile(user.uid, { profileImageURL: photoURL }, { merge: true })).pipe(
+          concatMap(() => this.authService.updateProfileData({ photoURL }))
+        )
+      )
     ).subscribe();
   }
 

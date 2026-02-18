@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
 import { provideAuth, getAuth, connectAuthEmulator } from '@angular/fire/auth';
 import { provideFirestore, getFirestore, connectFirestoreEmulator } from '@angular/fire/firestore';
-import { provideStorage, getStorage } from '@angular/fire/storage';
+import { provideStorage, getStorage, connectStorageEmulator } from '@angular/fire/storage';
 import { provideFunctions, getFunctions, connectFunctionsEmulator } from '@angular/fire/functions';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -101,7 +101,14 @@ import { PostMenuComponent } from './post-menu/post-menu.component';
       }
       return firestore;
     }),
-    provideStorage(() => getStorage()),
+    provideStorage(() => {
+      const storage = getStorage();
+      if (!environment.production && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+        const { host, port } = environment.emulators.storage;
+        connectStorageEmulator(storage, host, port);
+      }
+      return storage;
+    }),
     provideFunctions(() => {
       const fns = getFunctions(getApp(), 'us-central1');
       if (!environment.production && (location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
