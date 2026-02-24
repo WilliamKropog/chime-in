@@ -50,8 +50,10 @@ export class UserService {
   }
 
   getUserProfile(uid: string): Observable<any> {
-    const ref = doc(this.db, `users/${uid}`);
-    return runInInjectionContext(this.env, () => docData(ref));
+    return runInInjectionContext(this.env, () => {
+      const ref = doc(this.db, `users/${uid}`);
+      return docData(ref);
+    });
   }
 
   setUserProfile(uid: string, data: any, options: { merge: boolean }): Promise<void> {

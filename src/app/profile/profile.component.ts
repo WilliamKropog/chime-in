@@ -87,10 +87,20 @@ export class ProfileComponent implements OnInit{
     })
   }
 
+  private dedupePostsById(posts: Post[]): Post[] {
+    const seen = new Set<string>();
+    return posts.filter(p => {
+      const id = p.postId ?? (p as any).id;
+      if (!id || seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+  }
+
   loadUserPosts(userId: string): void {
     this.isLoadingPosts = true;
     this.postsService.getUserPosts(userId).subscribe((posts) => {
-      this.userPosts = posts;
+      this.userPosts = this.dedupePostsById(posts ?? []);
       this.isLoadingPosts = false;
     });
   }
@@ -117,7 +127,7 @@ export class ProfileComponent implements OnInit{
 
     this.isLoadingPosts = true;
     this.postsService.getMoreUserPosts(this.currentUserId).subscribe((posts) => {
-      this.userPosts = [...this.userPosts, ...posts];
+      this.userPosts = this.dedupePostsById([...this.userPosts, ...(posts ?? [])]);
       this.isLoadingPosts = false;
     });
   }

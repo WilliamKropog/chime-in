@@ -43,13 +43,17 @@ export class AuthenticationService {
   }
 
   updateProfileData(profileData: Partial<UserInfo>): Observable<any> {
-    const currentUser = this.auth.currentUser;
-    return of(currentUser).pipe(
-      concatMap(user => {
-        if (!user) throw new Error('Not Authenticated');
-        return updateProfile(user, profileData);
-      })
-    );
+    return runInInjectionContext(this.env, () => {
+      const currentUser = this.auth.currentUser;
+      return of(currentUser).pipe(
+        concatMap(user =>
+          runInInjectionContext(this.env, () => {
+            if (!user) throw new Error('Not Authenticated');
+            return from(updateProfile(user, profileData));
+          })
+        )
+      );
+    });
   }
 
   get loggedInUserId(): string {
