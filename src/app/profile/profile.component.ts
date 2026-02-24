@@ -1,7 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'firebase/auth';
-import { of, switchMap } from 'rxjs';
+import { of, switchMap, merge, Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { UserService } from 'src/services/user.service';
 import { Post } from 'src/interface';
@@ -30,12 +31,11 @@ export class ProfileComponent implements OnInit{
   loggedInUserId: string = ''; 
   userPhotoUrl: string = 'assets/images/png-transparent-default-avatar.png';
 
-  //User Subscription:
-  //Pulls User from URL and loads their profile.
-  //If User exists, pull their data from Firebase Auth and combine it with User data
-  // from Firebase database. 
+  /** Emits when profile data is refreshed after editor close (bio, background, pfp). */
+  private profileRefresh$ = new Subject<any>();
 
-  user$ = this.route.paramMap.pipe(
+  // Initial load from route; merged with profileRefresh$ so template updates after editor save.
+  private user$ = this.route.paramMap.pipe(
     switchMap(params => {
       this.username = params.get('username') || '';
       if (!this.username || typeof this.username !== 'string' || this.username.trim() === '') {
@@ -65,6 +65,9 @@ export class ProfileComponent implements OnInit{
       }
     })
   );
+
+  /** Template uses this so bio/background/pfp update when editor closes. */
+  displayUser$ = merge(this.user$, this.profileRefresh$);
 
   constructor(
     private authService: AuthenticationService,
@@ -163,12 +166,26 @@ export class ProfileComponent implements OnInit{
     }
   }
 
-  //Profile Editor Modal fucntions:
+  //Profile Editor Modal functions:
   openProfileEditor(): void {
     this.isProfileEditorOpen = true;
   }
-  
+
+  /** Refetch profile from Firestore so bio, background, and pfp update after editor save. */
+  refreshProfileData(): void {
+    if (!this.currentUserId || !this.userData) return;
+    this.userService.getUserProfile(this.currentUserId).pipe(take(1)).subscribe((data: any) => {
+      const merged = { ...this.userData, ...data };
+      this.userData = merged;
+      this.userPhotoUrl = merged?.profileImageURL || 'assets/images/png-transparent-default-avatar.png';
+      this.hasBio = !!merged?.bio;
+      this.hasBackgroundImage = !!merged?.backgroundImageURL;
+      this.profileRefresh$.next(merged);
+    });
+  }
+
   closeProfileEditor(): void {
     this.isProfileEditorOpen = false;
+    this.refreshProfileData();
   }
 }
