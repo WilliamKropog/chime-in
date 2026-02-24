@@ -218,7 +218,7 @@ export class PostsService {
           if (snapshot.size > 0) {
             this.lastVisible = snapshot.docs[snapshot.docs.length - 1];
           }
-          subscriber.next(snapshot.docs.map(d => d.data() as Post));
+          subscriber.next(snapshot.docs.map(d => ({ ...d.data(), postId: d.id } as Post)));
           subscriber.complete();
         } catch (err) {
           subscriber.error(err);
