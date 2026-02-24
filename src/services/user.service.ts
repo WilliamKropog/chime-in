@@ -255,10 +255,9 @@ export class UserService {
 
   // ---------- Follow / Unfollow (transaction) ----------
   async followUser(targetUserId: string, loggedInUserId: string): Promise<void> {
-    const targetRef = doc(this.db, `users/${targetUserId}`) as DocumentReference<any>;
-    const meRef = doc(this.db, `users/${loggedInUserId}`) as DocumentReference<any>;
-
     await runInInjectionContext(this.env, async () => {
+      const targetRef = doc(this.db, `users/${targetUserId}`) as DocumentReference<any>;
+      const meRef = doc(this.db, `users/${loggedInUserId}`) as DocumentReference<any>;
       await runTransaction(this.db, async (tx) => {
         const targetSnap = await tx.get(targetRef);
         const meSnap = await tx.get(meRef);
@@ -291,10 +290,9 @@ export class UserService {
   }
 
   async unfollowUser(targetUserId: string, loggedInUserId: string): Promise<void> {
-    const targetRef = doc(this.db, `users/${targetUserId}`) as DocumentReference<any>;
-    const meRef = doc(this.db, `users/${loggedInUserId}`) as DocumentReference<any>;
-
     await runInInjectionContext(this.env, async () => {
+      const targetRef = doc(this.db, `users/${targetUserId}`) as DocumentReference<any>;
+      const meRef = doc(this.db, `users/${loggedInUserId}`) as DocumentReference<any>;
       await runTransaction(this.db, async (tx) => {
         const targetSnap = await tx.get(targetRef);
         const meSnap = await tx.get(meRef);

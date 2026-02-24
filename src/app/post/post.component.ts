@@ -1,14 +1,18 @@
-import { Component, Input, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, HostListener, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, HostListener, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { Post, Comment } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 import { AuthenticationService } from 'src/services/authentication.service';
-import { of, shareReplay, Subscription, switchMap } from 'rxjs';
+import { merge, of, shareReplay, Subscription, switchMap } from 'rxjs';
+import { filter, map, take } from 'rxjs/operators';
 import { CommentEditorService } from 'src/services/commenteditor.service';
 import { PostMenuStateService } from 'src/services/post-menu-state.service';
 import { Router } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import type { User } from 'src/interface';
 import { UserService } from 'src/services/user.service';
+import { ProfileUpdateService } from 'src/services/profile-update.service';
+
+const DEFAULT_AVATAR = 'assets/images/png-transparent-default-avatar.png';
 
 @Component({
     selector: 'app-post',
@@ -16,9 +20,11 @@ import { UserService } from 'src/services/user.service';
     styleUrls: ['./post.component.css'],
     standalone: false
 })
-export class PostComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PostComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   public currentUser$!: Observable<Pick<User, 'uid'|'isAdmin'|'isMod'>>;
+  /** Author's current profile image (from Firestore), so pfp updates everywhere when user changes it. */
+  authorPhotoUrl$: Observable<string> = of(DEFAULT_AVATAR);
 
   @Input() post?: Post;
   @ViewChild('postRef') private postRef?: ElementRef<HTMLElement>;
@@ -45,7 +51,30 @@ export class PostComponent implements OnInit, AfterViewInit, OnDestroy {
     private commentEditorService: CommentEditorService,
     private postMenuStateService: PostMenuStateService,
     private router: Router,
+    private profileUpdateService: ProfileUpdateService
   ) { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const post = changes['post']?.currentValue as Post | undefined;
+    if (post?.userId) {
+      const initial$ = this.userService.getUserProfile(post.userId).pipe(
+        take(1),
+        map((d: any) => d?.profileImageURL || DEFAULT_AVATAR)
+      );
+      const onProfileUpdate$ = this.profileUpdateService.profileUpdated$.pipe(
+        filter((uid) => uid === post.userId),
+        switchMap(() =>
+          this.userService.getUserProfile(post.userId).pipe(
+            take(1),
+            map((d: any) => d?.profileImageURL || DEFAULT_AVATAR)
+          )
+        )
+      );
+      this.authorPhotoUrl$ = merge(initial$, onProfileUpdate$);
+    } else {
+      this.authorPhotoUrl$ = of(DEFAULT_AVATAR);
+    }
+  }
 
   ngOnInit(): void {
     this.checkIfLiked();

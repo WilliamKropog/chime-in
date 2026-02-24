@@ -2,6 +2,12 @@ import { Component, Input, OnInit, OnDestroy, SimpleChanges } from '@angular/cor
 import { Comment } from 'src/interface';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { CommentEditorService } from 'src/services/commenteditor.service';
+import { UserService } from 'src/services/user.service';
+import { ProfileUpdateService } from 'src/services/profile-update.service';
+import { merge, Observable, of } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
+
+const DEFAULT_AVATAR = 'assets/images/png-transparent-default-avatar.png';
 
 @Component({
     selector: 'app-comment',
@@ -15,10 +21,14 @@ export class CommentComponent implements OnInit, OnDestroy{
   isLiked?:boolean = false;
   isDisliked?:boolean = false;
   private userId?: string;
+  /** Comment author's current profile image so pfp updates when user changes it. */
+  authorPhotoUrl$: Observable<string> = of(DEFAULT_AVATAR);
 
   constructor(
     private authService: AuthenticationService,
-    private commentEditorService: CommentEditorService
+    private commentEditorService: CommentEditorService,
+    private userService: UserService,
+    private profileUpdateService: ProfileUpdateService
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +41,26 @@ export class CommentComponent implements OnInit, OnDestroy{
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['comment'] && changes['comment'].currentValue) {
+    const comment = changes['comment']?.currentValue as Comment | undefined;
+    if (comment?.userId) {
+      const initial$ = this.userService.getUserProfile(comment.userId).pipe(
+        take(1),
+        map((d: any) => d?.profileImageURL || DEFAULT_AVATAR)
+      );
+      const onProfileUpdate$ = this.profileUpdateService.profileUpdated$.pipe(
+        filter((uid) => uid === comment.userId),
+        switchMap(() =>
+          this.userService.getUserProfile(comment.userId).pipe(
+            take(1),
+            map((d: any) => d?.profileImageURL || DEFAULT_AVATAR)
+          )
+        )
+      );
+      this.authorPhotoUrl$ = merge(initial$, onProfileUpdate$);
+    } else {
+      this.authorPhotoUrl$ = of(DEFAULT_AVATAR);
+    }
+    if (comment && this.userId) {
       this.checkIfLiked();
       this.checkIfDisliked();
     }

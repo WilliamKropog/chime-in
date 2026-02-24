@@ -42,7 +42,9 @@
   border-radius: 999px;
   object-fit: cover;
   object-position: center;
-  outline: 4px solid rgba(16, 196, 3, 0.45);
+  outline-style: solid;
+  outline-color: var(--accent);
+  outline-width: 2px;
   background: var(--surface);
 }
 

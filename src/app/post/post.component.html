@@ -10,7 +10,7 @@
         (keydown)="onPostCardKeydown($event)"
       >
         <img
-          [src]="post.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"
+          [src]="(authorPhotoUrl$ | async) ?? 'assets/images/png-transparent-default-avatar.png'"
           alt="Profile Picture"
           (click)="stopEvent($event)"
         >

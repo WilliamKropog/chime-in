@@ -5,7 +5,7 @@
         <div class="edit-pfp-and-username">
           <h2>Profile Picture:</h2>
           <img
-            [src]="user.photoURL ?? 'assets/images/png-transparent-default-avatar.png'"
+            [src]="(pfpPreviewUrl ?? user.photoURL) ?? 'assets/images/png-transparent-default-avatar.png'"
             alt="Profile Picture"
             />
             <div class="post-button">
@@ -19,7 +19,7 @@
             <input type="file"
               #fileInput
               accept=".png, .jpg, .jpeg"
-              (change)="uploadImage($event, user)"
+              (change)="onPfpFileSelected($event)"
               style="display: none;">
             </div>
               <h2 style="margin-top: 150px;">
@@ -30,14 +30,14 @@
               <div class="edit-profile-page">
                 <h2>Background Image:</h2>
                 <div class="background-image">
-                  @if (!hasBackgroundImage) {
+                  @if (!hasBackgroundImage && !backgroundPreviewUrl) {
                     <div class="background-image__placeholder"></div>
                   }
-                  @if (hasBackgroundImage) {
-                    <img [src]="user.backgroundImageURL" alt="User Background" class="background-image__img">
+                  @if (hasBackgroundImage || backgroundPreviewUrl) {
+                    <img [src]="backgroundPreviewUrl ?? user.backgroundImageURL" alt="User Background" class="background-image__img">
                   }
                 </div>
-                <input type="file" accept=".jpg, .jpeg, .png" style="display: none" #backgroundInput (change)="uploadBackgroundImage($event, user)">
+                <input type="file" accept=".jpg, .jpeg, .png" style="display: none" #backgroundInput (change)="onBackgroundFileSelected($event)">
                 <a class="upload-link" (click)="backgroundInput.click()">
                   Upload Background
                 </a>
