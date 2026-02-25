@@ -10,6 +10,7 @@
         (keydown)="onPostCardKeydown($event)"
       >
         <img
+          class="avatar"
           [src]="(authorPhotoUrl$ | async) ?? 'assets/images/png-transparent-default-avatar.png'"
           alt="Profile Picture"
           (click)="stopEvent($event)"
@@ -86,14 +87,16 @@
         </div>
       </div>
     </div>
+
+    <div class="comment-editor" [ngClass]="{'open': isCommentEditorOpen}">
+      @if (isCommentEditorOpen) {
+        <app-comment-editor [postId]="post.postId"></app-comment-editor>
+      }
+    </div>
       <div class="comment-section">
         <app-comment-list [comments]="commentsList" [post]="post"></app-comment-list>
       </div>
-      <div class="comment-editor" [ngClass]="{'open': isCommentEditorOpen}">
-        @if (isCommentEditorOpen) {
-          <app-comment-editor [postId]="post.postId"></app-comment-editor>
-        }
-      </div>
+      
     </div>
     @if (isPostMenuOpen) {
       <div class="post-menu open" #postMenuRef [style.left.px]="menuPosition?.left ?? 0" [style.top.px]="menuPosition?.top ?? 0">

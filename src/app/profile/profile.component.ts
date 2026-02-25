@@ -5,6 +5,7 @@ import { of, switchMap, merge, Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { UserService } from 'src/services/user.service';
+import { HotToastService } from '@ngneat/hot-toast';
 import { Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 
@@ -73,7 +74,8 @@ export class ProfileComponent implements OnInit{
     private authService: AuthenticationService,
     private userService: UserService,
     private postsService: PostsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toast: HotToastService
   ){}
 
   //Grab the logged-in User's UserID and store it.
@@ -147,22 +149,22 @@ export class ProfileComponent implements OnInit{
   }
 
   follow(): void {
-    console.log('Current User ID:', this.currentUserId);
-    console.log('Logged-in User ID:', this.loggedInUserId);
     if (this.currentUserId && this.loggedInUserId) {
-      console.log('Calling followUser function.');
       this.userService.followUser(this.currentUserId, this.loggedInUserId).then(() => {
         this.isFollowing = true;
-      })
+        const handle = this.userData?.username ?? this.username;
+        this.toast.success(handle ? `Now following @${handle}` : 'Follow successful');
+      });
     }
   }
 
   unfollow(): void {
     if (this.currentUserId && this.loggedInUserId) {
-      console.log('Calling unfollowUser function.');
       this.userService.unfollowUser(this.currentUserId, this.loggedInUserId).then(() => {
         this.isFollowing = false;
-      })
+        const handle = this.userData?.username ?? this.username;
+        this.toast.success(handle ? `Unfollowed @${handle}` : 'Unfollow successful');
+      });
     }
   }
 
