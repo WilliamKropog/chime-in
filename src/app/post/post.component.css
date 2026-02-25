@@ -212,8 +212,10 @@
     box-sizing: border-box;
 }
 
-.post-content img {
+/* Avatar only; do not style .post-content img globally or post images get 60px height */
+.post-content img.avatar {
     width: 60px;
+    height: 60px;
     margin-right: auto;
     border-radius: 100%;
     margin-top: 20px;
@@ -223,7 +225,6 @@
     outline-style: solid;
     outline-color: var(--accent);
     outline-width: 2px;
-    height: 60px;
 }
 
 .post-content h1 {

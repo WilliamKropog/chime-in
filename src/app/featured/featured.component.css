@@ -3,6 +3,7 @@
     background-color: var(--surface);
     width: 80%;
     margin: auto;
+    margin-bottom: 20px;
     padding-bottom: 10px;
     border-radius: 10px;
 }
