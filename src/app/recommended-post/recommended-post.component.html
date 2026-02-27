@@ -7,9 +7,17 @@
       <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
         <h1>{{ post.displayName }}</h1>
       </a>
-      <div class="item4 body">
-        {{ post.body }}
-      </div>
+      <!--Copy and paste from post.component.html-->
+      @if (!post.imageUrl) {
+        <div class="item4 body">
+          {{ post.body }}
+        </div>
+      } @else {
+        <div class="item4 body">
+          {{ post.body }}
+          <img [src]="post.imageUrl" alt="Post Image" class="post-body-image">
+        </div>
+      }
       <div class="item5">
         <button mat-mini-fab class="vote-button up" (click)="likePost()" [ngClass]="{'liked': isLiked}"
           style="margin-left: 40px;">
