@@ -13,6 +13,8 @@ import { CommentEditorService } from 'src/services/commenteditor.service';
 })
 export class RecommendedPostComponent implements OnInit, OnDestroy {
   @Input() post?: Post;
+  /** Profile image of the post author (e.g. recommended user's avatar when used in recommended-profile). */
+  @Input() authorPhotoUrl?: string | null;
   commentsList: Comment[] = [];
   topComment?: Comment;
   isLiked?: boolean = false; 
