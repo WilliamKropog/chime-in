@@ -11,9 +11,9 @@
 .rp-user-profile {
     width: 750px;
     height: 150px;
-    background-color: rgb(10, 26, 14);
+    background-color: var(--surface);
     border-radius: 10px;
-    border: solid 1px rgb(10, 26, 14);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     position: absolute;
     margin-top: 10px;
     background-size: cover;
@@ -32,7 +32,7 @@
     margin-left: 25px;
     padding-top: 10px;
     padding-right: 10px;
-    background-color: rgb(10, 26, 14);
+    background-color: var(--surface);
     border-radius: 10px;
 }
 
@@ -65,7 +65,7 @@
     color: white;
     width: 450px;
     height: 100px;
-    background-color: rgb(10, 26, 14);
+    background-color: var(--surface);
     border-radius: 10px;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .rp-container button {
-    background-color: rgb(10, 26, 14);
+    background-color: var(--surface);
     border-radius: 10px;
     text-align: center;
     align-items: center;
