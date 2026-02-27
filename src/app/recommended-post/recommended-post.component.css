@@ -3,10 +3,8 @@
     background-color: var(--surface);
     border-radius: 20px;
     height: auto;
-    max-height: 800px;
+    max-height: 425px;
     margin: auto;
-    margin-bottom: 40px;
-    padding-bottom: 10px;
     border: 1px solid var(--border);
 }
 
@@ -119,12 +117,12 @@
 }
 
 .post-content img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     margin-right: auto;
     border-radius: 100%;
-    margin-top: 20px;
-    margin-left: 20px;
+    margin-top: 30px;
+    margin-left: 30px;
     object-fit: cover;
     object-position: center;
     outline-style: solid;
@@ -148,24 +146,26 @@
 }
 
 .body {
-    font-size: 22px;
+    font-size: 18px;
     line-height: normal;
     width: 500px;
+    max-width: 100%;
+    min-width: 0;
     color: var(--text);
     margin-left: 50px;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 /* Post body image (photos/GIFs) – higher specificity than .post-content img so it isn’t avatar-styled */
 .post-content img.post-body-image {
     display: block;
     width: 100%;
-    max-width: 500px;
+    max-width: 300px;
     height: auto;
-    max-height: 400px;
+    max-height: 150px;
     object-fit: cover;
     border-radius: 10px;
-    margin: 10px auto;
-    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
     outline: none;
