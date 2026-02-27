@@ -154,6 +154,22 @@
     color: var(--text);
     margin-left: 50px;
 }
+
+/* Post body image (photos/GIFs) – higher specificity than .post-content img so it isn’t avatar-styled */
+.post-content img.post-body-image {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 10px auto;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    outline: none;
+}
   
 .comment-editor.open {
     overflow: hidden;
