@@ -1,3 +1,4 @@
+<div style="border-top: 1px solid rgba(148, 163, 184, 0.35); border-bottom: 1px solid rgba(148, 163, 184, 0.35);">
 <div class="rp-container">
   <!--Recommended Profile Header-->
   <div class="rp-user-profile" [style.backgroundImage]="backgroundImageUrl ? 'url(' + backgroundImageUrl + ')' : ''">
@@ -14,7 +15,9 @@
   </div>
 </div>
 <!--Featured Posts from Selected Profile-->
-<button (click)="prevPost()" style="margin-right: 900px;">❮</button>
+<button mat-mini-fab class="rp-carousel-btn rp-prev" (click)="prevPost()" style="margin-right: 900px;">
+  <mat-icon>arrow_circle_left</mat-icon>
+</button>
 
 <div class="rp-user-posts">
   @for (post of recentPosts; track post.postId; let i = $index) {
@@ -24,6 +27,7 @@
   }
 </div>
 
-<button (click)="nextPost()" style="margin-left: 900px;">❯</button>
-
+<button mat-mini-fab class="rp-carousel-btn rp-next" (click)="nextPost()" style="margin-left: 900px;">
+  <mat-icon>arrow_circle_right</mat-icon>
+</button>
 </div>
