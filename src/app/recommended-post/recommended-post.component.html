@@ -1,22 +1,27 @@
 @if (post) {
   <div class="post">
     <div class="post-content">
-      <img [src]="(authorPhotoUrl ?? post?.photoURL) ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+      <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
+        <img [src]="(authorPhotoUrl ?? post?.photoURL) ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+      </a>
       <div class="item6">• {{ post.createdAt | relativeTime}}</div>
       <div class="item3">{{ post.views }} views</div>
       <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
         <h1>{{ post.displayName }}</h1>
       </a>
-      <!--Copy and paste from post.component.html-->
       @if (!post.imageUrl) {
-        <div class="item4 body">
-          {{ post.body }}
-        </div>
+        <a [routerLink]="['/post', post.postId]" class="body-link item4" style="text-decoration: none; color: inherit;">
+          <div class="body">
+            {{ post.body }}
+          </div>
+        </a>
       } @else {
-        <div class="item4 body">
-          {{ post.body }}
-          <img [src]="post.imageUrl" alt="Post Image" class="post-body-image">
-        </div>
+        <a [routerLink]="['/post', post.postId]" class="body-link item4" style="text-decoration: none; color: inherit;">
+          <div class="body">
+            {{ post.body }}
+            <img [src]="post.imageUrl" alt="Post Image" class="post-body-image">
+          </div>
+        </a>
       }
       <div class="item5">
         <button mat-mini-fab class="vote-button up" (click)="likePost()" [ngClass]="{'liked': isLiked}"
@@ -44,7 +49,7 @@
         <div style="color: lightblue">
           {{ post.repostCount }}
         </div>
-        <a [routerLink]="['/profile', post.displayName]" style="text-decoration: none;">
+        <a [routerLink]="['/post', post.postId]" style="text-decoration: none;">
           <button mat-mini-fab
             style="width: 100px; border-radius: 10px; margin-left: 180px;">
             <mat-icon>chat_bubble</mat-icon>
