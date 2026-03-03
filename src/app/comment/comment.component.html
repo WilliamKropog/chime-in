@@ -1,6 +1,8 @@
 @if (comment) {
   <div class="comment-container">
-    <img [src]="(authorPhotoUrl$ | async) ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+    <a class="comment-pfp-link" [routerLink]="['/profile', comment.displayName]" style="text-decoration: none;">
+      <img [src]="(authorPhotoUrl$ | async) ?? 'assets/images/png-transparent-default-avatar.png'" alt="Profile Picture">
+    </a>
     <div class="comment-header">
       <a class="comment-name" [routerLink]="['/profile', comment.displayName]" style="text-decoration: none; color: white;">
         {{ comment.displayName }}

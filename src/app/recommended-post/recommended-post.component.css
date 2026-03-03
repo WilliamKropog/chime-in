@@ -27,6 +27,12 @@
     grid-area: body;
 }
 
+/* Anchor as grid item: participate in grid like the div did, and allow shrinking so body doesn’t overflow */
+.body-link {
+    display: block;
+    min-width: 0;
+}
+
 .item5 {
     grid-area: footer;
     display: flex;

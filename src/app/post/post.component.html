@@ -9,12 +9,13 @@
         (click)="onPostCardClick($event)"
         (keydown)="onPostCardKeydown($event)"
       >
-        <img
-          class="avatar"
-          [src]="(authorPhotoUrl$ | async) ?? 'assets/images/png-transparent-default-avatar.png'"
-          alt="Profile Picture"
-          (click)="stopEvent($event)"
-        >
+        <a [routerLink]="['/profile', post.displayName]" (click)="stopEvent($event)" style="text-decoration: none;">
+          <img
+            class="avatar"
+            [src]="(authorPhotoUrl$ | async) ?? 'assets/images/png-transparent-default-avatar.png'"
+            alt="Profile Picture"
+          >
+        </a>
         <div class="item6">• {{ post.createdAt | relativeTime}}</div>
         <div class="item3">{{ post.views }} views</div>
         <div class="item8">
