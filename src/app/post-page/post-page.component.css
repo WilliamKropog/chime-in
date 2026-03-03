@@ -1,5 +1,7 @@
 .post-page-container {
+  margin-top: 100px;
   padding-top: 12px;
+  transform: scale(1.2);
 }
 
 .post-page-loading {

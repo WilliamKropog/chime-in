@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostsService } from 'src/services/posts.service';
+import { CommentEditorService } from 'src/services/commenteditor.service';
 import { Post } from 'src/interface';
 
 @Component({
@@ -14,7 +15,11 @@ export class PostPageComponent implements OnInit {
   isLoading = true;
   notFound = false;
 
-  constructor(private route: ActivatedRoute, private postsService: PostsService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private postsService: PostsService,
+    private commentEditorService: CommentEditorService
+  ) {}
 
   ngOnInit(): void {
     const postId = this.route.snapshot.paramMap.get('postId');
@@ -33,6 +38,10 @@ export class PostPageComponent implements OnInit {
       this.post = post;
       this.isLoading = false;
       this.notFound = !post;
+      if (post) {
+        // Defer so <app-post> is created and subscribed to openEditor$ before we emit
+        setTimeout(() => this.commentEditorService.openEditor(postId), 0);
+      }
     });
   }
 

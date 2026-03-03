@@ -93,7 +93,9 @@ export class PostComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     : of({ uid: '', isAdmin: false, isMod: false });
 
     this.editorSubscription = this.commentEditorService.openEditor$.subscribe(openPostId => {
-      if (openPostId !== this.post?.postId) {
+      if (openPostId === this.post?.postId) {
+        this.isCommentEditorOpen = true;
+      } else {
         this.isCommentEditorOpen = false;
       }
     });
