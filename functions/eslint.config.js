@@ -20,6 +20,9 @@ module.exports = [
       "no-restricted-globals": ["error", "name", "length"],
       "prefer-arrow-callback": "error",
       "quotes": ["error", "double", {allowTemplateLiterals: true}],
+      "linebreak-style": ["error", "windows"],
+      "max-len": ["error", {"code": 120, "ignoreUrls": true, "ignoreStrings": true}],
+      "operator-linebreak": "off",
     },
     overrides: [
       {
