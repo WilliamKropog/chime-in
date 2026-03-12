@@ -32,6 +32,8 @@
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
+    "chokidar": "^5.0.0",
+    "readdirp": "^5.0.0",
     "@angular/build": "^20.3.14",
     "@angular/cli": "^21.1.0",
     "@angular/compiler-cli": "^20.3.16",
