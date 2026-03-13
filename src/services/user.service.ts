@@ -7,6 +7,7 @@ import {
   Firestore,
   doc,
   docData,
+  getDoc,
   setDoc,
   updateDoc,
   collection,
@@ -65,6 +66,22 @@ export class UserService {
   updateUserProfile(uid: string, data: any): Promise<void> {
     return runInInjectionContext(this.env, async () => {
       await updateDoc(doc(this.db, `users/${uid}`), data);
+    });
+  }
+
+  /**
+   * Ensures Firestore has profileImageURL when Auth has photoURL (e.g. Google sign-in).
+   * Call on app load so author avatars in Posts/Comments work in production when Firestore was never written.
+   */
+  syncAuthPhotoToFirestoreIfMissing(authUser: { uid: string; photoURL: string | null }): Promise<void> {
+    if (!authUser?.uid || !authUser.photoURL) return Promise.resolve();
+    return runInInjectionContext(this.env, async () => {
+      const ref = doc(this.db, 'users', authUser.uid);
+      const snap = await getDoc(ref);
+      const data = snap.exists() ? snap.data() : {};
+      if (!data?.['profileImageURL']) {
+        await setDoc(ref, { profileImageURL: authUser.photoURL }, { merge: true });
+      }
     });
   }
 
