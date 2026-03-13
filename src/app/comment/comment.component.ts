@@ -43,18 +43,23 @@ export class CommentComponent implements OnInit, OnDestroy{
   ngOnChanges(changes: SimpleChanges): void {
     const comment = changes['comment']?.currentValue as Comment | undefined;
     if (comment?.userId) {
-      const initial$ = this.userService.getUserProfile(comment.userId).pipe(
-        take(1),
-        map((d: any) => d?.profileImageURL || DEFAULT_AVATAR)
-      );
+      const currentUser$ = this.authService.currentUser$;
+      const authorPhotoForComment = () =>
+        currentUser$.pipe(
+          take(1),
+          switchMap((cur) =>
+            cur && comment.userId === cur.uid
+              ? of(cur.photoURL ?? DEFAULT_AVATAR)
+              : this.userService.getUserProfile(comment.userId).pipe(
+                  take(1),
+                  map((d: any) => d?.profileImageURL || DEFAULT_AVATAR)
+                )
+          )
+        );
+      const initial$ = authorPhotoForComment();
       const onProfileUpdate$ = this.profileUpdateService.profileUpdated$.pipe(
         filter((uid) => uid === comment.userId),
-        switchMap(() =>
-          this.userService.getUserProfile(comment.userId).pipe(
-            take(1),
-            map((d: any) => d?.profileImageURL || DEFAULT_AVATAR)
-          )
-        )
+        switchMap(() => authorPhotoForComment())
       );
       this.authorPhotoUrl$ = merge(initial$, onProfileUpdate$);
     } else {
