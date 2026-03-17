@@ -2,9 +2,11 @@ import { Component, EventEmitter, Input, Output, OnDestroy, inject, EnvironmentI
 import { take } from 'rxjs/operators';
 import { AuthenticationService } from 'src/services/authentication.service';
 import { PostsService } from 'src/services/posts.service';
+import { UserService } from 'src/services/user.service';
 import { Post } from '../../interface';
 import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { firstValueFrom } from 'rxjs';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-post-editor',
@@ -33,7 +35,9 @@ export class PostEditorComponent implements OnDestroy {
   constructor(
     private authService: AuthenticationService,
     private postService: PostsService,
-    private storage: Storage
+    private userService: UserService,
+    private storage: Storage,
+    private toast: HotToastService
   ) {}
 
   ngOnDestroy(): void {
@@ -53,6 +57,12 @@ export class PostEditorComponent implements OnDestroy {
     const user = await firstValueFrom(this.authService.currentUser$);
     if (!user) {
       this.errorMessage = 'You must be logged in to post.';
+      return;
+    }
+
+    const profile = await firstValueFrom(this.userService.user$(user.uid));
+    if (profile?.isBanned) {
+      this.toast.error('You are banned from creating posts.');
       return;
     }
 

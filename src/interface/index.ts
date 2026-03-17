@@ -16,6 +16,7 @@ export interface User {
     backgroundImageURL?: string | null;
     isAdmin?: boolean;
     isMod?: boolean;
+    isBanned?: boolean;
 }
 
 export interface Post {
