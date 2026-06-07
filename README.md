@@ -4,7 +4,7 @@ A full-stack social media web application built with **Angular** (frontend) and 
 
 ## 🚀 Live Demo
 
-<https://chimein--chime-in-ded1f.us-central1.hosted.app>
+<https://chime-in-ded1f.web.app>
 
 ## 🔧 Tech Stack
 
