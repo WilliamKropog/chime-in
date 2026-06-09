@@ -16,7 +16,7 @@
 }
 
 @if (followedPosts.length === 0 && recommendedProfiles.length > 0) {
-  <div>
+  <div class="recommended-profiles">
     @for (profile of recommendedProfiles; track profile) {
       <app-recommended-profile [user]="profile"></app-recommended-profile>
     }
