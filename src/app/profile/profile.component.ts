@@ -25,9 +25,12 @@ export class ProfileComponent implements OnInit{
   username: string = '';
   userData: any = null;
   viewedPosts: Set<string> = new Set();
-  isLoadingPosts: boolean = false;
+  isLoadingInitial: boolean = false;
+  isLoadingMore: boolean = false;
+  hasMorePosts = true;
   scrollTimeout: any = null;
   scrollThreshHold: number = 200;
+  private readonly pageSize = 10;
   currentUserId: string = ''; 
   loggedInUserId: string = ''; 
   userPhotoUrl: string = 'assets/images/png-transparent-default-avatar.png';
@@ -103,10 +106,14 @@ export class ProfileComponent implements OnInit{
   }
 
   loadUserPosts(userId: string): void {
-    this.isLoadingPosts = true;
+    this.isLoadingInitial = true;
+    this.hasMorePosts = true;
     this.postsService.getUserPosts(userId).subscribe((posts) => {
       this.userPosts = this.dedupePostsById(posts ?? []);
-      this.isLoadingPosts = false;
+      if ((posts ?? []).length < this.pageSize) {
+        this.hasMorePosts = false;
+      }
+      this.isLoadingInitial = false;
     });
   }
 
@@ -121,19 +128,33 @@ export class ProfileComponent implements OnInit{
       const scrollPosition = window.innerHeight + window.pageYOffset;
       const fullHeight = document.documentElement.scrollHeight;
 
-      if ((fullHeight - scrollPosition) < this.scrollThreshHold && !this.isLoadingPosts) {
+      if ((fullHeight - scrollPosition) < this.scrollThreshHold && !this.isLoadingInitial && !this.isLoadingMore && this.hasMorePosts) {
         this.loadMorePosts();
       }
     }, 200);
   }
 
   loadMorePosts(): void {
-    if (this.isLoadingPosts || !this.currentUserId) return;
+    if (this.isLoadingInitial || this.isLoadingMore || !this.hasMorePosts || !this.currentUserId) return;
 
-    this.isLoadingPosts = true;
-    this.postsService.getMoreUserPosts(this.currentUserId).subscribe((posts) => {
-      this.userPosts = this.dedupePostsById([...this.userPosts, ...(posts ?? [])]);
-      this.isLoadingPosts = false;
+    this.isLoadingMore = true;
+    const previousCount = this.userPosts.length;
+    this.postsService.getMoreUserPosts(this.currentUserId).subscribe({
+      next: (posts) => {
+        if (!posts?.length) {
+          this.hasMorePosts = false;
+        } else {
+          this.userPosts = this.dedupePostsById([...this.userPosts, ...(posts ?? [])]);
+          const addedCount = this.userPosts.length - previousCount;
+          if (addedCount === 0 || posts.length < this.pageSize) {
+            this.hasMorePosts = false;
+          }
+        }
+        this.isLoadingMore = false;
+      },
+      error: () => {
+        this.isLoadingMore = false;
+      }
     });
   }
 

@@ -66,10 +66,16 @@
       <app-profile-posts [posts]="userPosts"></app-profile-posts>
     </div>
 
-    @if (isLoadingPosts) {
+    @if (isLoadingInitial) {
       <div class="loading-spinner"></div>
       <div class="loading-posts">
         Loading Posts...
+      </div>
+    }
+    @if (isLoadingMore) {
+      <div class="loading-spinner"></div>
+      <div class="loading-posts">
+        Loading more posts...
       </div>
     }
   </div>

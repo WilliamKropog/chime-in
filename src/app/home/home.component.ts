@@ -12,10 +12,13 @@ import { Post } from 'src/interface';
 export class HomeComponent implements OnInit, OnDestroy {
   mostRecentPosts: Post[] = [];
   viewedPosts: Set<string> = new Set();
-  isLoadingPosts = false;
+  isLoadingInitial = false;
+  isLoadingMore = false;
+  hasMorePosts = true;
   loadError: string | null = null;
   scrollTimeout: any = null;
   scrollThreshold = 200;
+  private readonly pageSize = 10;
 
   private subs = new Subscription();
 
@@ -41,28 +44,43 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   loadInitialPosts() {
-    this.isLoadingPosts = true;
+    this.isLoadingInitial = true;
+    this.hasMorePosts = true;
     this.loadError = null;
     this.postsService.getMostRecentPosts().subscribe(posts => {
       this.mostRecentPosts = posts;
-      this.isLoadingPosts = false;
+      if (posts.length < this.pageSize) {
+        this.hasMorePosts = false;
+      }
+      this.isLoadingInitial = false;
     }, err => {
       console.error('Failed to load posts:', err);
       this.loadError = 'Failed to load posts. If you are using the Firebase emulators, you may simply have no local data yet.';
-      this.isLoadingPosts = false;
+      this.isLoadingInitial = false;
     });
   }
 
   loadMorePosts() {
-    if (this.isLoadingPosts) return;
+    if (this.isLoadingInitial || this.isLoadingMore || !this.hasMorePosts) return;
 
-    this.isLoadingPosts = true;
+    this.isLoadingMore = true;
+    const previousCount = this.mostRecentPosts.length;
     const s = this.postsService.getMorePosts().subscribe({
       next: posts => {
-        this.mostRecentPosts = this.mergeUniqueById(this.mostRecentPosts, posts);
-        this.isLoadingPosts = false;
+        if (!posts.length) {
+          this.hasMorePosts = false;
+        } else {
+          this.mostRecentPosts = this.mergeUniqueById(this.mostRecentPosts, posts);
+          const addedCount = this.mostRecentPosts.length - previousCount;
+          if (addedCount === 0 || posts.length < this.pageSize) {
+            this.hasMorePosts = false;
+          }
+        }
+        this.isLoadingMore = false;
       },
-      error: () => (this.isLoadingPosts = false)
+      error: () => {
+        this.isLoadingMore = false;
+      }
     });
     this.subs.add(s);
   }
@@ -74,7 +92,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.ngZone.run(() => {
         const scrollPosition = window.innerHeight + window.pageYOffset;
         const fullHeight = document.documentElement.scrollHeight;
-        if ((fullHeight - scrollPosition) < this.scrollThreshold && !this.isLoadingPosts) {
+        if ((fullHeight - scrollPosition) < this.scrollThreshold && !this.isLoadingInitial && !this.isLoadingMore && this.hasMorePosts) {
           this.loadMorePosts();
         }
       });

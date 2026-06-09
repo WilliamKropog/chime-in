@@ -5,18 +5,24 @@
       (deleted)="onPostDeleted($event)">
     </app-home-posts>
   }
-  @if (isLoadingPosts) {
+  @if (isLoadingInitial) {
     <div class="loading-spinner"></div>
     <div class="loading-posts">
       Loading Posts...
     </div>
   }
-  @if (!isLoadingPosts && loadError) {
+  @if (isLoadingMore) {
+    <div class="loading-spinner"></div>
+    <div class="loading-posts">
+      Loading more posts...
+    </div>
+  }
+  @if (!isLoadingInitial && loadError) {
     <div class="loading-posts">
       {{ loadError }}
     </div>
   }
-  @if (!isLoadingPosts && !loadError && mostRecentPosts.length === 0) {
+  @if (!isLoadingInitial && !loadError && mostRecentPosts.length === 0) {
     <div class="loading-posts">
       No posts yet in your local emulator. Create a post to see the feed populate.
     </div>
