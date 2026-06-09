@@ -11,6 +11,7 @@
     top: 0;
     overflow: scroll;
     border-left: 1px solid var(--border);
+    z-index: 2;
   }
 
   .image {
