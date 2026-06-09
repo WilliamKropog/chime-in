@@ -13,7 +13,9 @@ export class FeaturedComponent implements OnInit, OnDestroy{
 
   followedPosts: Post[] = [];
   recommendedProfiles: any[] = [];
-  isLoadingPosts: boolean = false;
+  isLoadingInitial = false;
+  isLoadingMore = false;
+  hasMorePosts = true;
   scrollTimeout: any = null;
   scrollThreshold: number = 400;
   private followedUserIds: string[] = [];
@@ -33,7 +35,7 @@ export class FeaturedComponent implements OnInit, OnDestroy{
   }
 
   loadFollowedUserPosts(): void {
-    this.isLoadingPosts = true;
+    this.isLoadingInitial = true;
     this.userService.getFollowedUserIds()
     .subscribe(userIds => {
       if (userIds && userIds.length > 0) {
@@ -41,28 +43,57 @@ export class FeaturedComponent implements OnInit, OnDestroy{
         this.loadInitialPosts();
       } else {
         this.loadRecommendedProfiles(3);
-        this.isLoadingPosts = false;
+        this.isLoadingInitial = false;
       }
     });
   }
 
+  private mergeUniqueById(existing: Post[], incoming: Post[]): Post[] {
+    const seen = new Set(existing.map(p => p.postId));
+    const dedupIncoming = incoming.filter(p => !seen.has(p.postId));
+    return [...existing, ...dedupIncoming];
+  }
+
   loadInitialPosts(): void {
-    this.isLoadingPosts = true;
+    this.isLoadingInitial = true;
+    this.hasMorePosts = true;
     this.postsService.getPostsFromUsers(this.followedUserIds, this.postLoadLimit)
-      .subscribe(posts => {
-        this.followedPosts = posts;
-        this.isLoadingPosts = false;
+      .subscribe({
+        next: posts => {
+          this.followedPosts = posts;
+          if (posts.length < this.postLoadLimit) {
+            this.hasMorePosts = false;
+          }
+          this.isLoadingInitial = false;
+        },
+        error: () => {
+          this.isLoadingInitial = false;
+        }
       });
   }
 
   loadMorePosts(): void {
-    if (this.isLoadingPosts) return;
+    if (this.isLoadingInitial || this.isLoadingMore || !this.hasMorePosts) return;
 
-    this.isLoadingPosts = true;
+    this.isLoadingMore = true;
+    const previousCount = this.followedPosts.length;
     this.postsService.getMorePostsFromUsers(this.followedUserIds, this.postLoadLimit)
-      .subscribe(posts => {
-        this.followedPosts = [...this.followedPosts, ...posts];
-        this.isLoadingPosts = false;
+      .subscribe({
+        next: posts => {
+          if (!posts.length) {
+            this.hasMorePosts = false;
+          } else {
+            this.followedPosts = this.mergeUniqueById(this.followedPosts, posts);
+            const addedCount = this.followedPosts.length - previousCount;
+            if (addedCount === 0 || posts.length < this.postLoadLimit) {
+              this.hasMorePosts = false;
+            }
+          }
+          this.isLoadingMore = false;
+        },
+        error: () => {
+          this.isLoadingMore = false;
+        }
       });
   }
 
@@ -78,7 +109,7 @@ export class FeaturedComponent implements OnInit, OnDestroy{
   }
 
   loadMoreRecommendedProfiles(count: number): void {
-    this.isLoadingPosts = true;
+    this.isLoadingMore = true;
 
     for (let i = 0; i < count; i++) {
       this.userService.getRandomRecommendedUser().subscribe(user => {
@@ -87,7 +118,7 @@ export class FeaturedComponent implements OnInit, OnDestroy{
         }
       });
     }
-    this.isLoadingPosts = false;
+    this.isLoadingMore = false;
   }
 
   @HostListener('window:scroll', [])
@@ -100,12 +131,12 @@ export class FeaturedComponent implements OnInit, OnDestroy{
       const scrollPosition = window.innerHeight + window.pageYOffset;
       const fullHeight = document.documentElement.scrollHeight;
 
-      if ((fullHeight - scrollPosition) < this.scrollThreshold && !this.isLoadingPosts) {
-        if (this.followedPosts.length > 0){
-          console.log('Attempting to load more posts...')
-          this.loadMorePosts();
+      if ((fullHeight - scrollPosition) < this.scrollThreshold && !this.isLoadingInitial && !this.isLoadingMore) {
+        if (this.followedPosts.length > 0) {
+          if (this.hasMorePosts) {
+            this.loadMorePosts();
+          }
         } else {
-          console.log('Attempting to load more recommended profiles...');
           this.loadMoreRecommendedProfiles(3);
         }
       }
