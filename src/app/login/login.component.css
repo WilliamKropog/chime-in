@@ -10,6 +10,7 @@
     font-weight: 400;
     font-size: 36px;
     border-right: 1px solid var(--border);
+    z-index: 2;
   }
 
   .login ul {

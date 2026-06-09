@@ -56,6 +56,8 @@ body {
   margin-left: var(--sidebar-width);
   margin-right: var(--sidebar-width);
   padding: var(--page-gutter);
+  position: relative;
+  z-index: 0;
 }
 
 /* Simple “page” wrapper for templates that want centered content */
