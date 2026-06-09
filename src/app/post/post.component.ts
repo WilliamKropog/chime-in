@@ -304,12 +304,33 @@ export class PostComponent implements OnInit, OnChanges, AfterViewInit, OnDestro
     const anchor = this.menuAnchorRef?.nativeElement;
     const post = this.postRef?.nativeElement;
     if (!anchor || !post) return;
-    const anchorRect = anchor.getBoundingClientRect();
-    const postRect = post.getBoundingClientRect();
+
+    // Use layout offsets (not getBoundingClientRect) so menu stays aligned when
+    // an ancestor applies transform (e.g. post-page scale) — viewport rects and
+    // absolute left/top live in different coordinate spaces in that case.
+    const anchorOffset = this.getOffsetWithin(anchor, post);
     this.menuPosition = {
-      left: anchorRect.left - postRect.left + anchorRect.width / 2,
-      top: anchorRect.top - postRect.top + anchorRect.height / 2
+      left: anchorOffset.left + anchor.offsetWidth / 2,
+      top: anchorOffset.top + anchor.offsetHeight / 2
     };
+  }
+
+  private getOffsetWithin(element: HTMLElement, ancestor: HTMLElement): { left: number; top: number } {
+    let left = 0;
+    let top = 0;
+    let current: HTMLElement | null = element;
+
+    while (current && current !== ancestor) {
+      left += current.offsetLeft;
+      top += current.offsetTop;
+      const parent = current.offsetParent as HTMLElement | null;
+      if (!parent || !ancestor.contains(parent)) {
+        break;
+      }
+      current = parent;
+    }
+
+    return { left, top };
   }
 
   @HostListener('document:click', ['$event']) onDocumentClick(event: MouseEvent): void {
