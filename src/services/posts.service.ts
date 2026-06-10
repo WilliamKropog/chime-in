@@ -297,31 +297,22 @@ export class PostsService {
       return src$.pipe(
         map(comments => comments.filter(c => !c.isHidden)),
         map(comments => topCommentId ? comments.filter(c => c.commentId !== topCommentId) : comments),
-        debounceTime(500),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
       );
     });
   }
 
   getTopCommentForPost(postId: string): Observable<Comment | undefined> {
-    return new Observable<Comment | undefined>(subscriber => {
-      runInInjectionContext(this.env, async () => {
-        try {
-          const q = query(
-            collection(this.db, `posts/${postId}/comments`),
-            orderBy('likeCount', 'desc'),
-            limit(10)
-          );
-          const snap = await getDocs(q);
-          const item = snap.docs
-            .map(d => d.data() as Comment)
-            .find(c => !c.isHidden);
-          subscriber.next(item);
-          subscriber.complete();
-        } catch (err) {
-          subscriber.error(err);
-        }
-      });
+    return runInInjectionContext(this.env, () => {
+      const q = query(
+        collection(this.db, `posts/${postId}/comments`),
+        orderBy('likeCount', 'desc'),
+        limit(20)
+      );
+      return (collectionData(q, { idField: 'commentId' }) as Observable<Comment[]>).pipe(
+        map(comments => comments.find(c => !c.isHidden)),
+        distinctUntilChanged((a, b) => a?.commentId === b?.commentId)
+      );
     });
   }
 

@@ -1,7 +1,7 @@
 <div class="comment-list">
   <div class="scrollable-comments" [ngClass]="{ 'open': isCommentSectionOpen }">
     <!--Top Comment-->
-    @if (topComment) {
+    @if (topComment && !topComment.isHidden) {
       <div class="top-comment-block">
         <div class="topCommentText">
           Top Comment:

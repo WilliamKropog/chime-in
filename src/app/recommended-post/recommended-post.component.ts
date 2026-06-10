@@ -41,17 +41,24 @@ export class RecommendedPostComponent implements OnInit, OnDestroy {
     });
 
     if (this.post?.postId) {
-      this.topCommentSubscription = this.postsService.getTopCommentForPost(this.post.postId)
-      .subscribe(topComment => {
-        this.topComment = topComment;
-        const topCommentId = topComment ? topComment.commentId : undefined;
+      this.bindCommentStreams(this.post.postId);
+    }
+  }
 
-        this.commentsSubscription = this.postsService.getCommentsForPost(this.post!.postId, topCommentId)
+  private bindCommentStreams(postId: string): void {
+    this.topCommentSubscription?.unsubscribe();
+    this.commentsSubscription?.unsubscribe();
+
+    this.topCommentSubscription = this.postsService.getTopCommentForPost(postId).subscribe(topComment => {
+      this.topComment = topComment;
+      const topCommentId = topComment?.commentId;
+
+      this.commentsSubscription?.unsubscribe();
+      this.commentsSubscription = this.postsService.getCommentsForPost(postId, topCommentId)
         .subscribe(comments => {
           this.commentsList = comments;
         });
-      });
-    }
+    });
   }
 
   ngOnDestroy(): void {
