@@ -68,7 +68,8 @@ body {
 
 /* Feed pages: scale with center column; posts fill this width via --post-card-max-width */
 .page.home-page,
-.page.profile-page {
+.page.profile-page,
+.page.featured-page {
   --feed-col: calc(100vw - 2 * var(--sidebar-width) - 2 * var(--page-gutter));
   --post-card-max-width: 100%;
   max-width: clamp(625px, calc(var(--feed-col) * 0.935), 800px);
@@ -190,7 +191,8 @@ a {
   }
 
   .page.home-page,
-  .page.profile-page {
+  .page.profile-page,
+  .page.featured-page {
     --feed-col: calc(100vw - 32px);
   }
 

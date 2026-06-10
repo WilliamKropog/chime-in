@@ -21,6 +21,7 @@ export class SideNavComponent implements OnInit {
 
   user$ = this.authService.currentUser$;
   isPostEditorOpen: boolean = false;
+  private isLoggingOut = false;
 
   constructor(
     private authService: AuthenticationService,
@@ -63,11 +64,18 @@ export class SideNavComponent implements OnInit {
   //LOGOUT BUTTON
 
   logout() {
-    console.log("Logout button clicked...");
-    this.authService.logout();
-    this.router.navigate(['']).then(() => {
-      window.location.reload();
-    });
+    if (this.isLoggingOut) return;
+    this.isLoggingOut = true;
+
+    void this.authService.logout()
+      .then(() => this.router.navigate(['']))
+      .catch((err) => {
+        console.error('Logout failed:', err);
+        this.toast.error('Logout failed. Please try again.');
+      })
+      .finally(() => {
+        this.isLoggingOut = false;
+      });
   }
 
 
