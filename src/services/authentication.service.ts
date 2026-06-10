@@ -10,7 +10,7 @@ import {
 import { Observable, from, of, concatMap, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'any'
+  providedIn: 'root'
 })
 export class AuthenticationService {
 
@@ -37,9 +37,11 @@ export class AuthenticationService {
     });
   }
 
-  logout() {
-    console.log('Logging out...');
-    return from(this.auth.signOut());
+  async logout(): Promise<void> {
+    await runInInjectionContext(this.env, async () => {
+      await this.auth.signOut();
+    });
+    localStorage.removeItem('user');
   }
 
   updateProfileData(profileData: Partial<UserInfo>): Observable<any> {

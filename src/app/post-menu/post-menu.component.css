@@ -1,7 +1,7 @@
 .post-menu-container {
     display: inline-block;
     background: var(--surface-2);
-    z-index: 1;
+    z-index: 3;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid var(--border);
@@ -10,7 +10,7 @@
 .menu-list {
     display: flex;
     flex-direction: column;
-    z-index: 1;
+    z-index: 3;
 }
 
 .menu-list button {
@@ -18,7 +18,7 @@
     color: var(--text);
     background-color: transparent;
     border-radius: 0px;
-    z-index: 1;
+    z-index: 3;
 }
 
 .menu-list button:hover {

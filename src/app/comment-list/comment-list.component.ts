@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Comment, Post } from 'src/interface';
 import { PostsService } from 'src/services/posts.service';
 
@@ -9,11 +10,12 @@ import { PostsService } from 'src/services/posts.service';
     styleUrl: './comment-list.component.css',
     standalone: false
 })
-export class CommentListComponent implements OnInit {
+export class CommentListComponent implements OnInit, OnDestroy {
   @Input() post?: Post;
   @Input() comments: Comment[] = [];
   topComment?: Comment;
   isCommentSectionOpen = false;
+  private topCommentSubscription?: Subscription;
 
   constructor(
     private postsService: PostsService,
@@ -28,10 +30,14 @@ export class CommentListComponent implements OnInit {
       this.isCommentSectionOpen = true;
     }
     if (this.post?.postId) {
-      this.postsService.getTopCommentForPost(this.post.postId).subscribe(topComment => {
+      this.topCommentSubscription = this.postsService.getTopCommentForPost(this.post.postId).subscribe(topComment => {
         this.topComment = topComment;
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.topCommentSubscription?.unsubscribe();
   }
 
   trackByCommentId(index: number, comment: Comment): string {

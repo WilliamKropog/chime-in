@@ -69,30 +69,40 @@
 
 .rp-user-profile .user-bio {
     position: absolute;
-    justify-content: center;
-    align-items: center;
     display: flex;
+    align-items: stretch;
+    gap: 8px;
     margin-left: 275px;
     margin-top: 20px;
-    padding-top: 6px;
+    padding: 8px 10px;
     color: white;
     width: 450px;
     height: 100px;
+    box-sizing: border-box;
+    overflow: hidden;
     background-color: var(--surface);
     border-radius: 10px;
 }
 
 .user-bio h1 {
+    flex-shrink: 0;
     font-size: 20px;
     font-weight: bold;
-    margin-left: 10px;
+    margin: 0;
+    line-height: 1.35;
 }
 
 .user-bio p {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
     font-size: 16px;
-    width: 425px;
-    margin-left: 10px;
+    line-height: 1.35;
     text-align: left;
+    overflow-x: hidden;
+    overflow-y: auto;
+    word-break: break-word;
 }
 
 .rp-user-posts {

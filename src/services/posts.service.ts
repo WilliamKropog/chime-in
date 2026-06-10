@@ -38,6 +38,8 @@ export class PostsService {
   private homeLastVisible: QueryDocumentSnapshot | null = null;
   private userLastVisible = new Map<string, QueryDocumentSnapshot>();
   private followingLastVisible: QueryDocumentSnapshot | null = null;
+  private readonly voteCooldownMs = 500;
+  private voteLastCalled = new Map<string, number>();
   private env = inject(EnvironmentInjector);
 
   private openEditorSubject = new Subject<string | null>();
@@ -297,31 +299,22 @@ export class PostsService {
       return src$.pipe(
         map(comments => comments.filter(c => !c.isHidden)),
         map(comments => topCommentId ? comments.filter(c => c.commentId !== topCommentId) : comments),
-        debounceTime(500),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
       );
     });
   }
 
   getTopCommentForPost(postId: string): Observable<Comment | undefined> {
-    return new Observable<Comment | undefined>(subscriber => {
-      runInInjectionContext(this.env, async () => {
-        try {
-          const q = query(
-            collection(this.db, `posts/${postId}/comments`),
-            orderBy('likeCount', 'desc'),
-            limit(10)
-          );
-          const snap = await getDocs(q);
-          const item = snap.docs
-            .map(d => d.data() as Comment)
-            .find(c => !c.isHidden);
-          subscriber.next(item);
-          subscriber.complete();
-        } catch (err) {
-          subscriber.error(err);
-        }
-      });
+    return runInInjectionContext(this.env, () => {
+      const q = query(
+        collection(this.db, `posts/${postId}/comments`),
+        orderBy('likeCount', 'desc'),
+        limit(20)
+      );
+      return (collectionData(q, { idField: 'commentId' }) as Observable<Comment[]>).pipe(
+        map(comments => comments.find(c => !c.isHidden)),
+        distinctUntilChanged((a, b) => a?.commentId === b?.commentId)
+      );
     });
   }
 
@@ -399,6 +392,17 @@ export class PostsService {
   }
 
   // ---------- Cloud Functions / Interactions ----------
+  /** Drops rapid repeat calls so vote cloud functions fire at most once per cooldown per target. */
+  private async runVoteThrottled(key: string, action: () => Promise<void>): Promise<void> {
+    const now = Date.now();
+    const last = this.voteLastCalled.get(key) ?? 0;
+    if (now - last < this.voteCooldownMs) {
+      return;
+    }
+    this.voteLastCalled.set(key, now);
+    await action();
+  }
+
   async incrementView(postId: string): Promise<void> {
     await runInInjectionContext(this.env, async () => {
       const fn = httpsCallable(this.fns, 'incrementPostView');
@@ -418,17 +422,23 @@ export class PostsService {
   }
 
   async addLike(postId: string | undefined): Promise<void> {
-    await runInInjectionContext(this.env, async () => {
-      const fn = httpsCallable(this.fns, 'addLike');
-      await fn({ postId });
-    });
+    if (!postId) return;
+    await this.runVoteThrottled(`post-like:${postId}`, () =>
+      runInInjectionContext(this.env, async () => {
+        const fn = httpsCallable(this.fns, 'addLike');
+        await fn({ postId });
+      })
+    );
   }
 
   async removeLike(postId: string | undefined): Promise<void> {
-    await runInInjectionContext(this.env, async () => {
-      const fn = httpsCallable(this.fns, 'removeLike');
-      await fn({ postId });
-    });
+    if (!postId) return;
+    await this.runVoteThrottled(`post-like:${postId}`, () =>
+      runInInjectionContext(this.env, async () => {
+        const fn = httpsCallable(this.fns, 'removeLike');
+        await fn({ postId });
+      })
+    );
   }
 
   async checkIfUserLiked(postId: string, userId: string): Promise<boolean> {
@@ -440,17 +450,23 @@ export class PostsService {
   }
 
   async addDislike(postId: string | undefined): Promise<void> {
-    await runInInjectionContext(this.env, async () => {
-      const fn = httpsCallable(this.fns, 'addDislike');
-      await fn({ postId });
-    });
+    if (!postId) return;
+    await this.runVoteThrottled(`post-dislike:${postId}`, () =>
+      runInInjectionContext(this.env, async () => {
+        const fn = httpsCallable(this.fns, 'addDislike');
+        await fn({ postId });
+      })
+    );
   }
 
   async removeDislike(postId: string | undefined): Promise<void> {
-    await runInInjectionContext(this.env, async () => {
-      const fn = httpsCallable(this.fns, 'removeDislike');
-      await fn({ postId });
-    });
+    if (!postId) return;
+    await this.runVoteThrottled(`post-dislike:${postId}`, () =>
+      runInInjectionContext(this.env, async () => {
+        const fn = httpsCallable(this.fns, 'removeDislike');
+        await fn({ postId });
+      })
+    );
   }
 
   async checkIfUserDisliked(postId: string, userId: string): Promise<boolean> {
