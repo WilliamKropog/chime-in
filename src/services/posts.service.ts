@@ -1,6 +1,6 @@
 import { Injectable, EnvironmentInjector, runInInjectionContext, inject } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
 import {
   Firestore,
   doc,
@@ -84,7 +84,12 @@ export class PostsService {
       const commentRef = doc(commentsCol);
       data.commentId = commentRef.id;
 
-      await setDoc(commentRef, data as any);
+      const payload: Comment = {
+        ...data,
+        isHidden: data.isHidden ?? false,
+      };
+
+      await setDoc(commentRef, payload as any);
       await this.incrementCommentCount(postId);
       return commentRef.id;
     });
@@ -142,28 +147,20 @@ export class PostsService {
     });
   }
 
-  // ---------- Home: initial list ----------
+  // ---------- Home: initial list (live updates when new posts are created) ----------
   getMostRecentPosts(): Observable<Post[]> {
-    return new Observable<Post[]>(subscriber => {
-      runInInjectionContext(this.env, async () => {
-        try {
-          this.homeLastVisible = null;
-          const q = query(
-            collection(this.db, 'posts'),
-            orderBy('createdAt', 'desc'),
-            limit(PostsService.FEED_PAGE_SIZE),
-            where('isHidden', '==', false)
-          );
-          const snapshot = await getDocs(q);
-          if (snapshot.size > 0) {
-            this.homeLastVisible = snapshot.docs[snapshot.docs.length - 1];
-          }
-          subscriber.next(this.mapPostDocs(snapshot.docs));
-          subscriber.complete();
-        } catch (err) {
-          subscriber.error(err);
-        }
-      });
+    return runInInjectionContext(this.env, () => {
+      this.homeLastVisible = null;
+      const q = query(
+        collection(this.db, 'posts'),
+        orderBy('createdAt', 'desc'),
+        limit(PostsService.FEED_PAGE_SIZE),
+        where('isHidden', '==', false)
+      );
+      void this.seedHomePaginationCursor(q);
+      return (collectionData(q, { idField: 'postId' }) as Observable<Post[]>).pipe(
+        tap(() => void this.seedHomePaginationCursor(q))
+      );
     });
   }
 
@@ -200,28 +197,23 @@ export class PostsService {
     });
   }
 
-  // ---------- Profile: posts ----------
+  // ---------- Profile: posts (live updates when user creates a post) ----------
   getUserPosts(userId: string): Observable<Post[]> {
-    return new Observable<Post[]>(subscriber => {
-      runInInjectionContext(this.env, async () => {
-        try {
-          this.userLastVisible.delete(userId);
-          const q = query(
-            collection(this.db, 'posts'),
-            where('userId', '==', userId),
-            orderBy('createdAt', 'desc'),
-            limit(PostsService.FEED_PAGE_SIZE)
-          );
-          const snapshot = await getDocs(q);
-          if (snapshot.size > 0) {
-            this.userLastVisible.set(userId, snapshot.docs[snapshot.docs.length - 1]);
-          }
-          subscriber.next(this.mapPostDocs(snapshot.docs));
-          subscriber.complete();
-        } catch (err) {
-          subscriber.error(err);
-        }
-      });
+    return runInInjectionContext(this.env, () => {
+      this.userLastVisible.delete(userId);
+      const q = query(
+        collection(this.db, 'posts'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc'),
+        limit(PostsService.FEED_PAGE_SIZE)
+      );
+      void this.seedUserPaginationCursor(userId, q);
+      const src$ = collectionData(q, { idField: 'postId' }) as Observable<Post[]>;
+      return src$.pipe(
+        tap(() => void this.seedUserPaginationCursor(userId, q)),
+        debounceTime(1000),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      );
     });
   }
 
@@ -264,6 +256,34 @@ export class PostsService {
     });
   }
 
+  private seedHomePaginationCursor(q: Query): Promise<void> {
+    return runInInjectionContext(this.env, async () => {
+      try {
+        const snapshot = await getDocs(q);
+        this.homeLastVisible = snapshot.size > 0
+          ? snapshot.docs[snapshot.docs.length - 1]
+          : null;
+      } catch {
+        this.homeLastVisible = null;
+      }
+    });
+  }
+
+  private seedUserPaginationCursor(userId: string, q: Query): Promise<void> {
+    return runInInjectionContext(this.env, async () => {
+      try {
+        const snapshot = await getDocs(q);
+        if (snapshot.size > 0) {
+          this.userLastVisible.set(userId, snapshot.docs[snapshot.docs.length - 1]);
+        } else {
+          this.userLastVisible.delete(userId);
+        }
+      } catch {
+        this.userLastVisible.delete(userId);
+      }
+    });
+  }
+
   // ---------- Comments ----------
   getCommentsForPost(postId: string, topCommentId?: string): Observable<Comment[]> {
     return runInInjectionContext(this.env, () => {
@@ -275,6 +295,7 @@ export class PostsService {
       const src$ = collectionData(q, { idField: 'commentId' }) as Observable<Comment[]>;
 
       return src$.pipe(
+        map(comments => comments.filter(c => !c.isHidden)),
         map(comments => topCommentId ? comments.filter(c => c.commentId !== topCommentId) : comments),
         debounceTime(500),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
@@ -289,10 +310,12 @@ export class PostsService {
           const q = query(
             collection(this.db, `posts/${postId}/comments`),
             orderBy('likeCount', 'desc'),
-            limit(1)
+            limit(10)
           );
           const snap = await getDocs(q);
-          const item = snap.docs.length ? (snap.docs[0].data() as Comment) : undefined;
+          const item = snap.docs
+            .map(d => d.data() as Comment)
+            .find(c => !c.isHidden);
           subscriber.next(item);
           subscriber.complete();
         } catch (err) {

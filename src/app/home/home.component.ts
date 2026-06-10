@@ -47,17 +47,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isLoadingInitial = true;
     this.hasMorePosts = true;
     this.loadError = null;
-    this.postsService.getMostRecentPosts().subscribe(posts => {
-      this.mostRecentPosts = posts;
-      if (posts.length < this.pageSize) {
-        this.hasMorePosts = false;
+    const s = this.postsService.getMostRecentPosts().subscribe({
+      next: posts => {
+        this.mostRecentPosts = this.mergeFeedFirstPage(posts);
+        this.hasMorePosts = posts.length >= this.pageSize;
+        this.isLoadingInitial = false;
+      },
+      error: err => {
+        console.error('Failed to load posts:', err);
+        this.loadError = 'Failed to load posts. If you are using the Firebase emulators, you may simply have no local data yet.';
+        this.isLoadingInitial = false;
       }
-      this.isLoadingInitial = false;
-    }, err => {
-      console.error('Failed to load posts:', err);
-      this.loadError = 'Failed to load posts. If you are using the Firebase emulators, you may simply have no local data yet.';
-      this.isLoadingInitial = false;
     });
+    this.subs.add(s);
+  }
+
+  /** Keep scroll-loaded pages when the live first page updates (e.g. new post). */
+  private mergeFeedFirstPage(firstPage: Post[]): Post[] {
+    if (this.mostRecentPosts.length <= this.pageSize) {
+      return firstPage;
+    }
+    const firstPageIds = new Set(firstPage.map(p => p.postId));
+    const olderLoaded = this.mostRecentPosts.filter(p => !firstPageIds.has(p.postId));
+    return this.mergeUniqueById(firstPage, olderLoaded);
   }
 
   loadMorePosts() {

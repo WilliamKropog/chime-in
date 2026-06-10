@@ -49,4 +49,5 @@ export interface Comment {
     dislikeCount: number;
     replyCount: number;
     likes?: Array<string>;
+    isHidden?: boolean;
 }

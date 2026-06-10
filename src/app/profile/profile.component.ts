@@ -109,12 +109,21 @@ export class ProfileComponent implements OnInit{
     this.isLoadingInitial = true;
     this.hasMorePosts = true;
     this.postsService.getUserPosts(userId).subscribe((posts) => {
-      this.userPosts = this.dedupePostsById(posts ?? []);
-      if ((posts ?? []).length < this.pageSize) {
-        this.hasMorePosts = false;
-      }
+      const firstPage = posts ?? [];
+      this.userPosts = this.mergeFeedFirstPage(firstPage);
+      this.hasMorePosts = firstPage.length >= this.pageSize;
       this.isLoadingInitial = false;
     });
+  }
+
+  /** Keep scroll-loaded pages when the live first page updates (e.g. new post). */
+  private mergeFeedFirstPage(firstPage: Post[]): Post[] {
+    if (this.userPosts.length <= this.pageSize) {
+      return this.dedupePostsById(firstPage);
+    }
+    const firstPageIds = new Set(firstPage.map(p => p.postId));
+    const olderLoaded = this.userPosts.filter(p => !firstPageIds.has(p.postId));
+    return this.dedupePostsById([...firstPage, ...olderLoaded]);
   }
 
   //Automatically load more posts when scrolled to the bottom of the page.
