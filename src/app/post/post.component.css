@@ -1,6 +1,6 @@
 .post {
     width: 100%;
-    max-width: 625px;
+    max-width: var(--post-card-max-width, 625px);
     box-sizing: border-box;
     background-color: var(--surface);
     border-radius: 20px;
@@ -267,7 +267,7 @@
 }
   
 .comment-editor.open {
-    overflow: hidden;
+    overflow: visible;
     transition: 0.3s ease-out;
 }
 

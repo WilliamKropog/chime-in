@@ -67,6 +67,18 @@ body {
   margin: 0 auto;
 }
 
+/* Feed pages: scale with center column; posts fill this width via --post-card-max-width */
+.page.home-page,
+.page.profile-page {
+  --feed-col: calc(100vw - 2 * var(--sidebar-width) - 2 * var(--page-gutter));
+  --post-card-max-width: 100%;
+  max-width: clamp(625px, calc(var(--feed-col) * 0.935), 800px);
+}
+
+.page.home-page {
+  padding-top: 12px;
+}
+
 /* Generic “card” */
 .card {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 80%), var(--surface);
@@ -176,6 +188,11 @@ a {
     margin-left: 0;
     margin-right: 0;
     padding: 16px;
+  }
+
+  .page.home-page,
+  .page.profile-page {
+    --feed-col: calc(100vw - 32px);
   }
 
   .sidenav,
